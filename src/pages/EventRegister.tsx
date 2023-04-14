@@ -43,6 +43,7 @@ export const EventRegister = () => {
             {...register("amount1", { required: "金額を入力してください", min: { value: 1, message: "1以上の数値を入力してください" } })}
             type="number"
             helperText={errors.amount1?.message}
+            sx={{ width: "100%" }}
           />
         </div>
         <div className={styles.form}>
@@ -71,7 +72,7 @@ export const EventRegister = () => {
           />
         </div>
         <div className={styles.form}>
-          <TextField id="amount2" label="金額" {...register("amount2")} type="number" />
+          <TextField id="amount2" label="金額" {...register("amount2")} type="number" sx={{ width: "100%" }} />
         </div>
         <div className={styles.form}>
           <Controller
@@ -105,6 +106,7 @@ export const EventRegister = () => {
             error={Boolean(errors.storeName)}
             helperText={errors.storeName?.message}
             {...register("storeName", { maxLength: { value: 20, message: "20文字以内で入力してください" } })}
+            sx={{ width: "100%" }}
           />
         </div>
         <div className={styles.form}>
