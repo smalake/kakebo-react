@@ -12,6 +12,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<EventRegister />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route path="event-register" element={<EventRegister />} />
