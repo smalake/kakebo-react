@@ -1,0 +1,45 @@
+.calendar {
+  background-color: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  margin-bottom: 10px;
+}
+
+.total {
+  border-radius: 8px;
+  display: flex;
+  background-color: white;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.totalTitle {
+  margin-left: 20px;
+}
+.totalContents {
+  margin-right: 30px;
+}
+
+.eventList {
+  padding: 0;
+  border-radius: 8px;
+  background-color: white;
+}
+
+.eventContents {
+  list-style-type: none;
+  border-bottom: 2px solid #ebebeb;
+  padding: 15px 0;
+}
+.eventContents:last-child {
+  border: none;
+}
+.eventItem {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  text-decoration: none;
+  color: black;
+}

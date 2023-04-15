@@ -10,6 +10,7 @@ import { FirebaseError } from "firebase/app";
 import { useCookies } from "react-cookie";
 import { authApi } from "../../api/authApi";
 import { googleLogin } from "../../util/googleLogin";
+import { Button, TextField } from "@mui/material";
 
 // 型の設定
 interface RegisterForm {
@@ -95,29 +96,51 @@ export const Register = () => {
     <div className={styles.container}>
       <h2>新規登録フォーム</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <label htmlFor="email">メールアドレス</label>
-          <input id="email" {...register("email")} />
-          <p className={styles.error}>{errors.email?.message as React.ReactNode}</p>
+        <div className={styles.form}>
+          <TextField
+            id="email"
+            label="メールアドレス"
+            {...register("email")}
+            error={Boolean(errors.email)}
+            helperText={errors.email?.message}
+            sx={{ width: "100%" }}
+          />
         </div>
-        <div>
-          <label htmlFor="name">表示名</label>
-          <input id="name" {...register("name")} />
-          <p className={styles.error}>{errors.name?.message as React.ReactNode}</p>
+        <div className={styles.form}>
+          <TextField
+            id="name"
+            label="表示名"
+            {...register("name")}
+            error={Boolean(errors.name)}
+            helperText={errors.name?.message}
+            sx={{ width: "100%" }}
+          />
         </div>
-        <div>
-          <label htmlFor="password">パスワード</label>
-          <input id="password" type="password" {...register("password")} />
-          <p className={styles.error}>{errors.password?.message as React.ReactNode}</p>
+        <div className={styles.form}>
+          <TextField
+            id="password"
+            label="パスワード"
+            type="password"
+            {...register("password")}
+            error={Boolean(errors.password)}
+            helperText={errors.password?.message}
+            sx={{ width: "100%" }}
+          />
         </div>
-        <div>
-          <label htmlFor="confirmPassword">確認用パスワード</label>
-          <input id="confirmPassword" type="password" {...register("confirmPassword")} />
-          <p className={styles.error}>{errors.confirmPassword?.message as React.ReactNode}</p>
+        <div className={styles.form}>
+          <TextField
+            id="confirmPassword"
+            label="確認用パスワード"
+            type="password"
+            {...register("confirmPassword")}
+            error={Boolean(errors.confirmPassword)}
+            helperText={errors.confirmPassword?.message}
+            sx={{ width: "100%" }}
+          />
         </div>
-        <button className={styles.submit} type="submit">
+        <Button type="submit" variant="contained" color="info" sx={{ width: "100%", height: "45px", fontSize: "16px", fontWeight: "bold" }}>
           メールアドレスで新規登録
-        </button>
+        </Button>
       </form>
       <p className={styles.subText}>または</p>
       <button className={styles.google} onClick={handleGoogle}>

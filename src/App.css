@@ -5,8 +5,9 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  margin: 0;
+  /* height: 100vh; */
+  margin: 20px 0 0 0;
+  width: 100%;
 }
 
 /* タイトル */
@@ -15,24 +16,6 @@ h2 {
   font-size: 24px;
   font-weight: bold;
   text-align: center;
-}
-
-/* フォーム要素のスタイリング */
-label {
-  display: block;
-  font-size: 14px;
-  margin-bottom: 5px;
-}
-
-input,
-select {
-  width: 100%;
-  padding: 8px;
-  font-size: 14px;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  margin-bottom: 5px;
-  box-sizing: border-box;
 }
 
 #root {
