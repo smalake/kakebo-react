@@ -5,16 +5,19 @@ import jaLocale from "@fullcalendar/core/locales/ja";
 import styles from "./Calendar.module.css";
 import "./calendar.css";
 import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
-import { Avatar, List, ListItem, ListItemAvatar, ListItemText, Stack } from "@mui/material";
 import { EventClickArg } from "@fullcalendar/core";
 import { format } from "date-fns";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { eventApi } from "../api/eventApi";
+import { useRecoilState } from "recoil";
+import { eventAtom } from "../recoil/EventAtom";
+import { Category } from "../components/category";
 
 interface Transaction {
   id: number;
   amount: number;
-  category: string;
-  store: string;
+  category: number;
+  storeName: string;
 }
 
 interface Events {
@@ -22,18 +25,9 @@ interface Events {
 }
 
 export const Calendar = () => {
+  const [events, setEvents] = useRecoilState(eventAtom);
+  const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState("");
-  const [events, setEvents] = useState<Events>({
-    "2023-04-01": [
-      { id: 1, amount: 100, category: "食費", store: "イオン" },
-      { id: 3, amount: 200, category: "食費", store: "イオン" },
-    ],
-    "2023-04-10": [
-      { id: 2, amount: 300, category: "食費", store: "イオン" },
-      { id: 10, amount: 400, category: "外食費", store: "マック" },
-      { id: 5, amount: 500, category: "日用品", store: "スギ薬局" },
-    ],
-  });
   const [amount, setAmount] = useState<
     {
       title: string;
@@ -41,6 +35,26 @@ export const Calendar = () => {
     }[]
   >();
   const [total, setTotal] = useState(0);
+
+  // イベント一覧を取得
+  useEffect(() => {
+    const getEvents = async () => {
+      try {
+        const res = await eventApi.getAll();
+        console.log(res.data);
+        setEvents(res.data);
+      } catch (err: any) {
+        if (err.status === 401) {
+          alert("認証エラー\n再ログインしてください");
+          navigate("/login");
+        } else {
+          alert("登録に失敗しました");
+          console.log(err);
+        }
+      }
+    };
+    getEvents();
+  }, [setEvents, navigate]);
 
   // イベントをカレンダー内に表示させるためのフォーマットへと変換
   useEffect(() => {
@@ -115,7 +129,7 @@ export const EventList = ({ events, selectedDate }: { events: Events; selectedDa
           <li key={index} className={styles.eventContents}>
             <Link to={`/edit-event/${item.id}`} className={styles.eventItem}>
               <span className={styles.totalTitle}>
-                {item.category} ({item.store})
+                <Category catNum={item.category} /> {item.storeName ? `(${item.storeName})` : ""}
               </span>
               <span className={styles.totalContents}>{item.amount}円</span>
             </Link>
