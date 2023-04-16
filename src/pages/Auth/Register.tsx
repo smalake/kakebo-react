@@ -82,7 +82,7 @@ export const Register = () => {
       const res = await authApi.register(data);
       if (res.status === 200) {
         setCookie("kakebo", token); // トークンをCookieにセット
-        navigate("/input");
+        navigate("/event-register");
       } else {
         alert("新規登録に失敗しました");
       }
