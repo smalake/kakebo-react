@@ -1,8 +1,9 @@
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import styles from "./Event.module.css";
 import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { eventApi } from "../api/eventApi";
+import { useNavigate } from "react-router-dom";
 
 interface EventRegisterForm {
   amount1: number;
@@ -15,7 +16,6 @@ interface EventRegisterForm {
 
 export const EventRegister = () => {
   const navigate = useNavigate();
-
   // react-hook-formの設定
   const {
     register,
@@ -25,10 +25,34 @@ export const EventRegister = () => {
   } = useForm<EventRegisterForm>();
 
   // 登録ボタンをクリックしたときの処理
-  const onSubmit = (data: EventRegisterForm) => {
-    console.log(data.amount1);
-    console.log(data.category1);
-    console.log(data.date);
+  const onSubmit = async (data: EventRegisterForm) => {
+    const d = new Date(data.date);
+    try {
+      // 送信用のフォーマットへと変換
+      const send = {
+        amount1: Number(data.amount1),
+        amount2: Number(data.amount2 || 0),
+        category1: data.category1,
+        category2: data.category2,
+        storeName: data.storeName,
+        date: d.toISOString(),
+      };
+      const res = await eventApi.create(send);
+      if (res.status === 200) {
+        alert("登録しました");
+      } else {
+        alert("登録に失敗しました");
+        console.log(res);
+      }
+    } catch (err: any) {
+      if (err.status === 401) {
+        alert("認証エラー\n再ログインしてください");
+        navigate("/login");
+      } else {
+        alert("登録に失敗しました");
+        console.log(err);
+      }
+    }
   };
 
   return (
@@ -39,6 +63,7 @@ export const EventRegister = () => {
           <TextField
             id="amount1"
             label="金額"
+            defaultValue={0}
             error={Boolean(errors.amount1)}
             {...register("amount1", { required: "金額を入力してください", min: { value: 1, message: "1以上の数値を入力してください" } })}
             type="number"
@@ -72,7 +97,7 @@ export const EventRegister = () => {
           />
         </div>
         <div className={styles.form}>
-          <TextField id="amount2" label="金額" {...register("amount2")} type="number" sx={{ width: "100%" }} />
+          <TextField id="amount2" defaultValue={0} label="金額" {...register("amount2")} type="number" sx={{ width: "100%" }} />
         </div>
         <div className={styles.form}>
           <Controller
