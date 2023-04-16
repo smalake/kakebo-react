@@ -75,7 +75,8 @@ export const Login = () => {
     try {
       const res = await authApi.login(data);
       if (res.status === 200) {
-        setCookie("kakebo", token); // トークンをCookieにセット
+        const now = new Date();
+        setCookie("kakebo", token, { expires: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000) }); // トークンをCookieにセット（有効期限1週間）
         navigate("/event-register");
       } else {
         alert("認証エラーが発生しました\nアカウントが登録されていない、またはパスワードが間違っています");

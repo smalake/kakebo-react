@@ -81,7 +81,8 @@ export const Register = () => {
     try {
       const res = await authApi.register(data);
       if (res.status === 200) {
-        setCookie("kakebo", token); // トークンをCookieにセット
+        const now = new Date();
+        setCookie("kakebo", token, { expires: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000) }); // トークンをCookieにセット（有効期限1週間）
         navigate("/event-register");
       } else {
         alert("新規登録に失敗しました");
