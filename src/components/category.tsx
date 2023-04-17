@@ -1,79 +1,101 @@
 import React from "react";
+import { ReactComponent as Unselected } from "../assets/unselected.svg";
+import { ReactComponent as Food } from "../assets/food.svg";
+import { ReactComponent as EatingOut } from "../assets/eating_out.svg";
+import { ReactComponent as Lifework } from "../assets/lifework.svg";
+import { ReactComponent as Traffic } from "../assets/traffic.svg";
+import { ReactComponent as Medical } from "../assets/medical.svg";
+import { ReactComponent as Clothing } from "../assets/clothing.svg";
+import { ReactComponent as Hobby } from "../assets/hobby.svg";
+import { ReactComponent as Utility } from "../assets/utility.svg";
+import { ReactComponent as Connection } from "../assets/connection.svg";
+import { useRecoilValue } from "recoil";
+import { categoryAtom } from "../recoil/CategoryAtom";
 
 type CategoryProps = {
   catNum: number;
 };
 
 export const Category = ({ catNum }: CategoryProps): JSX.Element => {
+  const category = useRecoilValue(categoryAtom);
+  const color = category[catNum].color;
+  const style = { fill: color };
   switch (catNum) {
+    case 0:
+      return (
+        <>
+          <Unselected style={style} />
+          <span>{category[catNum].name}</span>
+        </>
+      );
     case 1:
       return (
         <>
-          <span>icon</span>
-          <span>食費</span>
+          <Food style={style} />
+          <span>{category[catNum].name}</span>
         </>
       );
     case 2:
       return (
         <>
-          <span>icon</span>
-          <span>外食費</span>
+          <EatingOut style={style} />
+          <span>{category[catNum].name}</span>
         </>
       );
     case 3:
       return (
         <>
-          <span>icon</span>
-          <span>日用品</span>
+          <Lifework style={style} />
+          <span>{category[catNum].name}</span>
         </>
       );
     case 4:
       return (
         <>
-          <span>icon</span>
-          <span>交通費</span>
+          <Traffic style={style} />
+          <span>{category[catNum].name}</span>
         </>
       );
     case 5:
       return (
         <>
-          <span>icon</span>
-          <span>医療費</span>
+          <Medical style={style} />
+          <span>{category[catNum].name}</span>
         </>
       );
     case 6:
       return (
         <>
-          <span>icon</span>
-          <span>衣服</span>
+          <Clothing style={style} />
+          <span>{category[catNum].name}</span>
         </>
       );
     case 7:
       return (
         <>
-          <span>icon</span>
-          <span>趣味</span>
+          <Hobby style={style} />
+          <span>{category[catNum].name}</span>
         </>
       );
     case 8:
       return (
         <>
-          <span>icon</span>
-          <span>光熱費</span>
+          <Utility style={style} />
+          <span>{category[catNum].name}</span>
         </>
       );
     case 9:
       return (
         <>
-          <span>icon</span>
-          <span>通信費</span>
+          <Connection style={style} />
+          <span>{category[catNum].name}</span>
         </>
       );
     default:
       return (
         <>
-          <span>icon</span>
-          <span>その他</span>
+          <Unselected style={style} />
+          <span>{category[catNum].name}</span>
         </>
       );
   }
