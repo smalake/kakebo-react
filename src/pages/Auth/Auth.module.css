@@ -5,11 +5,12 @@
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 400px;
+  height: 100%;
 }
 
 .form {
   margin: 30px 0;
+  text-align: center;
 }
 
 /* 送信ボタン */
@@ -32,7 +33,7 @@
 }
 
 .google {
-  width: 100%;
+  width: 90%;
   height: 45px;
   padding: 8px;
   font-size: 14px;

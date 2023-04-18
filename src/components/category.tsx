@@ -11,6 +11,7 @@ import { ReactComponent as Utility } from "../assets/utility.svg";
 import { ReactComponent as Connection } from "../assets/connection.svg";
 import { useRecoilValue } from "recoil";
 import { categoryAtom } from "../recoil/CategoryAtom";
+import styles from "./category.module.css";
 
 type CategoryProps = {
   catNum: number;
@@ -24,78 +25,78 @@ export const Category = ({ catNum }: CategoryProps): JSX.Element => {
     case 0:
       return (
         <>
-          <Unselected style={style} />
-          <span>{category[catNum].name}</span>
+          <Unselected style={style} className={styles.icon} />
+          <span className={styles.name}>{category[catNum].name}</span>
         </>
       );
     case 1:
       return (
         <>
-          <Food style={style} />
-          <span>{category[catNum].name}</span>
+          <Food style={style} className={styles.icon} />
+          <span className={styles.name}>{category[catNum].name}</span>
         </>
       );
     case 2:
       return (
         <>
-          <EatingOut style={style} />
-          <span>{category[catNum].name}</span>
+          <EatingOut style={style} className={styles.icon} />
+          <span className={styles.name}>{category[catNum].name}</span>
         </>
       );
     case 3:
       return (
         <>
-          <Lifework style={style} />
-          <span>{category[catNum].name}</span>
+          <Lifework style={style} className={styles.icon} />
+          <span className={styles.name}>{category[catNum].name}</span>
         </>
       );
     case 4:
       return (
         <>
-          <Traffic style={style} />
-          <span>{category[catNum].name}</span>
+          <Traffic style={style} className={styles.icon} />
+          <span className={styles.name}>{category[catNum].name}</span>
         </>
       );
     case 5:
       return (
         <>
-          <Medical style={style} />
-          <span>{category[catNum].name}</span>
+          <Medical style={style} className={styles.icon} />
+          <span className={styles.name}>{category[catNum].name}</span>
         </>
       );
     case 6:
       return (
         <>
-          <Clothing style={style} />
-          <span>{category[catNum].name}</span>
+          <Clothing style={style} className={styles.icon} />
+          <span className={styles.name}>{category[catNum].name}</span>
         </>
       );
     case 7:
       return (
         <>
-          <Hobby style={style} />
-          <span>{category[catNum].name}</span>
+          <Hobby style={style} className={styles.icon} />
+          <span className={styles.name}>{category[catNum].name}</span>
         </>
       );
     case 8:
       return (
         <>
-          <Utility style={style} />
-          <span>{category[catNum].name}</span>
+          <Utility style={style} className={styles.icon} />
+          <span className={styles.name}>{category[catNum].name}</span>
         </>
       );
     case 9:
       return (
         <>
-          <Connection style={style} />
-          <span>{category[catNum].name}</span>
+          <Connection style={style} className={styles.icon} />
+          <span className={styles.name}>{category[catNum].name}</span>
         </>
       );
     default:
       return (
         <>
-          <Unselected style={style} />
-          <span>{category[catNum].name}</span>
+          <Unselected style={style} className={styles.icon} />
+          <span className={styles.name}>{category[catNum].name}</span>
         </>
       );
   }

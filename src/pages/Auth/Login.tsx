@@ -98,7 +98,7 @@ export const Login = () => {
             {...register("email")}
             error={Boolean(errors.email)}
             helperText={errors.email?.message}
-            sx={{ width: "100%" }}
+            sx={{ width: "90%" }}
           />
         </div>
         <div className={styles.form}>
@@ -109,18 +109,22 @@ export const Login = () => {
             {...register("password")}
             error={Boolean(errors.password)}
             helperText={errors.password?.message}
-            sx={{ width: "100%" }}
+            sx={{ width: "90%" }}
           />
         </div>
-        <Button type="submit" variant="contained" color="info" sx={{ width: "100%", height: "45px", fontSize: "16px", fontWeight: "bold" }}>
-          メールアドレスでログイン
-        </Button>
+        <div className={styles.form}>
+          <Button type="submit" variant="contained" color="info" sx={{ width: "90%", height: "45px", fontSize: "16px", fontWeight: "bold" }}>
+            メールアドレスでログイン
+          </Button>
+        </div>
       </form>
       <p className={styles.subText}>または</p>
-      <button className={styles.google} onClick={handleGoogle}>
-        Googleアカウントでログイン
-      </button>
-      <div>
+      <div className={styles.form}>
+        <button className={styles.google} onClick={handleGoogle}>
+          Googleアカウントでログイン
+        </button>
+      </div>
+      <div style={{ marginLeft: "20px" }}>
         <p className={styles.linkText}>アカウントをお持ちでない方は</p>
         <Link to="/register">新規登録</Link>
       </div>

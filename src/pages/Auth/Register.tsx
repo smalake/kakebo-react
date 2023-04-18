@@ -104,7 +104,7 @@ export const Register = () => {
             {...register("email")}
             error={Boolean(errors.email)}
             helperText={errors.email?.message}
-            sx={{ width: "100%" }}
+            sx={{ width: "90%" }}
           />
         </div>
         <div className={styles.form}>
@@ -114,7 +114,7 @@ export const Register = () => {
             {...register("name")}
             error={Boolean(errors.name)}
             helperText={errors.name?.message}
-            sx={{ width: "100%" }}
+            sx={{ width: "90%" }}
           />
         </div>
         <div className={styles.form}>
@@ -125,7 +125,7 @@ export const Register = () => {
             {...register("password")}
             error={Boolean(errors.password)}
             helperText={errors.password?.message}
-            sx={{ width: "100%" }}
+            sx={{ width: "90%" }}
           />
         </div>
         <div className={styles.form}>
@@ -136,18 +136,22 @@ export const Register = () => {
             {...register("confirmPassword")}
             error={Boolean(errors.confirmPassword)}
             helperText={errors.confirmPassword?.message}
-            sx={{ width: "100%" }}
+            sx={{ width: "90%" }}
           />
         </div>
-        <Button type="submit" variant="contained" color="info" sx={{ width: "100%", height: "45px", fontSize: "16px", fontWeight: "bold" }}>
-          メールアドレスで新規登録
-        </Button>
+        <div className={styles.form}>
+          <Button type="submit" variant="contained" color="info" sx={{ width: "90%", height: "45px", fontSize: "16px", fontWeight: "bold" }}>
+            メールアドレスで新規登録
+          </Button>
+        </div>
       </form>
       <p className={styles.subText}>または</p>
-      <button className={styles.google} onClick={handleGoogle}>
-        Googleアカウントで新規登録
-      </button>
-      <div>
+      <div className={styles.form}>
+        <button className={styles.google} onClick={handleGoogle}>
+          Googleアカウントで新規登録
+        </button>
+      </div>
+      <div style={{ marginLeft: "20px" }}>
         <p className={styles.linkText}>アカウントをお持ちの方は</p>
         <Link to="/login">ログイン</Link>
       </div>

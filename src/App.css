@@ -7,7 +7,9 @@ body {
   align-items: center;
   /* height: 100vh; */
   margin: 20px 0 0 0;
-  width: 100%;
+  width: 390px;
+  height: 844px;
+  overflow: hidden;
 }
 
 /* タイトル */
@@ -22,4 +24,16 @@ h2 {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.MuiBottomNavigation-root {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  height: 36px;
+  z-index: 1000;
 }

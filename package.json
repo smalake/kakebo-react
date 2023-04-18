@@ -12,6 +12,7 @@
     "@fullcalendar/react": "^6.1.5",
     "@fullcalendar/timegrid": "^6.1.5",
     "@hookform/resolvers": "^3.0.1",
+    "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.12.0",
     "@mui/x-date-pickers": "^6.1.0",
     "@types/jest": "^27.5.2",

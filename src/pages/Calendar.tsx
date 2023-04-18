@@ -11,7 +11,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { eventApi } from "../api/eventApi";
 import { useRecoilState } from "recoil";
 import { eventAtom } from "../recoil/EventAtom";
-import { Category } from "../components/category";
+import { Category } from "../components/Category";
 
 interface Transaction {
   id: number;
@@ -131,7 +131,7 @@ export const EventList = ({ events, selectedDate }: { events: Events; selectedDa
               <span className={styles.totalTitle}>
                 <Category catNum={item.category} /> {item.storeName ? `(${item.storeName})` : ""}
               </span>
-              <span className={styles.totalContents}>{item.amount}円</span>
+              <span className={styles.eventAmount}>{item.amount}円</span>
             </Link>
           </li>
         ))
