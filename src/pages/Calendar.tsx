@@ -94,7 +94,7 @@ export const Calendar = () => {
   }, []);
 
   return (
-    <div className={styles.container}>
+    <div>
       <div className={styles.calendar}>
         <div>
           <FullCalendar

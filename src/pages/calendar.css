@@ -34,4 +34,22 @@
   background-color: transparent;
   border: none;
   text-align: center;
+  box-shadow: none !important;
+}
+
+.fc-event-selected::after,
+.fc-event:focus::after {
+  background: transparent;
+  content: none;
+}
+.fc-event-selected::before,
+.fc-event:focus::before {
+  background: transparent;
+  content: none;
+}
+.fc-daygrid-event-harness:before {
+  content: none;
+}
+.fc-daygrid-day-events:before {
+  content: none;
 }
