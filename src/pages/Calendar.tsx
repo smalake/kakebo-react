@@ -41,7 +41,6 @@ export const Calendar = () => {
     const getEvents = async () => {
       try {
         const res = await eventApi.getAll();
-        console.log(res.data);
         setEvents(res.data);
       } catch (err: any) {
         if (err.status === 401) {
@@ -127,7 +126,7 @@ export const EventList = ({ events, selectedDate }: { events: Events; selectedDa
       {selectedDate && events[selectedDate] ? (
         events[selectedDate].map((item, index) => (
           <li key={index} className={styles.eventContents}>
-            <Link to={`/edit-event/${item.id}`} className={styles.eventItem}>
+            <Link to={`/event-edit/${item.id}`} className={styles.eventItem}>
               <span className={styles.totalTitle}>
                 <Category catNum={item.category} /> {item.storeName ? `(${item.storeName})` : ""}
               </span>

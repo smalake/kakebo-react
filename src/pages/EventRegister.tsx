@@ -77,7 +77,7 @@ export const EventRegister = () => {
             control={control}
             defaultValue={0}
             render={({ field }) => (
-              <FormControl sx={{ width: "90%" }}>
+              <FormControl sx={{ width: "90%", textAlign: "left" }}>
                 <InputLabel id="category1-label">カテゴリー</InputLabel>
                 <Select {...field} id="category1" label="カテゴリー" labelId="category1-label">
                   <MenuItem value={0}>未選択</MenuItem>
@@ -105,7 +105,7 @@ export const EventRegister = () => {
             control={control}
             defaultValue={0}
             render={({ field }) => (
-              <FormControl sx={{ width: "90%" }}>
+              <FormControl sx={{ width: "90%", textAlign: "left" }}>
                 <InputLabel id="category2-label">カテゴリー</InputLabel>
                 <Select {...field} id="category2" label="カテゴリー" labelId="category2-label">
                   <MenuItem value={0}>未選択</MenuItem>
