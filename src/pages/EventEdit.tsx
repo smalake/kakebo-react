@@ -5,7 +5,7 @@ import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from "@m
 import { eventApi } from "../api/eventApi";
 import { useNavigate, useParams } from "react-router-dom";
 
-interface EventRegisterForm {
+interface EventEditForm {
   amount: number;
   category: number;
   storeName: string;
@@ -27,7 +27,7 @@ export const EventEdit = () => {
     setValue,
     control,
     formState: { errors },
-  } = useForm<EventRegisterForm>();
+  } = useForm<EventEditForm>();
 
   useEffect(() => {
     // APIからイベントを取得
@@ -55,21 +55,24 @@ export const EventEdit = () => {
   });
 
   // 更新ボタンをクリックしたときの処理
-  const onSubmit = async (data: EventRegisterForm) => {
+  const onSubmit = async (data: EventEditForm) => {
     const d = new Date(data.date);
     try {
       // 送信用のフォーマットへと変換
       const send = {
+        id: parseInt(id!),
         amount1: Number(data.amount),
         category1: data.category,
         storeName: data.storeName,
         date: d.toISOString(),
       };
-      const res = await eventApi.create(send);
+
+      const res = await eventApi.update(send);
       if (res.status === 200) {
-        alert("登録しました");
+        alert("更新しました");
+        navigate("/calendar");
       } else {
-        alert("登録に失敗しました");
+        alert("更新に失敗しました");
         console.log(res);
       }
     } catch (err: any) {
@@ -77,7 +80,7 @@ export const EventEdit = () => {
         alert("認証エラー\n再ログインしてください");
         navigate("/login");
       } else {
-        alert("登録に失敗しました");
+        alert("更新に失敗しました");
         console.log(err);
       }
     }
