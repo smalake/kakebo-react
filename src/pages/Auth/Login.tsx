@@ -11,12 +11,7 @@ import { authApi } from "../../api/authApi";
 import { googleLogin } from "../../util/googleLogin";
 import { FirebaseError } from "firebase/app";
 import { Button, TextField } from "@mui/material";
-
-// 型の設定
-interface LoginForm {
-  email: string;
-  password: string;
-}
+import { LoginForm } from "../../types";
 
 export const Login = () => {
   const navigate = useNavigate();

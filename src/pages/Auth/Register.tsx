@@ -11,14 +11,7 @@ import { useCookies } from "react-cookie";
 import { authApi } from "../../api/authApi";
 import { googleLogin } from "../../util/googleLogin";
 import { Button, TextField } from "@mui/material";
-
-// 型の設定
-interface RegisterForm {
-  email: string;
-  name: string;
-  password: string;
-  confirmPassword: string;
-}
+import { RegisterForm } from "../../types";
 
 export const Register = () => {
   const navigate = useNavigate();
