@@ -1,3 +1,4 @@
+import { EventID } from "../types";
 import { axiosClient } from "./axiosClient";
 
 export const eventApi = {
@@ -5,5 +6,5 @@ export const eventApi = {
   getOne: (id: number) => axiosClient.get(`/events/${id}`),
   create: (params: any) => axiosClient.post("/events", params),
   update: (params: any) => axiosClient.put("/events", params),
-  delete: (id: number) => axiosClient.delete(`/events/${id}`),
+  delete: (param: EventID) => axiosClient.delete("/events", { data: param }),
 };

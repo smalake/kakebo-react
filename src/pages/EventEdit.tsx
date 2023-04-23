@@ -84,13 +84,29 @@ export const EventEdit = () => {
     navigate("/calendar");
   };
 
+  // 削除ボタンをクリックしたときの処理
   const onDelete = async () => {
     try {
       const send: EventID = {
         id: parseInt(id!),
       };
       const res = await eventApi.delete(send);
-    } catch (err) {}
+      if (res.status === 200) {
+        navigate("/calendar");
+        alert("削除しました");
+      } else {
+        alert("削除に失敗しました");
+        console.log(res);
+      }
+    } catch (err: any) {
+      if (err.status === 401) {
+        alert("認証エラー\n再ログインしてください");
+        navigate("/login");
+      } else {
+        alert("削除に失敗しました");
+        console.log(err);
+      }
+    }
   };
 
   return (
@@ -98,7 +114,7 @@ export const EventEdit = () => {
       <div className={styles.container}>
         <h2>家計簿編集</h2>
         <div>
-          <Button>削除</Button>
+          <Button onClick={onDelete}>削除</Button>
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className={styles.form}>
