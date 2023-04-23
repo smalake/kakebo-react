@@ -5,6 +5,7 @@ import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from "@m
 import { eventApi } from "../api/eventApi";
 import { useNavigate, useParams } from "react-router-dom";
 import { EventEditForm, EventID } from "../types";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export const EventEdit = () => {
   const { id } = useParams();
@@ -40,9 +41,14 @@ export const EventEdit = () => {
         } else {
           alert("読み込みに失敗しました");
         }
-      } catch (err) {
-        alert("読み込みに失敗しました");
-        console.log(err);
+      } catch (err: any) {
+        if (err.status === 401) {
+          alert("認証エラー\n再ログインしてください");
+          navigate("/login");
+        } else {
+          alert("読み込みに失敗しました");
+          console.log(err);
+        }
       }
     };
     getEvent();
@@ -86,25 +92,28 @@ export const EventEdit = () => {
 
   // 削除ボタンをクリックしたときの処理
   const onDelete = async () => {
-    try {
-      const send: EventID = {
-        id: parseInt(id!),
-      };
-      const res = await eventApi.delete(send);
-      if (res.status === 200) {
-        navigate("/calendar");
-        alert("削除しました");
-      } else {
-        alert("削除に失敗しました");
-        console.log(res);
-      }
-    } catch (err: any) {
-      if (err.status === 401) {
-        alert("認証エラー\n再ログインしてください");
-        navigate("/login");
-      } else {
-        alert("削除に失敗しました");
-        console.log(err);
+    const result = window.confirm("本当に削除しますか？");
+    if (result) {
+      try {
+        const send: EventID = {
+          id: parseInt(id!),
+        };
+        const res = await eventApi.delete(send);
+        if (res.status === 200) {
+          navigate("/calendar");
+          alert("削除しました");
+        } else {
+          alert("削除に失敗しました");
+          console.log(res);
+        }
+      } catch (err: any) {
+        if (err.status === 401) {
+          alert("認証エラー\n再ログインしてください");
+          navigate("/login");
+        } else {
+          alert("削除に失敗しました");
+          console.log(err);
+        }
       }
     }
   };
@@ -113,8 +122,23 @@ export const EventEdit = () => {
     <>
       <div className={styles.container}>
         <h2>家計簿編集</h2>
-        <div>
-          <Button onClick={onDelete}>削除</Button>
+        <div className={styles.delete}>
+          <Button
+            startIcon={<DeleteIcon />}
+            onClick={onDelete}
+            sx={{
+              "& .MuiButton-startIcon": { marginRight: "1px" },
+              "& .MuiSvgIcon-root": { fontSize: "17px", marginTop: "-2px" },
+              border: "2px solid red",
+              borderRadius: "4px",
+              color: "red",
+              fontWeight: "bold",
+              fontSize: "12px",
+              padding: "2px",
+            }}
+          >
+            削除
+          </Button>
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className={styles.form}>
