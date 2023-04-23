@@ -4,13 +4,7 @@ import styles from "./Event.module.css";
 import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { eventApi } from "../api/eventApi";
 import { useNavigate, useParams } from "react-router-dom";
-
-interface EventEditForm {
-  amount: number;
-  category: number;
-  storeName: string;
-  date: Date;
-}
+import { EventEditForm, EventID } from "../types";
 
 export const EventEdit = () => {
   const { id } = useParams();
@@ -69,8 +63,8 @@ export const EventEdit = () => {
 
       const res = await eventApi.update(send);
       if (res.status === 200) {
-        alert("更新しました");
         navigate("/calendar");
+        alert("更新しました");
       } else {
         alert("更新に失敗しました");
         console.log(res);
@@ -90,10 +84,22 @@ export const EventEdit = () => {
     navigate("/calendar");
   };
 
+  const onDelete = async () => {
+    try {
+      const send: EventID = {
+        id: parseInt(id!),
+      };
+      const res = await eventApi.delete(send);
+    } catch (err) {}
+  };
+
   return (
     <>
       <div className={styles.container}>
         <h2>家計簿編集</h2>
+        <div>
+          <Button>削除</Button>
+        </div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className={styles.form}>
             <TextField

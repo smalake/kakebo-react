@@ -4,15 +4,7 @@ import styles from "./Event.module.css";
 import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { eventApi } from "../api/eventApi";
 import { useNavigate } from "react-router-dom";
-
-interface EventRegisterForm {
-  amount1: number;
-  amount2: number;
-  category1: number;
-  category2: number;
-  storeName: string;
-  date: Date;
-}
+import { EventRegisterForm } from "../types";
 
 export const EventRegister = () => {
   const navigate = useNavigate();
