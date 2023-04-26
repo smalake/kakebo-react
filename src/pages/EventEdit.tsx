@@ -61,8 +61,8 @@ export const EventEdit = () => {
       // 送信用のフォーマットへと変換
       const send = {
         id: parseInt(id!),
-        amount1: Number(data.amount),
-        category1: data.category,
+        amount: Number(data.amount),
+        category: data.category,
         storeName: data.storeName,
         date: d.toISOString(),
       };
@@ -160,7 +160,7 @@ export const EventEdit = () => {
               defaultValue={0}
               render={({ field }) => (
                 <FormControl sx={{ width: "90%", textAlign: "left" }}>
-                  <InputLabel id="category1-label">カテゴリー</InputLabel>
+                  <InputLabel id="category-label">カテゴリー</InputLabel>
                   <Select {...field} id="category" label="カテゴリー" labelId="category-label">
                     <MenuItem value={0}>未選択</MenuItem>
                     <MenuItem value={1}>食費</MenuItem>
