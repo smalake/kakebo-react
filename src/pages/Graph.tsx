@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import { PieChart, ResponsiveContainer, Pie, Cell } from "recharts";
 import styles from "./Graph.module.css";
 import { GraphDataContext } from "../util/context";
-import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
-import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
+import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { Category } from "../components/Category";
 
 export const Graph = () => {
@@ -46,15 +46,35 @@ export const Graph = () => {
   return (
     <div>
       <div className={styles.container}>
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <div onClick={handleDown}>
-            <ArrowCircleLeftIcon sx={{ fontSize: "40px" }} />
+            <KeyboardArrowLeftIcon
+              sx={{
+                fontSize: "1.5em",
+                backgroundColor: "#2c3e50",
+                color: "#fff",
+                borderRadius: "0.25em",
+                padding: "6.4px 10.4px",
+                height: "1.1em",
+                width: "1.1em",
+              }}
+            />
           </div>
           <div className={styles.selector}>
-            {year}年{month.toString().padStart(2, "0")}月
+            {year}年{month.toString()}月
           </div>
           <div onClick={handleUp}>
-            <ArrowCircleRightIcon sx={{ fontSize: "40px" }} />
+            <KeyboardArrowRightIcon
+              sx={{
+                fontSize: "1.5em",
+                backgroundColor: "#2c3e50",
+                color: "#fff",
+                borderRadius: "0.25em",
+                padding: "6.4px 10.4px",
+                height: "1.1em",
+                width: "1.1em",
+              }}
+            />
           </div>
         </Box>
         <Stack spacing={3} style={{ width: "100%", height: "250px" }}>
@@ -80,7 +100,7 @@ export const Graph = () => {
                 </Pie>
               </PieChart>
             ) : (
-              <p>データがありません</p>
+              <p className={styles.noData}>データがありません</p>
             )}
           </ResponsiveContainer>
         </Stack>

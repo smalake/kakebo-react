@@ -10,8 +10,8 @@
   margin: 0 25px;
   font-size: 28px;
   font-weight: bold;
-  position: relative;
-  top: -2px;
+  /* position: relative;
+  top: -2px; */
 }
 
 .eventList {
@@ -43,4 +43,9 @@
 }
 .itemValue {
   margin-right: 30px;
+}
+
+.noData {
+  text-align: center;
+  margin-top: 96px;
 }
