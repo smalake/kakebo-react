@@ -72,17 +72,16 @@ export const EventRegister = () => {
               <FormControl sx={{ width: "90%", textAlign: "left" }}>
                 <InputLabel id="category1-label">カテゴリー</InputLabel>
                 <Select {...field} id="category1" label="カテゴリー" labelId="category1-label">
-                  <MenuItem value={0}>未選択</MenuItem>
-                  <MenuItem value={1}>食費</MenuItem>
-                  <MenuItem value={2}>外食費</MenuItem>
-                  <MenuItem value={3}>日用品</MenuItem>
-                  <MenuItem value={4}>交通費</MenuItem>
-                  <MenuItem value={5}>医療費</MenuItem>
-                  <MenuItem value={6}>衣服</MenuItem>
-                  <MenuItem value={7}>趣味</MenuItem>
-                  <MenuItem value={8}>光熱費</MenuItem>
-                  <MenuItem value={9}>通信費</MenuItem>
-                  <MenuItem value={10}>その他</MenuItem>
+                  <MenuItem value={0}>食費</MenuItem>
+                  <MenuItem value={1}>外食費</MenuItem>
+                  <MenuItem value={2}>日用品</MenuItem>
+                  <MenuItem value={3}>交通費</MenuItem>
+                  <MenuItem value={4}>医療費</MenuItem>
+                  <MenuItem value={5}>衣服</MenuItem>
+                  <MenuItem value={6}>趣味</MenuItem>
+                  <MenuItem value={7}>光熱費</MenuItem>
+                  <MenuItem value={8}>通信費</MenuItem>
+                  <MenuItem value={9}>その他</MenuItem>
                 </Select>
               </FormControl>
             )}
@@ -100,17 +99,16 @@ export const EventRegister = () => {
               <FormControl sx={{ width: "90%", textAlign: "left" }}>
                 <InputLabel id="category2-label">カテゴリー</InputLabel>
                 <Select {...field} id="category2" label="カテゴリー" labelId="category2-label">
-                  <MenuItem value={0}>未選択</MenuItem>
-                  <MenuItem value={1}>食費</MenuItem>
-                  <MenuItem value={2}>外食費</MenuItem>
-                  <MenuItem value={3}>日用品</MenuItem>
-                  <MenuItem value={4}>交通費</MenuItem>
-                  <MenuItem value={5}>医療費</MenuItem>
-                  <MenuItem value={6}>衣服</MenuItem>
-                  <MenuItem value={7}>趣味</MenuItem>
-                  <MenuItem value={8}>光熱費</MenuItem>
-                  <MenuItem value={9}>通信費</MenuItem>
-                  <MenuItem value={10}>その他</MenuItem>
+                  <MenuItem value={0}>食費</MenuItem>
+                  <MenuItem value={1}>外食費</MenuItem>
+                  <MenuItem value={2}>日用品</MenuItem>
+                  <MenuItem value={3}>交通費</MenuItem>
+                  <MenuItem value={4}>医療費</MenuItem>
+                  <MenuItem value={5}>衣服</MenuItem>
+                  <MenuItem value={6}>趣味</MenuItem>
+                  <MenuItem value={7}>光熱費</MenuItem>
+                  <MenuItem value={8}>通信費</MenuItem>
+                  <MenuItem value={9}>その他</MenuItem>
                 </Select>
               </FormControl>
             )}

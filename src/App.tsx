@@ -11,6 +11,7 @@ import { MenuLayout } from "./components/layout/MenuLayout";
 import { EventEdit } from "./pages/EventEdit";
 import { NoMenuLayout } from "./components/layout/NoMenuLayout";
 import { AuthLayout } from "./components/layout/AuthLayout";
+import { EventLayout } from "./components/layout/EventLayout";
 
 function App() {
   return (
@@ -26,8 +27,10 @@ function App() {
           </Route>
           <Route path="/" element={<MenuLayout />}>
             <Route path="event-register" element={<EventRegister />} />
-            <Route path="calendar" element={<Calendar />} />
-            <Route path="graph" element={<Graph />} />
+            <Route path="/" element={<EventLayout />}>
+              <Route path="calendar" element={<Calendar />} />
+              <Route path="graph" element={<Graph />} />
+            </Route>
             <Route path="setting" element={<Setting />} />
           </Route>
         </Routes>

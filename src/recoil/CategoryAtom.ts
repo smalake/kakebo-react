@@ -4,10 +4,6 @@ export const categoryAtom = atom({
   key: "Category",
   default: [
     {
-      name: "未選択",
-      color: "black",
-    },
-    {
       name: "食費",
       color: "red",
     },

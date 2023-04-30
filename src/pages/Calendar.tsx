@@ -7,26 +7,14 @@ import "./calendar.css";
 import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 import { EventClickArg } from "@fullcalendar/core";
 import { format } from "date-fns";
-import { Link, useNavigate } from "react-router-dom";
-import { eventApi } from "../api/eventApi";
-import { useRecoilState } from "recoil";
+import { Link } from "react-router-dom";
+import { useRecoilValue } from "recoil";
 import { eventAtom } from "../recoil/EventAtom";
 import { Category } from "../components/Category";
-
-interface Transaction {
-  id: number;
-  amount: number;
-  category: number;
-  storeName: string;
-}
-
-interface Events {
-  [date: string]: Transaction[];
-}
+import { Events } from "../types";
 
 export const Calendar = () => {
-  const [events, setEvents] = useRecoilState(eventAtom);
-  const navigate = useNavigate();
+  const events = useRecoilValue(eventAtom);
   const [selectedDate, setSelectedDate] = useState("");
   const [amount, setAmount] = useState<
     {
@@ -35,25 +23,6 @@ export const Calendar = () => {
     }[]
   >();
   const [total, setTotal] = useState(0);
-
-  // イベント一覧を取得
-  useEffect(() => {
-    const getEvents = async () => {
-      try {
-        const res = await eventApi.getAll();
-        setEvents(res.data);
-      } catch (err: any) {
-        if (err.status === 401) {
-          alert("認証エラー\n再ログインしてください");
-          navigate("/login");
-        } else {
-          alert("登録に失敗しました");
-          console.log(err);
-        }
-      }
-    };
-    getEvents();
-  }, [setEvents, navigate]);
 
   // イベントをカレンダー内に表示させるためのフォーマットへと変換
   useEffect(() => {

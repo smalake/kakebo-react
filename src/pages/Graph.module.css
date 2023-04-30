@@ -1,0 +1,46 @@
+/* フォームのコンテナ */
+.container {
+  background-color: white;
+  padding: 25px 0 5px 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+.selector {
+  margin: 0 25px;
+  font-size: 28px;
+  font-weight: bold;
+  position: relative;
+  top: -2px;
+}
+
+.eventList {
+  padding: 0;
+  background-color: white;
+}
+
+.listDisplay {
+  list-style-type: none;
+  border-bottom: 2px solid #ebebeb;
+  padding: 15px 0;
+}
+.listDisplays:last-child {
+  border: none;
+}
+
+.listHidden {
+  display: none;
+}
+
+.listItem {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.itemName {
+  margin-left: 20px;
+}
+.itemValue {
+  margin-right: 30px;
+}

@@ -25,67 +25,60 @@ export const Category = ({ catNum }: CategoryProps): JSX.Element => {
     case 0:
       return (
         <>
-          <Unselected style={style} className={styles.icon} />
+          <Food style={style} className={styles.icon} />
           <span className={styles.name}>{category[catNum].name}</span>
         </>
       );
     case 1:
       return (
         <>
-          <Food style={style} className={styles.icon} />
+          <EatingOut style={style} className={styles.icon} />
           <span className={styles.name}>{category[catNum].name}</span>
         </>
       );
     case 2:
       return (
         <>
-          <EatingOut style={style} className={styles.icon} />
+          <Lifework style={style} className={styles.icon} />
           <span className={styles.name}>{category[catNum].name}</span>
         </>
       );
     case 3:
       return (
         <>
-          <Lifework style={style} className={styles.icon} />
+          <Traffic style={style} className={styles.icon} />
           <span className={styles.name}>{category[catNum].name}</span>
         </>
       );
     case 4:
       return (
         <>
-          <Traffic style={style} className={styles.icon} />
+          <Medical style={style} className={styles.icon} />
           <span className={styles.name}>{category[catNum].name}</span>
         </>
       );
     case 5:
       return (
         <>
-          <Medical style={style} className={styles.icon} />
+          <Clothing style={style} className={styles.icon} />
           <span className={styles.name}>{category[catNum].name}</span>
         </>
       );
     case 6:
       return (
         <>
-          <Clothing style={style} className={styles.icon} />
+          <Hobby style={style} className={styles.icon} />
           <span className={styles.name}>{category[catNum].name}</span>
         </>
       );
     case 7:
       return (
         <>
-          <Hobby style={style} className={styles.icon} />
-          <span className={styles.name}>{category[catNum].name}</span>
-        </>
-      );
-    case 8:
-      return (
-        <>
           <Utility style={style} className={styles.icon} />
           <span className={styles.name}>{category[catNum].name}</span>
         </>
       );
-    case 9:
+    case 8:
       return (
         <>
           <Connection style={style} className={styles.icon} />
