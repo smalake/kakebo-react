@@ -1,4 +1,4 @@
-export interface Transaction {
+export interface OneEvent {
   id: number;
   amount: number;
   category: number;
@@ -6,5 +6,5 @@ export interface Transaction {
 }
 
 export interface Events {
-  [date: string]: Transaction[];
+  [date: string]: OneEvent[];
 }

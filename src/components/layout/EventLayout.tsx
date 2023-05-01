@@ -5,7 +5,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { eventApi } from "../../api/eventApi";
 import { checkAtom } from "../../recoil/CheckAtom";
 import { categoryAtom } from "../../recoil/CategoryAtom";
-import { Colors, Graph, GraphData } from "../../types";
+import { Colors, Graph, GraphData, OneEvent } from "../../types";
 import { GraphDataContext } from "../../util/context";
 
 export const EventLayout = () => {
@@ -40,7 +40,7 @@ export const EventLayout = () => {
         const transactions = res.data[date];
         date = date.slice(0, -3);
 
-        transactions.forEach((transaction: any) => {
+        transactions.forEach((transaction: OneEvent) => {
           template[transaction.category].value += transaction.amount;
           template[transaction.category].category = transaction.category;
         });
@@ -68,5 +68,4 @@ export const EventLayout = () => {
     })();
   }, [loading, events]);
   return <GraphDataContext.Provider value={{ graphData, colors }}>{loading ? <p>Loading...</p> : <Outlet />}</GraphDataContext.Provider>;
-  // return <GraphDataContext.Provider value={{ graphData, colors }}><Outlet /></GraphDataContext.Provider>;
 };
