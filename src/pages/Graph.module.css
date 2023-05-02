@@ -47,3 +47,18 @@
   text-align: center;
   margin-top: 96px;
 }
+
+.total {
+  display: flex;
+  background-color: white;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 1px;
+}
+
+.totalTitle {
+  margin-left: 20px;
+}
+.totalContents {
+  margin-right: 30px;
+}

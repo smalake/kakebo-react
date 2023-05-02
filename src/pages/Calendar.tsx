@@ -22,21 +22,20 @@ export const Calendar = () => {
       start: string;
     }[]
   >();
-  const [total, setTotal] = useState(0);
 
   // イベントをカレンダー内に表示させるためのフォーマットへと変換
   useEffect(() => {
     const formattedEvents = [];
     for (const date in events) {
       const transactions = events[date];
-      let total = 0;
+      let totalDay = 0;
 
       for (const transaction of transactions) {
-        total += transaction.amount;
+        totalDay += transaction.amount;
       }
 
       formattedEvents.push({
-        title: `${total}円`,
+        title: `${totalDay}円`,
         start: date,
       });
     }
@@ -78,10 +77,6 @@ export const Calendar = () => {
           />
         </div>
       </div>
-      <div className={styles.total}>
-        <p className={styles.totalTitle}>1ヶ月の支出合計</p>
-        <p className={styles.totalContents}>{total}円</p>
-      </div>
       <div>
         <EventList events={events} selectedDate={selectedDate} />
       </div>
@@ -96,7 +91,7 @@ export const EventList = ({ events, selectedDate }: { events: Events; selectedDa
         events[selectedDate].map((item, index) => (
           <li key={index} className={styles.eventContents}>
             <Link to={`/event-edit/${item.id}`} className={styles.eventItem}>
-              <span className={styles.totalTitle}>
+              <span className={styles.detail}>
                 <Category catNum={item.category} /> {item.storeName ? `(${item.storeName})` : ""}
               </span>
               <span className={styles.eventAmount}>{item.amount}円</span>

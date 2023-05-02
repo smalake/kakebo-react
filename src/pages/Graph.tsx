@@ -8,7 +8,7 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { Category } from "../components/Category";
 
 export const Graph = () => {
-  const { graphData, colors } = React.useContext(GraphDataContext);
+  const { graphData, colors, total } = React.useContext(GraphDataContext);
   const date = new Date();
   const [year, setYear] = useState(date.getFullYear());
   const [month, setMonth] = useState(date.getMonth() + 1);
@@ -53,7 +53,7 @@ export const Graph = () => {
                 fontSize: "1.5em",
                 backgroundColor: "#2c3e50",
                 color: "#fff",
-                borderRadius: "0.25em",
+                borderRadius: "0.2em",
                 padding: "6.4px 10.4px",
                 height: "1.1em",
                 width: "1.1em",
@@ -69,7 +69,7 @@ export const Graph = () => {
                 fontSize: "1.5em",
                 backgroundColor: "#2c3e50",
                 color: "#fff",
-                borderRadius: "0.25em",
+                borderRadius: "0.2em",
                 padding: "6.4px 10.4px",
                 height: "1.1em",
                 width: "1.1em",
@@ -104,6 +104,10 @@ export const Graph = () => {
             )}
           </ResponsiveContainer>
         </Stack>
+      </div>
+      <div className={styles.total}>
+        <p className={styles.totalTitle}>1ヶ月の支出合計</p>
+        <p className={styles.totalContents}>{total[yearMonth] ?? 0}円</p>
       </div>
       <div>
         <ul className={styles.eventList}>

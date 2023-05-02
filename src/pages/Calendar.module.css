@@ -1,23 +1,9 @@
 .calendar {
   background-color: white;
-  padding: 30px 0;
+  padding: 25px 0;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 100%;
   margin-bottom: 10px;
-}
-
-.total {
-  display: flex;
-  background-color: white;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.totalTitle {
-  margin-left: 20px;
-}
-.totalContents {
-  margin-right: 30px;
 }
 
 .eventList {
@@ -45,4 +31,8 @@
   margin-right: 30px;
   position: relative;
   top: 5px;
+}
+
+.detail {
+  margin-left: 20px;
 }

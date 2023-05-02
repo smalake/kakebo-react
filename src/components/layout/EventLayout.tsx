@@ -5,8 +5,10 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { eventApi } from "../../api/eventApi";
 import { checkAtom } from "../../recoil/CheckAtom";
 import { categoryAtom } from "../../recoil/CategoryAtom";
-import { Colors, Graph, GraphData, OneEvent } from "../../types";
+import { Colors, Graph, GraphData, OneEvent, TotalData } from "../../types";
 import { GraphDataContext } from "../../util/context";
+import CircularProgress from "@mui/material/CircularProgress";
+import { Box } from "@mui/material";
 
 export const EventLayout = () => {
   const navigate = useNavigate();
@@ -15,10 +17,12 @@ export const EventLayout = () => {
   const [loading, setLoading] = useState(true);
   const [graphData, setGraphData] = useState<GraphData>({});
   const [colors, setColors] = useState<Colors>([]);
+  const [total, setTotal] = useState<TotalData>({});
   const category = useRecoilValue(categoryAtom);
   var color: string[] = [];
   var template: Graph[] = [];
   var graph: GraphData = {};
+  var totalData: TotalData = {};
 
   // イベント一覧を取得してAtomに保存
   const getEvents = async () => {
@@ -39,15 +43,22 @@ export const EventLayout = () => {
       for (var date in res.data) {
         const transactions = res.data[date];
         date = date.slice(0, -3);
-
+        let sum = 0;
         transactions.forEach((transaction: OneEvent) => {
           template[transaction.category].value += transaction.amount;
           template[transaction.category].category = transaction.category;
+          sum += transaction.amount;
         });
         graph[date] = template;
+        if (totalData[date]) {
+          totalData[date] += sum;
+        } else {
+          totalData[date] = sum;
+        }
       }
       setGraphData(graph);
       setColors(color);
+      setTotal(totalData);
     } catch (err: any) {
       if (err.status === 401) {
         alert("認証エラー\n再ログインしてください");
@@ -61,11 +72,19 @@ export const EventLayout = () => {
   // イベント一覧を取得
   useEffect(() => {
     (async () => {
-      if (check.calendar === 0) {
-        await getEvents();
-        setLoading(false);
-      }
+      await getEvents();
+      setLoading(false);
     })();
   }, [loading, events]);
-  return <GraphDataContext.Provider value={{ graphData, colors }}>{loading ? <p>Loading...</p> : <Outlet />}</GraphDataContext.Provider>;
+  return (
+    <GraphDataContext.Provider value={{ graphData, colors, total }}>
+      {loading ? (
+        <Box sx={{ display: "flex", justifyContent: "center", marginTop: "330px" }}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <Outlet />
+      )}
+    </GraphDataContext.Provider>
+  );
 };
