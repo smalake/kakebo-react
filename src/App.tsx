@@ -13,6 +13,11 @@ import { NoMenuLayout } from "./components/layout/NoMenuLayout";
 import { AuthLayout } from "./components/layout/AuthLayout";
 import { EventLayout } from "./components/layout/EventLayout";
 import { ChangeName } from "./pages/Setting/ChangeName";
+import { Select } from "./pages/Setup/Select";
+import { Start } from "./pages/Setup/Start";
+import { Setup } from "./components/layout/Setup";
+import { Create } from "./pages/Setup/Create";
+import { CreateOK } from "./pages/Setup/CreateOK";
 
 function App() {
   return (
@@ -26,6 +31,12 @@ function App() {
           <Route path="/" element={<NoMenuLayout />}>
             <Route path="event-edit/:id" element={<EventEdit />} />
             <Route path="change-name" element={<ChangeName />} />
+          </Route>
+          <Route path="/" element={<Setup />}>
+            <Route path="setup" element={<Start />} />
+            <Route path="setup-select" element={<Select />} />
+            <Route path="setup-create" element={<Create />} />
+            <Route path="setup-complete" element={<CreateOK />} />
           </Route>
           <Route path="/" element={<MenuLayout />}>
             <Route path="event-register" element={<EventRegister />} />
