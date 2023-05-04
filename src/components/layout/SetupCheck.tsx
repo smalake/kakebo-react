@@ -12,15 +12,18 @@ export const SetupCheck = () => {
       // セットアップが完了しているかチェック
       if (check.setup === 0) {
         try {
+          // グループ情報を取得
           const res = await setupApi.get();
-          console.log(res);
-          const grouoId = res.data["grouoId"];
-          if (grouoId <= 0) {
+          const groupId = Number(res.data["groupId"]);
+          // グループIDが0以下の場合はセットアップ未完了（未完了の場合は0か-1が返ってくる）
+          if (groupId <= 0) {
+            // セットアップ画面へ
             navigate("/setup");
           } else {
+            // セットアップ完了していた場合はAtomへ登録
             setCheck((prevCheck) => ({
               ...prevCheck,
-              setup: grouoId,
+              setup: groupId,
             }));
           }
         } catch (err: any) {
