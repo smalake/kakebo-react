@@ -1,0 +1,55 @@
+.fc .fc-scrollgrid-sync-table {
+  border: 1px;
+}
+
+.fc-daygrid-day-number {
+  font-size: 10px;
+}
+
+.fc-day-sat .fc-daygrid-day-number {
+  color: blue;
+}
+.fc-day-sat .fc-col-header-cell-cushion {
+  color: blue;
+}
+.fc-day-sun .fc-daygrid-day-number {
+  color: red;
+}
+.fc-day-sun .fc-col-header-cell-cushion {
+  color: red;
+}
+
+.fc .fc-daygrid-day-frame {
+  height: 48px;
+}
+.fc .fc-daygrid-day-frame:hover {
+  cursor: pointer;
+}
+.fc-event-title {
+  font-size: 11px;
+  color: red;
+}
+
+.fc-event {
+  background-color: transparent;
+  border: none;
+  text-align: center;
+  box-shadow: none !important;
+}
+
+.fc-event-selected::after,
+.fc-event:focus::after {
+  background: transparent;
+  content: none;
+}
+.fc-event-selected::before,
+.fc-event:focus::before {
+  background: transparent;
+  content: none;
+}
+.fc-daygrid-event-harness:before {
+  content: none;
+}
+.fc-daygrid-day-events:before {
+  content: none;
+}

@@ -1,0 +1,64 @@
+/* フォームのコンテナ */
+.container {
+  background-color: white;
+  padding: 25px 0 5px 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+.selector {
+  margin: 0 25px;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.eventList {
+  padding: 0;
+  background-color: white;
+}
+
+.listDisplay {
+  list-style-type: none;
+  border-bottom: 2px solid #ebebeb;
+  padding: 15px 0;
+}
+.listDisplays:last-child {
+  border: none;
+}
+
+.listHidden {
+  display: none;
+}
+
+.listItem {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.itemName {
+  margin-left: 20px;
+}
+.itemValue {
+  margin-right: 30px;
+}
+
+.noData {
+  text-align: center;
+  margin-top: 96px;
+}
+
+.total {
+  display: flex;
+  background-color: white;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 1px;
+}
+
+.totalTitle {
+  margin-left: 20px;
+}
+.totalContents {
+  margin-right: 30px;
+}

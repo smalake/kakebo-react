@@ -1,0 +1,38 @@
+.calendar {
+  background-color: white;
+  padding: 25px 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.eventList {
+  padding: 0;
+  background-color: white;
+}
+
+.eventContents {
+  list-style-type: none;
+  border-bottom: 2px solid #ebebeb;
+  padding: 15px 0;
+}
+.eventContents:last-child {
+  border: none;
+}
+.eventItem {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  text-decoration: none;
+  color: black;
+}
+
+.eventAmount {
+  margin-right: 30px;
+  position: relative;
+  top: 5px;
+}
+
+.detail {
+  margin-left: 20px;
+}
