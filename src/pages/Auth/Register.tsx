@@ -10,14 +10,8 @@ import { FirebaseError } from "firebase/app";
 import { useCookies } from "react-cookie";
 import { authApi } from "../../api/authApi";
 import { googleLogin } from "../../util/googleLogin";
-
-// 型の設定
-interface RegisterForm {
-  email: string;
-  name: string;
-  password: string;
-  confirmPassword: string;
-}
+import { Button, TextField } from "@mui/material";
+import { RegisterForm } from "../../types";
 
 export const Register = () => {
   const navigate = useNavigate();
@@ -80,8 +74,9 @@ export const Register = () => {
     try {
       const res = await authApi.register(data);
       if (res.status === 200) {
-        setCookie("kakebo", token); // トークンをCookieにセット
-        navigate("/input");
+        const now = new Date();
+        setCookie("kakebo", token, { expires: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000) }); // トークンをCookieにセット（有効期限1週間）
+        navigate("/event-register");
       } else {
         alert("新規登録に失敗しました");
       }
@@ -95,35 +90,61 @@ export const Register = () => {
     <div className={styles.container}>
       <h2>新規登録フォーム</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <label htmlFor="email">メールアドレス</label>
-          <input id="email" {...register("email")} />
-          <p className={styles.error}>{errors.email?.message as React.ReactNode}</p>
+        <div className={styles.form}>
+          <TextField
+            id="email"
+            label="メールアドレス"
+            {...register("email")}
+            error={Boolean(errors.email)}
+            helperText={errors.email?.message}
+            sx={{ width: "90%" }}
+          />
         </div>
-        <div>
-          <label htmlFor="name">表示名</label>
-          <input id="name" {...register("name")} />
-          <p className={styles.error}>{errors.name?.message as React.ReactNode}</p>
+        <div className={styles.form}>
+          <TextField
+            id="name"
+            label="表示名"
+            {...register("name")}
+            error={Boolean(errors.name)}
+            helperText={errors.name?.message}
+            sx={{ width: "90%" }}
+          />
         </div>
-        <div>
-          <label htmlFor="password">パスワード</label>
-          <input id="password" type="password" {...register("password")} />
-          <p className={styles.error}>{errors.password?.message as React.ReactNode}</p>
+        <div className={styles.form}>
+          <TextField
+            id="password"
+            label="パスワード"
+            type="password"
+            {...register("password")}
+            error={Boolean(errors.password)}
+            helperText={errors.password?.message}
+            sx={{ width: "90%" }}
+          />
         </div>
-        <div>
-          <label htmlFor="confirmPassword">確認用パスワード</label>
-          <input id="confirmPassword" type="password" {...register("confirmPassword")} />
-          <p className={styles.error}>{errors.confirmPassword?.message as React.ReactNode}</p>
+        <div className={styles.form}>
+          <TextField
+            id="confirmPassword"
+            label="確認用パスワード"
+            type="password"
+            {...register("confirmPassword")}
+            error={Boolean(errors.confirmPassword)}
+            helperText={errors.confirmPassword?.message}
+            sx={{ width: "90%" }}
+          />
         </div>
-        <button className={styles.submit} type="submit">
-          メールアドレスで新規登録
-        </button>
+        <div className={styles.form}>
+          <Button type="submit" variant="contained" color="info" sx={{ width: "90%", height: "45px", fontSize: "16px", fontWeight: "bold" }}>
+            メールアドレスで新規登録
+          </Button>
+        </div>
       </form>
       <p className={styles.subText}>または</p>
-      <button className={styles.google} onClick={handleGoogle}>
-        Googleアカウントで新規登録
-      </button>
-      <div>
+      <div className={styles.form}>
+        <button className={styles.google} onClick={handleGoogle}>
+          Googleアカウントで新規登録
+        </button>
+      </div>
+      <div style={{ marginLeft: "20px" }}>
         <p className={styles.linkText}>アカウントをお持ちの方は</p>
         <Link to="/login">ログイン</Link>
       </div>

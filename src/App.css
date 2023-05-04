@@ -5,8 +5,10 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
   margin: 0;
+  width: 390px;
+  height: 844px;
+  overflow: hidden;
 }
 
 /* タイトル */
@@ -17,26 +19,20 @@ h2 {
   text-align: center;
 }
 
-/* フォーム要素のスタイリング */
-label {
-  display: block;
-  font-size: 14px;
-  margin-bottom: 5px;
-}
-
-input,
-select {
-  width: 100%;
-  padding: 8px;
-  font-size: 14px;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  margin-bottom: 5px;
-  box-sizing: border-box;
-}
-
 #root {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.MuiBottomNavigation-root {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  height: 36px;
+  z-index: 1000;
 }
