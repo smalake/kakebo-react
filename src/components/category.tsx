@@ -11,12 +11,13 @@ import { ReactComponent as Utility } from "../assets/utility.svg";
 import { ReactComponent as Connection } from "../assets/connection.svg";
 import { useRecoilValue } from "recoil";
 import { categoryAtom } from "../recoil/CategoryAtom";
-import styles from "./category.module.css";
+import styles from "./Category.module.css";
 
 type CategoryProps = {
   catNum: number;
 };
 
+// カテゴリー番号を取得
 export const Category = ({ catNum }: CategoryProps): JSX.Element => {
   const category = useRecoilValue(categoryAtom);
   const color = category[catNum].color;

@@ -23,7 +23,7 @@ export const Calendar = () => {
     }[]
   >();
 
-  // イベントをカレンダー内に表示させるためのフォーマットへと変換
+  // Atomから取得したイベントをカレンダー内に表示させるためのフォーマットへと変換
   useEffect(() => {
     const formattedEvents = [];
     for (const date in events) {
