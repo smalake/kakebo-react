@@ -7,15 +7,18 @@ import { auth } from "../../firebase";
 
 export const Setting = () => {
   const navigate = useNavigate();
-  const [cookies, setCookie] = useCookies();
+  const [cookies, setCookie, removeCookie] = useCookies(["kakebo"]);
   const logout = async () => {
-    try {
-      await auth.signOut();
-      setCookie("kakebo", "");
-      alert("ログアウトしました");
-      navigate("login");
-    } catch (err) {
-      alert("ログアウトできませんでした");
+    const res = window.confirm("ログアウトしてもよろしいですか？");
+    if (res) {
+      try {
+        await auth.signOut();
+        removeCookie("kakebo");
+        alert("ログアウトしました");
+        navigate("/login");
+      } catch (err) {
+        alert("ログアウトできませんでした");
+      }
     }
   };
   return (
