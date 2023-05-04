@@ -1,12 +1,10 @@
-import { Box } from "@mui/material";
 import React, { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import { FooterMenu } from "../FooterMenu";
+import { setupApi } from "../../api/setupApi";
 import { useRecoilState } from "recoil";
 import { checkAtom } from "../../recoil/CheckAtom";
-import { setupApi } from "../../api/setupApi";
 
-export const MenuLayout = () => {
+export const SetupCheck = () => {
   const navigate = useNavigate();
   const [check, setCheck] = useRecoilState(checkAtom);
   useEffect(() => {
@@ -15,6 +13,7 @@ export const MenuLayout = () => {
       if (check.setup === 0) {
         try {
           const res = await setupApi.get();
+          console.log(res);
           const grouoId = res.data["grouoId"];
           if (grouoId <= 0) {
             navigate("/setup");
@@ -37,14 +36,5 @@ export const MenuLayout = () => {
     };
     checkSetup();
   });
-  return (
-    <Box sx={{ display: "flex", width: "100%", position: "absolute", top: "0" }}>
-      <Box sx={{ flexGrow: 1, width: "max-content" }}>
-        <Outlet />
-      </Box>
-      <Box sx={{ width: "max-content" }}>
-        <FooterMenu />
-      </Box>
-    </Box>
-  );
+  return <Outlet />;
 };

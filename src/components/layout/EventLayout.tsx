@@ -75,7 +75,7 @@ export const EventLayout = () => {
       await getEvents();
       setLoading(false);
     })();
-  }, [loading, events]);
+  }, [loading]);
   return (
     <GraphDataContext.Provider value={{ graphData, colors, total }}>
       {loading ? (
