@@ -27,7 +27,7 @@ export const Setting = () => {
       <Box sx={{ textAlign: "center" }}>
         <Button
           variant="contained"
-          sx={{ fontSize: "18px", width: "80%" }}
+          sx={{ fontSize: "18px", width: "80%", marginBottom: "30px" }}
           onClick={() => {
             navigate("/change-name");
           }}
