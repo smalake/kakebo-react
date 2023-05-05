@@ -1,7 +1,7 @@
 {
   "name": "kakebo-react",
   "version": "0.1.0",
-  "homepage": "https://kakebo-react.onrender.com/",
+  "homepage": "./",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.6",
@@ -55,7 +55,8 @@
     "local": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "start-sw": "http-server ./build"
   },
   "eslintConfig": {
     "extends": [
@@ -76,6 +77,7 @@
     ]
   },
   "devDependencies": {
-    "@types/styled-components": "^5.1.26"
+    "@types/styled-components": "^5.1.26",
+    "http-server": "^14.1.1"
   }
 }

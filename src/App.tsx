@@ -19,39 +19,42 @@ import { Setup } from "./components/layout/Setup";
 import { Create } from "./pages/Setup/Create";
 import { CreateOK } from "./pages/Setup/CreateOK";
 import { SetupCheck } from "./components/layout/SetupCheck";
+import { CookiesProvider } from "react-cookie";
 
 function App() {
   return (
     <RecoilRoot>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<AuthLayout />}>
-            <Route path="login" element={<Login />} />
-            <Route path="register" element={<Register />} />
-          </Route>
-
-          <Route path="/" element={<SetupCheck />}>
-            <Route path="/" element={<NoMenuLayout />}>
-              <Route path="event-edit/:id" element={<EventEdit />} />
-              <Route path="change-name" element={<ChangeName />} />
+      <CookiesProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<AuthLayout />}>
+              <Route index element={<Login />} />
+              <Route path="login" element={<Login />} />
+              <Route path="register" element={<Register />} />
             </Route>
-            <Route path="/" element={<MenuLayout />}>
-              <Route path="event-register" element={<EventRegister />} />
-              <Route path="/" element={<EventLayout />}>
-                <Route path="calendar" element={<Calendar />} />
-                <Route path="graph" element={<Graph />} />
+            <Route path="/" element={<SetupCheck />}>
+              <Route path="/" element={<NoMenuLayout />}>
+                <Route path="event-edit/:id" element={<EventEdit />} />
+                <Route path="change-name" element={<ChangeName />} />
               </Route>
-              <Route path="setting" element={<Setting />} />
+              <Route path="/" element={<MenuLayout />}>
+                <Route path="event-register" element={<EventRegister />} />
+                <Route path="/" element={<EventLayout />}>
+                  <Route path="calendar" element={<Calendar />} />
+                  <Route path="graph" element={<Graph />} />
+                </Route>
+                <Route path="setting" element={<Setting />} />
+              </Route>
             </Route>
-          </Route>
-          <Route path="/" element={<Setup />}>
-            <Route path="setup" element={<Start />} />
-            <Route path="setup-select" element={<Select />} />
-            <Route path="setup-create" element={<Create />} />
-            <Route path="setup-complete" element={<CreateOK />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+            <Route path="/" element={<Setup />}>
+              <Route path="setup" element={<Start />} />
+              <Route path="setup-select" element={<Select />} />
+              <Route path="setup-create" element={<Create />} />
+              <Route path="setup-complete" element={<CreateOK />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </CookiesProvider>
     </RecoilRoot>
   );
 }
