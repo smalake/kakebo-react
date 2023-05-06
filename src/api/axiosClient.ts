@@ -11,14 +11,14 @@ const getToken = () => localStorage.getItem("token");
 // APIを叩く前に前処理を行う
 axiosClient.interceptors.request.use(async (config: any) => {
   // const token = useRecoilValue(tokenAtom);
-  // return config;
-  return {
-    ...config,
-    headers: {
-      "Content-Type": "application/json",
-      authorization: `Bearer ${getToken()}`, //リクエストヘッダーにJWTを付けてサーバに渡す
-    },
-  };
+  return config;
+  //   return {
+  //     ...config,
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       authorization: `Bearer ${getToken()}`, //リクエストヘッダーにJWTを付けてサーバに渡す
+  //     },
+  //   };
 });
 
 axiosClient.interceptors.response.use(
