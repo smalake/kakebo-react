@@ -1,6 +1,6 @@
-import { axiosClient } from "./axiosClient";
+import { axiosAuthClient } from "./axiosAuthClient";
 
 export const authApi = {
-  register: (params: string) => axiosClient.post("/register", params),
-  login: (params: string) => axiosClient.post("/login", params),
+  register: (params: string) => axiosAuthClient.post("/register", params),
+  login: (params: string) => axiosAuthClient.post("/login", params),
 };

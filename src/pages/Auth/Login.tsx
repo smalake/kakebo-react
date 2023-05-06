@@ -12,10 +12,13 @@ import { googleLogin } from "../../util/googleLogin";
 import { FirebaseError } from "firebase/app";
 import { Button, TextField } from "@mui/material";
 import { LoginForm } from "../../types";
+import { useRecoilState } from "recoil";
+import { tokenAtom } from "../../recoil/TokenAtom";
 
 export const Login = () => {
   const navigate = useNavigate();
   const [cookies, setCookie] = useCookies();
+  const [idToken, setIdToken] = useRecoilState(tokenAtom);
 
   // react-hook-formの設定
   const {
@@ -71,8 +74,12 @@ export const Login = () => {
       const res = await authApi.login(data);
       if (res.status === 200) {
         setCookie("kakebo", token); // トークンをCookieにセット
+        // Atomにトークンをセット
+        setIdToken(token);
+        localStorage.setItem("token", token);
         navigate("/event-register");
       } else {
+        console.log(res);
         alert("認証エラーが発生しました\nアカウントが登録されていない、またはパスワードが間違っています");
       }
     } catch (err) {
