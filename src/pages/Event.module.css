@@ -11,6 +11,11 @@
   text-align: center;
 }
 
+.addButton {
+  margin: 30px 20px;
+  text-align: left;
+}
+
 .desc {
   margin-top: 10px;
   margin-left: 10px;

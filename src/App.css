@@ -2,13 +2,11 @@
 body {
   font-family: "Arial", sans-serif;
   background-color: #ebebeb !important;
-  display: flex;
-  justify-content: center;
   align-items: center;
   margin: 0;
-  width: 390px;
-  height: 844px;
-  overflow: hidden;
+  width: 100%;
+  height: auto;
+  /* overflow: hidden; */
 }
 
 /* タイトル */
