@@ -2,20 +2,17 @@ import React from "react";
 import styles from "./Setting.module.css";
 import { Box, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
-import { auth } from "../../firebase";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export const Setting = () => {
   const navigate = useNavigate();
-  const [cookies, setCookie, removeCookie] = useCookies(["kakebo"]);
-  const logout = async () => {
+  const { logout } = useAuth0();
+  const clickLogout = async () => {
     const res = window.confirm("ログアウトしてもよろしいですか？");
     if (res) {
       try {
-        await auth.signOut();
-        removeCookie("kakebo");
         alert("ログアウトしました");
-        navigate("/login");
+        logout({ logoutParams: { returnTo: window.location.origin } });
       } catch (err) {
         alert("ログアウトできませんでした");
       }
@@ -34,7 +31,7 @@ export const Setting = () => {
         >
           表示名の変更
         </Button>
-        <Button variant="contained" sx={{ fontSize: "18px", width: "80%" }} onClick={logout}>
+        <Button variant="contained" sx={{ fontSize: "18px", width: "80%" }} onClick={clickLogout}>
           ログアウト
         </Button>
       </Box>
