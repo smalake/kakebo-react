@@ -1,7 +1,6 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Login } from "./pages/Auth/Login";
-import { Register } from "./pages/Auth/Register";
 import { EventRegister } from "./pages/EventRegister";
 import { Calendar } from "./pages/Calendar";
 import { Graph } from "./pages/Graph";
@@ -20,42 +19,59 @@ import { Create } from "./pages/Setup/Create";
 import { CreateOK } from "./pages/Setup/CreateOK";
 import { SetupCheck } from "./components/layout/SetupCheck";
 import { CookiesProvider } from "react-cookie";
+import { Auth0Provider } from "@auth0/auth0-react";
+import { Home } from "./pages/Auth/Home";
+import { Authentication } from "./pages/Auth/Authentication";
 
 function App() {
+  const domain: string = process.env.REACT_APP_AUTH0_DOMAIN!;
+  const client_id: string = process.env.REACT_APP_AUTH0_CLIENT_ID!;
+  const audience: string = process.env.REACT_APP_AUTH0_AUDIENCE!;
   return (
-    <RecoilRoot>
-      <CookiesProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<AuthLayout />}>
-              <Route index element={<Login />} />
-              <Route path="login" element={<Login />} />
-              <Route path="register" element={<Register />} />
-            </Route>
-            <Route path="/" element={<SetupCheck />}>
-              <Route path="/" element={<NoMenuLayout />}>
-                <Route path="event-edit/:id" element={<EventEdit />} />
-                <Route path="change-name" element={<ChangeName />} />
+    <Auth0Provider
+      domain={domain}
+      clientId={client_id}
+      authorizationParams={{
+        redirect_uri: window.location.origin + "/auth",
+        audience: audience,
+        scope: "read:current_user update:current_user_metadata",
+      }}
+    >
+      <RecoilRoot>
+        <CookiesProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/auth" element={<Authentication />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/" element={<AuthLayout />}>
+                <Route index element={<Login />} />
+                <Route path="login" element={<Login />} />
               </Route>
-              <Route path="/" element={<MenuLayout />}>
-                <Route path="event-register" element={<EventRegister />} />
-                <Route path="/" element={<EventLayout />}>
-                  <Route path="calendar" element={<Calendar />} />
-                  <Route path="graph" element={<Graph />} />
+              <Route path="/" element={<SetupCheck />}>
+                <Route path="/" element={<NoMenuLayout />}>
+                  <Route path="event-edit/:id" element={<EventEdit />} />
+                  <Route path="change-name" element={<ChangeName />} />
                 </Route>
-                <Route path="setting" element={<Setting />} />
+                <Route path="/" element={<MenuLayout />}>
+                  <Route path="event-register" element={<EventRegister />} />
+                  <Route path="/" element={<EventLayout />}>
+                    <Route path="calendar" element={<Calendar />} />
+                    <Route path="graph" element={<Graph />} />
+                  </Route>
+                  <Route path="setting" element={<Setting />} />
+                </Route>
               </Route>
-            </Route>
-            <Route path="/" element={<Setup />}>
-              <Route path="setup" element={<Start />} />
-              <Route path="setup-select" element={<Select />} />
-              <Route path="setup-create" element={<Create />} />
-              <Route path="setup-complete" element={<CreateOK />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </CookiesProvider>
-    </RecoilRoot>
+              <Route path="/" element={<Setup />}>
+                <Route path="setup" element={<Start />} />
+                <Route path="setup-select" element={<Select />} />
+                <Route path="setup-create" element={<Create />} />
+                <Route path="setup-complete" element={<CreateOK />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </CookiesProvider>
+      </RecoilRoot>
+    </Auth0Provider>
   );
 }
 
