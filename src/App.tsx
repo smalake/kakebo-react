@@ -11,12 +11,6 @@ import { EventEdit } from "./pages/EventEdit";
 import { NoMenuLayout } from "./components/layout/NoMenuLayout";
 import { EventLayout } from "./components/layout/EventLayout";
 import { ChangeName } from "./pages/Setting/ChangeName";
-import { Select } from "./pages/Setup/Select";
-import { Start } from "./pages/Setup/Start";
-import { Setup } from "./components/layout/Setup";
-import { Create } from "./pages/Setup/Create";
-import { CreateOK } from "./pages/Setup/CreateOK";
-import { SetupCheck } from "./components/layout/SetupCheck";
 import { CookiesProvider } from "react-cookie";
 import { Auth0Provider } from "@auth0/auth0-react";
 import { Authentication } from "./pages/Auth/Authentication";
@@ -42,25 +36,17 @@ function App() {
               <Route path="/auth" element={<Authentication />} />
               <Route index element={<Login />} />
               <Route path="login" element={<Login />} />
-              <Route path="/" element={<SetupCheck />}>
-                <Route path="/" element={<NoMenuLayout />}>
-                  <Route path="event-edit/:id" element={<EventEdit />} />
-                  <Route path="change-name" element={<ChangeName />} />
-                </Route>
-                <Route path="/" element={<MenuLayout />}>
-                  <Route path="event-register" element={<EventRegister />} />
-                  <Route path="/" element={<EventLayout />}>
-                    <Route path="calendar" element={<Calendar />} />
-                    <Route path="graph" element={<Graph />} />
-                  </Route>
-                  <Route path="setting" element={<Setting />} />
-                </Route>
+              <Route path="/" element={<NoMenuLayout />}>
+                <Route path="event-edit/:id" element={<EventEdit />} />
+                <Route path="change-name" element={<ChangeName />} />
               </Route>
-              <Route path="/" element={<Setup />}>
-                <Route path="setup" element={<Start />} />
-                <Route path="setup-select" element={<Select />} />
-                <Route path="setup-create" element={<Create />} />
-                <Route path="setup-complete" element={<CreateOK />} />
+              <Route path="/" element={<MenuLayout />}>
+                <Route path="event-register" element={<EventRegister />} />
+                <Route path="/" element={<EventLayout />}>
+                  <Route path="calendar" element={<Calendar />} />
+                  <Route path="graph" element={<Graph />} />
+                </Route>
+                <Route path="setting" element={<Setting />} />
               </Route>
             </Routes>
           </BrowserRouter>
