@@ -9,7 +9,6 @@ import { RecoilRoot } from "recoil";
 import { MenuLayout } from "./components/layout/MenuLayout";
 import { EventEdit } from "./pages/EventEdit";
 import { NoMenuLayout } from "./components/layout/NoMenuLayout";
-import { AuthLayout } from "./components/layout/AuthLayout";
 import { EventLayout } from "./components/layout/EventLayout";
 import { ChangeName } from "./pages/Setting/ChangeName";
 import { Select } from "./pages/Setup/Select";
@@ -20,7 +19,6 @@ import { CreateOK } from "./pages/Setup/CreateOK";
 import { SetupCheck } from "./components/layout/SetupCheck";
 import { CookiesProvider } from "react-cookie";
 import { Auth0Provider } from "@auth0/auth0-react";
-import { Home } from "./pages/Auth/Home";
 import { Authentication } from "./pages/Auth/Authentication";
 
 function App() {
@@ -42,11 +40,8 @@ function App() {
           <BrowserRouter>
             <Routes>
               <Route path="/auth" element={<Authentication />} />
-              <Route path="/home" element={<Home />} />
-              <Route path="/" element={<AuthLayout />}>
-                <Route index element={<Login />} />
-                <Route path="login" element={<Login />} />
-              </Route>
+              <Route index element={<Login />} />
+              <Route path="login" element={<Login />} />
               <Route path="/" element={<SetupCheck />}>
                 <Route path="/" element={<NoMenuLayout />}>
                   <Route path="event-edit/:id" element={<EventEdit />} />
