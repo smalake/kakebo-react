@@ -1,14 +1,13 @@
 import { Box, Stack } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { PieChart, ResponsiveContainer, Pie, Cell } from "recharts";
 import styles from "./Graph.module.css";
-import { GraphDataContext } from "../util/context";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { Category } from "../components/Category";
 import { useNavigate } from "react-router-dom";
 import { checkAtom } from "../recoil/CheckAtom";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import { graphAtom } from "../recoil/GraphAtom";
 import { totalAtom } from "../recoil/TotalAtom";
 import { categoryAtom } from "../recoil/CategoryAtom";
@@ -23,11 +22,6 @@ export const Graph = () => {
   const [year, setYear] = useState(date.getFullYear());
   const [month, setMonth] = useState(date.getMonth() + 1);
   const [yearMonth, setYearMonth] = useState(`${date.getFullYear().toString()}-${(date.getMonth() + 1).toString().padStart(2, "0")}`);
-
-  // ラベル名
-  // const renderCustomizedLabel = ({ name }: any) => {
-  //   return name;
-  // };
 
   useEffect(() => {
     // イベントを取得しているかチェック
