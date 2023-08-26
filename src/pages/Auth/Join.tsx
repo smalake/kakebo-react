@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { authApi } from "../../api/authApi";
 import { useAuth0 } from "@auth0/auth0-react";
 
-export const Authentication = () => {
+export const Join = () => {
   const navigate = useNavigate();
   const { getAccessTokenSilently } = useAuth0();
+  //   const { group } = useParams();
+  const group = 10;
 
   useEffect(() => {
     // APIサーバへのログイン処理
@@ -18,16 +20,17 @@ export const Authentication = () => {
           },
         });
         localStorage.setItem("kakebo", token);
-        const res = await authApi.login();
+        const res = await authApi.join(group);
+        console.log(res);
         if (res.status === 200) {
           navigate("/event-register");
         } else {
           console.log(res);
-          alert("認証エラーが発生しました\nアカウントが登録されていない、またはパスワードが間違っています");
+          alert("認証エラーが発生しました");
         }
       } catch (err) {
         console.log(err);
-        alert("認証エラーが発生しました\nアカウントが登録されていない、またはパスワードが間違っています");
+        alert("認証エラーが発生しました");
       }
     };
     apiLogin();
