@@ -30,14 +30,15 @@ export const EventEdit = () => {
       try {
         if (id !== undefined) {
           const event = await eventApi.getOne(parseInt(id));
+          const formatedDate = event.data["date"].split("T");
           setValue("amount", event.data["amount"]);
           setValue("category", event.data["category"]);
-          setValue("storeName", event.data["storeName"]);
-          setValue("date", event.data["date"]);
-          setCreateUser(event.data["createUser"]);
-          setCreatedAt(event.data["createdAt"]);
-          setUpdateUser(event.data["updateUser"]);
-          setUpdatedAt(event.data["updatedAt"]);
+          setValue("storeName", event.data["store_name"]);
+          setValue("date", formatedDate[0]);
+          setCreateUser(event.data["create_user"]);
+          setCreatedAt(event.data["created_at"]);
+          setUpdateUser(event.data["update_user"]);
+          setUpdatedAt(event.data["updated_at"]);
         } else {
           alert("読み込みに失敗しました");
         }
