@@ -1,23 +1,34 @@
 import { Box, Stack } from "@mui/material";
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { PieChart, ResponsiveContainer, Pie, Cell } from "recharts";
 import styles from "./Graph.module.css";
-import { GraphDataContext } from "../util/context";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { Category } from "../components/Category";
+import { useNavigate } from "react-router-dom";
+import { checkAtom } from "../recoil/CheckAtom";
+import { useRecoilValue } from "recoil";
+import { graphAtom } from "../recoil/GraphAtom";
+import { totalAtom } from "../recoil/TotalAtom";
+import { categoryAtom } from "../recoil/CategoryAtom";
 
 export const Graph = () => {
-  const { graphData, colors, total } = React.useContext(GraphDataContext);
+  const navigate = useNavigate();
+  const check = useRecoilValue(checkAtom);
+  const graphData = useRecoilValue(graphAtom);
+  const total = useRecoilValue(totalAtom);
+  const category = useRecoilValue(categoryAtom);
   const date = new Date();
   const [year, setYear] = useState(date.getFullYear());
   const [month, setMonth] = useState(date.getMonth() + 1);
   const [yearMonth, setYearMonth] = useState(`${date.getFullYear().toString()}-${(date.getMonth() + 1).toString().padStart(2, "0")}`);
 
-  // ラベル名
-  // const renderCustomizedLabel = ({ name }: any) => {
-  //   return name;
-  // };
+  useEffect(() => {
+    // イベントを取得しているかチェック
+    if (check.calendar === 0) {
+      navigate("/loading/graph");
+    }
+  }, []);
 
   const handleDown = () => {
     let newYear = year;
@@ -84,18 +95,20 @@ export const Graph = () => {
                 <Pie
                   startAngle={90}
                   endAngle={-270}
-                  data={graphData[yearMonth]}
+                  data={graphData[yearMonth].map((value, cat) => ({
+                    name: category[cat]["name"],
+                    value: value,
+                  }))}
                   cx="50%"
                   cy="50%"
                   outerRadius={80}
                   fill="#8884d8"
                   nameKey="name"
                   dataKey="value"
-                  // label={renderCustomizedLabel}
                   style={{ fontSize: "11px" }}
                 >
-                  {graphData[yearMonth].map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+                  {graphData[yearMonth].map((entry, cat) => (
+                    <Cell key={`cell-${cat}`} fill={category[cat]["color"]} />
                   ))}
                 </Pie>
               </PieChart>
@@ -112,13 +125,13 @@ export const Graph = () => {
       <div>
         <ul className={styles.eventList}>
           {graphData[yearMonth] ? (
-            graphData[yearMonth].map((item, index) => (
-              <li key={index} className={item.value ? styles.listDisplay : styles.listHidden}>
+            graphData[yearMonth].map((value, cat) => (
+              <li key={cat} className={value ? styles.listDisplay : styles.listHidden}>
                 <div className={styles.listItem}>
                   <span className={styles.itemName}>
-                    <Category catNum={item.category} />
+                    <Category catNum={cat} />
                   </span>
-                  <span className={styles.itemValue}>{item.value}円</span>
+                  <span className={styles.itemValue}>{value}円</span>
                 </div>
               </li>
             ))

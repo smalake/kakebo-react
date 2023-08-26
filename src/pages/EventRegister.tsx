@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import styles from "./Event.module.css";
 import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
@@ -8,11 +8,14 @@ import { EventRegisterForm } from "../types";
 
 export const EventRegister = () => {
   const navigate = useNavigate();
+  const [display, setDisplay] = useState(false);
+
   // react-hook-formの設定
   const {
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm<EventRegisterForm>();
 
@@ -47,6 +50,16 @@ export const EventRegister = () => {
     }
   };
 
+  // 追加ボタンを押したときの処理
+  const addSeconds = () => {
+    setDisplay(true);
+  };
+  // 削除ボタンを押したときの処理
+  const removeSeconds = () => {
+    setDisplay(false);
+    reset({ amount2: 0 });
+  };
+
   return (
     <div className={styles.container}>
       <h2>家計簿入力</h2>
@@ -55,7 +68,6 @@ export const EventRegister = () => {
           <TextField
             id="amount1"
             label="金額"
-            defaultValue={0}
             error={Boolean(errors.amount1)}
             {...register("amount1", { required: "金額を入力してください", min: { value: 1, message: "1以上の数値を入力してください" } })}
             type="number"
@@ -87,33 +99,37 @@ export const EventRegister = () => {
             )}
           />
         </div>
-        <div className={styles.form}>
-          <TextField id="amount2" defaultValue={0} label="金額" {...register("amount2")} type="number" sx={{ width: "90%" }} />
-        </div>
-        <div className={styles.form}>
-          <Controller
-            name="category2"
-            control={control}
-            defaultValue={0}
-            render={({ field }) => (
-              <FormControl sx={{ width: "90%", textAlign: "left" }}>
-                <InputLabel id="category2-label">カテゴリー</InputLabel>
-                <Select {...field} id="category2" label="カテゴリー" labelId="category2-label">
-                  <MenuItem value={0}>食費</MenuItem>
-                  <MenuItem value={1}>外食費</MenuItem>
-                  <MenuItem value={2}>日用品</MenuItem>
-                  <MenuItem value={3}>交通費</MenuItem>
-                  <MenuItem value={4}>医療費</MenuItem>
-                  <MenuItem value={5}>衣服</MenuItem>
-                  <MenuItem value={6}>趣味</MenuItem>
-                  <MenuItem value={7}>光熱費</MenuItem>
-                  <MenuItem value={8}>通信費</MenuItem>
-                  <MenuItem value={9}>その他</MenuItem>
-                </Select>
-              </FormControl>
-            )}
-          />
-        </div>
+        {display && (
+          <div>
+            <div className={styles.form}>
+              <TextField id="amount2" label="金額" {...register("amount2")} type="number" sx={{ width: "90%" }} />
+            </div>
+            <div className={styles.form}>
+              <Controller
+                name="category2"
+                control={control}
+                defaultValue={0}
+                render={({ field }) => (
+                  <FormControl sx={{ width: "90%", textAlign: "left" }}>
+                    <InputLabel id="category2-label">カテゴリー</InputLabel>
+                    <Select {...field} id="category2" label="カテゴリー" labelId="category2-label">
+                      <MenuItem value={0}>食費</MenuItem>
+                      <MenuItem value={1}>外食費</MenuItem>
+                      <MenuItem value={2}>日用品</MenuItem>
+                      <MenuItem value={3}>交通費</MenuItem>
+                      <MenuItem value={4}>医療費</MenuItem>
+                      <MenuItem value={5}>衣服</MenuItem>
+                      <MenuItem value={6}>趣味</MenuItem>
+                      <MenuItem value={7}>光熱費</MenuItem>
+                      <MenuItem value={8}>通信費</MenuItem>
+                      <MenuItem value={9}>その他</MenuItem>
+                    </Select>
+                  </FormControl>
+                )}
+              />
+            </div>
+          </div>
+        )}
         <div className={styles.form}>
           <TextField
             id="storeName"
@@ -142,6 +158,31 @@ export const EventRegister = () => {
             sx={{ width: "90%" }}
           />
         </div>
+        {!display && (
+          <div className={styles.addButton}>
+            <Button
+              variant="outlined"
+              onClick={() => {
+                addSeconds();
+              }}
+            >
+              カテゴリー追加
+            </Button>
+          </div>
+        )}
+        {display && (
+          <div className={styles.addButton}>
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={() => {
+                removeSeconds();
+              }}
+            >
+              追加カテゴリー削除
+            </Button>
+          </div>
+        )}
         <div className={styles.form}>
           <Button type="submit" variant="contained" color="info" sx={{ width: "90%", height: "45px", fontSize: "16px", fontWeight: "bold" }}>
             登録

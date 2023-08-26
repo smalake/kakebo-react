@@ -1,6 +1,7 @@
 /* フォームのコンテナ */
 .container {
   background-color: white;
+  width: 100%;
   padding: 30px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -27,37 +28,4 @@
 
 .submit:hover {
   background-color: #2779bd;
-}
-
-.google {
-  width: 90%;
-  height: 45px;
-  padding: 8px;
-  font-size: 14px;
-  font-weight: bold;
-  background-color: white;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  margin-bottom: 20px;
-}
-.google:before {
-  content: "";
-  background: url("../../assets/google_logo.png") no-repeat;
-  display: inline-block;
-  width: 18px;
-  height: 18px;
-  background-size: contain;
-  vertical-align: middle;
-  margin: -3px 10px 0 0;
-}
-
-.subText {
-  text-align: center;
-  font-size: 0.9em;
-}
-.linkText {
-  text-align: left;
-  font-size: 0.9em;
-  margin-bottom: 5px;
 }

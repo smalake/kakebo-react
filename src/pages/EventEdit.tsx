@@ -4,7 +4,7 @@ import styles from "./Event.module.css";
 import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { eventApi } from "../api/eventApi";
 import { useNavigate, useParams } from "react-router-dom";
-import { EventEditForm, EventID } from "../types";
+import { EventEditForm } from "../types";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 export const EventEdit = () => {
@@ -30,14 +30,15 @@ export const EventEdit = () => {
       try {
         if (id !== undefined) {
           const event = await eventApi.getOne(parseInt(id));
+          const formatedDate = event.data["date"].split("T");
           setValue("amount", event.data["amount"]);
           setValue("category", event.data["category"]);
-          setValue("storeName", event.data["storeName"]);
-          setValue("date", event.data["date"]);
-          setCreateUser(event.data["createUser"]);
-          setCreatedAt(event.data["createdAt"]);
-          setUpdateUser(event.data["updateUser"]);
-          setUpdatedAt(event.data["updatedAt"]);
+          setValue("storeName", event.data["store_name"]);
+          setValue("date", formatedDate[0]);
+          setCreateUser(event.data["create_user"]);
+          setCreatedAt(event.data["created_at"]);
+          setUpdateUser(event.data["update_user"]);
+          setUpdatedAt(event.data["updated_at"]);
         } else {
           alert("読み込みに失敗しました");
         }
@@ -60,14 +61,13 @@ export const EventEdit = () => {
     try {
       // 送信用のフォーマットへと変換
       const send = {
-        id: parseInt(id!),
         amount: Number(data.amount),
         category: data.category,
-        storeName: data.storeName,
+        store_name: data.storeName,
         date: d.toISOString(),
       };
 
-      const res = await eventApi.update(send);
+      const res = await eventApi.update(parseInt(id!), send);
       if (res.status === 200) {
         navigate("/calendar");
         alert("更新しました");
@@ -95,10 +95,7 @@ export const EventEdit = () => {
     const result = window.confirm("本当に削除しますか？");
     if (result) {
       try {
-        const send: EventID = {
-          id: parseInt(id!),
-        };
-        const res = await eventApi.delete(send);
+        const res = await eventApi.delete(parseInt(id!));
         if (res.status === 200) {
           navigate("/calendar");
           alert("削除しました");

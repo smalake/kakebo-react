@@ -1,11 +1,11 @@
-import type { EventRegisterForm, EventEditForm, EventID } from "./event";
+import type { EventRegisterForm, EventEditForm, TotalData } from "./event";
 import type { RegisterForm, LoginForm } from "./auth";
 import type { Events, OneEvent } from "./calendar";
-import type { Graph, GraphData, Colors, TotalData } from "./graph";
+import type { Graphs, GraphData, Colors } from "./graph";
 import type { NameChangeForm } from "./setting";
 
-export type { EventRegisterForm, EventEditForm, EventID };
+export type { EventRegisterForm, EventEditForm, TotalData };
 export type { RegisterForm, LoginForm };
 export type { Events, OneEvent };
-export type { Graph, GraphData, Colors, TotalData };
+export type { Graphs, GraphData, Colors };
 export type { NameChangeForm };
