@@ -7,14 +7,17 @@ import "./calendar.css";
 import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 import { EventClickArg } from "@fullcalendar/core";
 import { format } from "date-fns";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { eventAtom } from "../recoil/EventAtom";
 import { Category } from "../components/Category";
 import { Events } from "../types";
+import { checkAtom } from "../recoil/CheckAtom";
 
 export const Calendar = () => {
+  const navigate = useNavigate();
   const events = useRecoilValue(eventAtom);
+  const check = useRecoilValue(checkAtom);
   const [selectedDate, setSelectedDate] = useState("");
   const [amount, setAmount] = useState<
     {
@@ -25,23 +28,27 @@ export const Calendar = () => {
 
   // Atomから取得したイベントをカレンダー内に表示させるためのフォーマットへと変換
   useEffect(() => {
-    const formattedEvents = [];
-    for (const date in events) {
-      const transactions = events[date];
-      let totalDay = 0;
+    // イベントを取得しているかチェック
+    if (check.calendar === 0) {
+      navigate("/loading/calendar");
+    } else {
+      const formattedEvents = [];
+      for (const date in events) {
+        const transactions = events[date];
+        let totalDay = 0;
 
-      for (const transaction of transactions) {
-        totalDay += transaction.amount;
+        for (const transaction of transactions) {
+          totalDay += transaction.amount;
+        }
+
+        formattedEvents.push({
+          title: `${totalDay}円`,
+          start: date,
+        });
       }
-
-      formattedEvents.push({
-        title: `${totalDay}円`,
-        start: date,
-      });
+      setAmount(formattedEvents);
     }
-
-    setAmount(formattedEvents);
-  }, [events]);
+  }, []);
 
   const headerToolbar = {
     start: "prev",

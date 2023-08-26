@@ -9,11 +9,12 @@ import { RecoilRoot } from "recoil";
 import { MenuLayout } from "./components/layout/MenuLayout";
 import { EventEdit } from "./pages/EventEdit";
 import { NoMenuLayout } from "./components/layout/NoMenuLayout";
-import { EventLayout } from "./components/layout/EventLayout";
 import { ChangeName } from "./pages/Setting/ChangeName";
 import { CookiesProvider } from "react-cookie";
 import { Auth0Provider } from "@auth0/auth0-react";
-import { Authentication } from "./pages/Auth/Authentication";
+import { Top } from "./pages/Top";
+import { Join } from "./pages/Auth/Join";
+import { Loading } from "./pages/Loading";
 
 function App() {
   const domain: string = process.env.REACT_APP_AUTH0_DOMAIN!;
@@ -24,7 +25,7 @@ function App() {
       domain={domain}
       clientId={client_id}
       authorizationParams={{
-        redirect_uri: window.location.origin + "/auth",
+        redirect_uri: window.location.origin + "/login",
         audience: audience,
         scope: "read:current_user update:current_user_metadata",
       }}
@@ -33,20 +34,19 @@ function App() {
         <CookiesProvider>
           <BrowserRouter>
             <Routes>
-              <Route path="/auth" element={<Authentication />} />
-              <Route index element={<Login />} />
+              <Route index element={<Top />} />
               <Route path="login" element={<Login />} />
+              <Route path="join" element={<Join />} />
               <Route path="/" element={<NoMenuLayout />}>
                 <Route path="event-edit/:id" element={<EventEdit />} />
                 <Route path="change-name" element={<ChangeName />} />
               </Route>
               <Route path="/" element={<MenuLayout />}>
                 <Route path="event-register" element={<EventRegister />} />
-                <Route path="/" element={<EventLayout />}>
-                  <Route path="calendar" element={<Calendar />} />
-                  <Route path="graph" element={<Graph />} />
-                </Route>
+                <Route path="calendar" element={<Calendar />} />
+                <Route path="graph" element={<Graph />} />
                 <Route path="setting" element={<Setting />} />
+                <Route path="loading/:base" element={<Loading />} />
               </Route>
             </Routes>
           </BrowserRouter>

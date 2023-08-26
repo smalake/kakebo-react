@@ -17,3 +17,7 @@ export interface EventEditForm {
 export interface EventID {
   id: number;
 }
+
+export interface TotalData {
+  [date: string]: number;
+}

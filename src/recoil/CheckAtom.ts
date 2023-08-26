@@ -5,6 +5,5 @@ export const checkAtom = atom({
   default: {
     calendar: 0,
     graph: 0,
-    setup: 0,
   },
 });
