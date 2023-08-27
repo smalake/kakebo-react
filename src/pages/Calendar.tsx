@@ -23,7 +23,6 @@ export const Calendar = memo(() => {
       start: string;
     }[]
   >();
-  console.log(events);
 
   useEffect(() => {
     setAmount(eventFormat);
