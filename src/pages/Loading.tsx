@@ -25,7 +25,6 @@ export const Loading = () => {
   const getEvents = async () => {
     try {
       const res = await eventApi.getAll();
-      console.log(res);
       setEvents(res.data.event);
       setTotal(res.data.total);
       setGraphs(res.data.graph);
@@ -51,7 +50,7 @@ export const Loading = () => {
       setLoading(false);
       navigate(`/${base}`);
     })();
-  }, [loading]);
+  }, []);
   return (
     <Box>
       {loading ? (

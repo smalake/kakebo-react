@@ -48,7 +48,7 @@ export const Calendar = () => {
       }
       setAmount(formattedEvents);
     }
-  }, []);
+  }, [events, check, navigate]);
 
   const headerToolbar = {
     start: "prev",
