@@ -13,7 +13,6 @@ export const ChangeName = () => {
     register,
     handleSubmit,
     setValue,
-    control,
     formState: { errors },
   } = useForm<NameChangeForm>();
 

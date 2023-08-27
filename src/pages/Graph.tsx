@@ -1,34 +1,22 @@
 import { Box, Stack } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { PieChart, ResponsiveContainer, Pie, Cell } from "recharts";
 import styles from "./Graph.module.css";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { Category } from "../components/Category";
-import { useNavigate } from "react-router-dom";
-import { checkAtom } from "../recoil/CheckAtom";
 import { useRecoilValue } from "recoil";
-import { graphAtom } from "../recoil/GraphAtom";
-import { totalAtom } from "../recoil/TotalAtom";
 import { categoryAtom } from "../recoil/CategoryAtom";
+import { eventAtom } from "../recoil/EventAtom";
 
 export const Graph = () => {
-  const navigate = useNavigate();
-  const check = useRecoilValue(checkAtom);
-  const graphData = useRecoilValue(graphAtom);
-  const total = useRecoilValue(totalAtom);
+  const graphData = useRecoilValue(eventAtom).graph;
+  const total = useRecoilValue(eventAtom).total;
   const category = useRecoilValue(categoryAtom);
   const date = new Date();
   const [year, setYear] = useState(date.getFullYear());
   const [month, setMonth] = useState(date.getMonth() + 1);
   const [yearMonth, setYearMonth] = useState(`${date.getFullYear().toString()}-${(date.getMonth() + 1).toString().padStart(2, "0")}`);
-
-  useEffect(() => {
-    // イベントを取得しているかチェック
-    if (check.calendar === 0) {
-      navigate("/loading/graph");
-    }
-  }, []);
 
   const handleDown = () => {
     let newYear = year;
