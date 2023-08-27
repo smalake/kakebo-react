@@ -19,7 +19,6 @@ export const Login = () => {
         });
         localStorage.setItem("token", token);
         const res = await authApi.login();
-        console.log(res);
         if (res.status === 200) {
           navigate("/event-register");
         } else {
