@@ -10,7 +10,6 @@ import { MenuLayout } from "./components/layout/MenuLayout";
 import { EventEdit } from "./pages/EventEdit";
 import { NoMenuLayout } from "./components/layout/NoMenuLayout";
 import { ChangeName } from "./pages/Setting/ChangeName";
-import { CookiesProvider } from "react-cookie";
 import { Auth0Provider } from "@auth0/auth0-react";
 import { Top } from "./pages/Top";
 import { Join } from "./pages/Auth/Join";
@@ -33,25 +32,23 @@ function App() {
     >
       <RecoilRoot>
         <Suspense fallback={<Fallback />}>
-          <CookiesProvider>
-            <BrowserRouter>
-              <Routes>
-                <Route index element={<Top />} />
-                <Route path="login" element={<Login />} />
-                <Route path="join" element={<Join />} />
-                <Route path="/" element={<NoMenuLayout />}>
-                  <Route path="event-edit/:id" element={<EventEdit />} />
-                  <Route path="change-name" element={<ChangeName />} />
-                </Route>
-                <Route path="/" element={<MenuLayout />}>
-                  <Route path="event-register" element={<EventRegister />} />
-                  <Route path="calendar" element={<Calendar />} />
-                  <Route path="graph" element={<Graph />} />
-                  <Route path="setting" element={<Setting />} />
-                </Route>
-              </Routes>
-            </BrowserRouter>
-          </CookiesProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route index element={<Top />} />
+              <Route path="login" element={<Login />} />
+              <Route path="join" element={<Join />} />
+              <Route path="/" element={<NoMenuLayout />}>
+                <Route path="event-edit/:id" element={<EventEdit />} />
+                <Route path="change-name" element={<ChangeName />} />
+              </Route>
+              <Route path="/" element={<MenuLayout />}>
+                <Route path="event-register" element={<EventRegister />} />
+                <Route path="calendar" element={<Calendar />} />
+                <Route path="graph" element={<Graph />} />
+                <Route path="setting" element={<Setting />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
         </Suspense>
       </RecoilRoot>
     </Auth0Provider>
