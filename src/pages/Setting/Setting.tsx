@@ -2,19 +2,25 @@ import React from "react";
 import styles from "./Setting.module.css";
 import { Box, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
+import { authApi } from "../../api/authApi";
 
 export const Setting = () => {
   const navigate = useNavigate();
-  const { logout } = useAuth0();
   const clickLogout = async () => {
     const res = window.confirm("ログアウトしてもよろしいですか？");
     if (res) {
       try {
-        alert("ログアウトしました");
-        logout({ logoutParams: { returnTo: window.location.origin } });
+        const res = await authApi.logout();
+        if (res.status === 200) {
+          alert("ログアウトしました");
+          navigate("/login");
+        } else {
+          console.log(res);
+          alert("ログアウトに失敗しました");
+        }
       } catch (err) {
-        alert("ログアウトできませんでした");
+        console.log(err);
+        alert("ログアウトに失敗しました");
       }
     }
   };

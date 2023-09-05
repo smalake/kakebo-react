@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import styles from "./Auth.module.css";
 import { Button, TextField } from "@mui/material";
 import { LoginForm } from "../../../src/types";
-import { axiosClient } from "../../api/axiosClient";
+import { authApi } from "../../api/authApi";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -20,17 +20,13 @@ export const Login = () => {
   // メールアドレスでログインボタンが押されたときの処理
   const onSubmit = async (data: LoginForm) => {
     try {
-      axiosClient.get("/sanctum/csrf-cookie").then((res) => {
-        axiosClient
-          .post("/login", {
-            email: data.email,
-            password: data.password,
-          })
-          .then((res) => {
-            console.log(res);
-            navigate("/event-register");
-          });
-      });
+      const param = {
+        email: data.email,
+        password: data.password,
+      };
+      const res = await authApi.login(param);
+      localStorage.setItem("token", res.data["api_token"]);
+      navigate("/event-register");
     } catch (err) {
       console.log(err);
       alert("メールアドレスかパスワードが間違っています");
