@@ -77,7 +77,7 @@ export const EventList = ({ events, selectedDate }: { events: Event; selectedDat
           <li key={index} className={styles.eventContents}>
             <Link to={`/event-edit/${item.id}`} className={styles.eventItem}>
               <span className={styles.detail}>
-                <Category catNum={item.category} /> {item.storeName ? `(${item.storeName})` : ""}
+                <Category catNum={item.category} /> {item.store_name ? `(${item.store_name})` : ""}
               </span>
               <span className={styles.eventAmount}>{item.amount}円</span>
             </Link>
