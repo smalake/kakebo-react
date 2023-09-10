@@ -30,8 +30,10 @@ export const Register = () => {
       };
       const res = await authApi.register(registerData);
       if (res.status === 200) {
+        localStorage.setItem("token", res.data["accessToken"]);
+        localStorage.setItem("refresh", res.data["refreshToken"]);
         alert("登録完了しました");
-        navigate("/login");
+        navigate("/event-register");
       } else {
         alert("新規登録に失敗しました");
       }

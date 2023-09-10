@@ -25,7 +25,8 @@ export const Login = () => {
         password: data.password,
       };
       const res = await authApi.login(param);
-      localStorage.setItem("token", res.data["api_token"]);
+      localStorage.setItem("token", res.data["accessToken"]);
+      localStorage.setItem("refresh", res.data["refreshToken"]);
       navigate("/event-register");
     } catch (err) {
       console.log(err);

@@ -12,6 +12,8 @@ export const Setting = () => {
       try {
         const res = await authApi.logout();
         if (res.status === 200) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("refresh");
           alert("ログアウトしました");
           navigate("/login");
         } else {
