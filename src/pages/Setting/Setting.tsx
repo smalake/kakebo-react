@@ -1,11 +1,40 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Setting.module.css";
 import { Box, Button } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
 import { useNavigate } from "react-router-dom";
 import { authApi } from "../../api/authApi";
+import { settingApi } from "../../api/settingApi";
 
 export const Setting = () => {
   const navigate = useNavigate();
+  const [isParent, setIsParent] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // グループの親かどうかチェック
+    const checkParent = async () => {
+      try {
+        const res = await settingApi.isParent();
+        if (res.status === 200) {
+          setIsParent(res.data.parent);
+        } else if (res.status === 401) {
+          alert("ログインしてください");
+          navigate("/login");
+        } else {
+          alert("エラーが発生しました");
+          console.log(res);
+        }
+      } catch (err) {
+        alert("エラーが発生しました");
+        console.log(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    checkParent();
+  }, []);
+
   const clickLogout = async () => {
     const res = window.confirm("ログアウトしてもよろしいですか？");
     if (res) {
@@ -28,21 +57,50 @@ export const Setting = () => {
   };
   return (
     <div className={styles.container}>
-      <h2>設定</h2>
-      <Box sx={{ textAlign: "center" }}>
-        <Button
-          variant="contained"
-          sx={{ fontSize: "18px", width: "80%", marginBottom: "30px" }}
-          onClick={() => {
-            navigate("/change-name");
+      {loading ? (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "330px",
           }}
         >
-          表示名の変更
-        </Button>
-        <Button variant="contained" sx={{ fontSize: "18px", width: "80%" }} onClick={clickLogout}>
-          ログアウト
-        </Button>
-      </Box>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <div>
+          <h2>設定</h2>
+          <Box sx={{ textAlign: "center" }}>
+            <Button
+              variant="contained"
+              sx={{ fontSize: "18px", width: "80%", marginBottom: "30px" }}
+              onClick={() => {
+                navigate("/change-name");
+              }}
+            >
+              表示名の変更
+            </Button>
+            {isParent && (
+              <Button
+                variant="contained"
+                sx={{
+                  fontSize: "18px",
+                  width: "80%",
+                  marginBottom: "30px",
+                }}
+                onClick={() => {
+                  navigate("/invite-group");
+                }}
+              >
+                共有家計簿への招待
+              </Button>
+            )}
+            <Button variant="contained" sx={{ fontSize: "18px", width: "80%" }} onClick={clickLogout}>
+              ログアウト
+            </Button>
+          </Box>
+        </div>
+      )}
     </div>
   );
 };
