@@ -44,27 +44,27 @@ export const Register = () => {
   };
 
   // Googleで新規登録ボタンが押されたときの処理
-  const handleGoogle = async () => {
-    // try {
-    //     // googleアカウントにログインして登録を行う
-    //     const { uid, token, name } = await googleLogin();
-    //     if (token !== undefined) {
-    //         const registerData = { uid: uid, name: name, type: 2 };
-    //         apiRegister(registerData, token);
-    //     }
-    // } catch (err) {
-    //     if (err instanceof FirebaseError) {
-    //         if (err.code === "auth/popup-closed-by-user") {
-    //             // ユーザがキャンセルした場合
-    //             // 何も処理を行わない
-    //         } else {
-    //             alert(err);
-    //         }
-    //     } else {
-    //         alert(err);
-    //     }
-    // }
-  };
+  // const handleGoogle = async () => {
+  // try {
+  //     // googleアカウントにログインして登録を行う
+  //     const { uid, token, name } = await googleLogin();
+  //     if (token !== undefined) {
+  //         const registerData = { uid: uid, name: name, type: 2 };
+  //         apiRegister(registerData, token);
+  //     }
+  // } catch (err) {
+  //     if (err instanceof FirebaseError) {
+  //         if (err.code === "auth/popup-closed-by-user") {
+  //             // ユーザがキャンセルした場合
+  //             // 何も処理を行わない
+  //         } else {
+  //             alert(err);
+  //         }
+  //     } else {
+  //         alert(err);
+  //     }
+  // }
+  // };
 
   return (
     <div className={styles.container}>

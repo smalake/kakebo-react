@@ -14,6 +14,7 @@ import { Join } from "./pages/Auth/Join";
 import { Suspense } from "react";
 import { Box, CircularProgress } from "@mui/material";
 import { Register } from "./pages/Auth/Register";
+import { InviteGroup } from "./pages/Setting/InviteGroup";
 
 function App() {
   return (
@@ -23,10 +24,11 @@ function App() {
           <Routes>
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
-            <Route path="join" element={<Join />} />
+            <Route path="join/:group" element={<Join />} />
             <Route path="/" element={<NoMenuLayout />}>
               <Route path="event-edit/:id" element={<EventEdit />} />
               <Route path="change-name" element={<ChangeName />} />
+              <Route path="invite-group" element={<InviteGroup />} />
             </Route>
             <Route path="/" element={<MenuLayout />}>
               <Route path="event-register" element={<EventRegister />} />
