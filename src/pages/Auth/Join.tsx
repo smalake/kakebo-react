@@ -8,12 +8,15 @@ import styles from "./Auth.module.css";
 import { Button, TextField, Box } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import { RegisterForm } from "../../../src/types";
+import { gapi } from "gapi-script";
+import { GoogleLogin } from "react-google-login";
 
 export const Join = () => {
   const navigate = useNavigate();
   const { group } = useParams();
   const [parentName, setParentName] = useState("");
   const [loading, setLoading] = useState(true);
+  const clientId = process.env.REACT_APP_CLIENT_ID;
 
   // react-hook-formの設定
   const {
@@ -21,6 +24,17 @@ export const Join = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterForm>({ resolver: zodResolver(registerValidation) });
+
+  // Googleログイン用の設定
+  useEffect(() => {
+    const start = () => {
+      gapi.client.init({
+        clientId: clientId,
+        scope: "",
+      });
+    };
+    gapi.load("client:auth2", start);
+  });
 
   useEffect(() => {
     const getParentName = async () => {
@@ -39,6 +53,34 @@ export const Join = () => {
     };
     getParentName();
   }, []);
+
+  // Googleのログインに成功したときの処理
+  const onSuccess = async (response: any) => {
+    try {
+      const email = response.profileObj.email;
+      const name = response.profileObj.name;
+
+      const res = await authApi.join({ email: email, name: name, password: "dummy", type: 2, group: group });
+      if (res.status === 200) {
+        localStorage.setItem("token", res.data["accessToken"]);
+        localStorage.setItem("refresh", res.data["refreshToken"]);
+        alert("登録完了しました");
+        navigate("/event-register");
+      } else if (res.status === 409) {
+        alert("すでに登録されているユーザーです");
+      } else {
+        alert("登録に失敗しました");
+      }
+    } catch (err: any) {
+      alert("エラーが発生しました");
+      console.log(err);
+    }
+  };
+  // Googleのログインに失敗したときの処理
+  const onFailure = (res: any) => {
+    console.log(res);
+    alert("ログインに失敗しました");
+  };
 
   const onSubmit = async (data: RegisterForm) => {
     try {
@@ -142,6 +184,16 @@ export const Join = () => {
                   </Button>
                 </div>
               </form>
+              <div className={styles.form}>
+                <GoogleLogin
+                  clientId={clientId!}
+                  buttonText="Googleアカウントで参加"
+                  onSuccess={onSuccess}
+                  onFailure={onFailure}
+                  cookiePolicy={"single_host_origin"}
+                  // isSignedIn={true}
+                />
+              </div>
             </div>
           ) : (
             <div>無効なリンクです</div>
