@@ -1,7 +1,7 @@
 name: CD Dev
 on:
   pull_request_target:
-    branches: [dev]
+    branches: [stage]
     types:
       - closed
 jobs:
@@ -17,7 +17,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd /var/www/kakebo-dev.smamiya.site/html/kakebo-react
-            git fetch origin dev
-            git reset --hard origin/dev
+            cd /var/www/stage-kakebo.smamiya.site/html/kakebo-react
+            git fetch origin stage
+            git reset --hard origin/stage
             sh ./deploy/build.sh
