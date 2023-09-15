@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerValidation } from "../../components/util/validation";
@@ -7,9 +7,12 @@ import styles from "./Auth.module.css";
 import { authApi } from "../../api/authApi";
 import { Button, TextField } from "@mui/material";
 import { RegisterForm } from "../../../src/types";
+import { gapi } from "gapi-script";
+import { GoogleLogin } from "react-google-login";
 
 export const Register = () => {
   const navigate = useNavigate();
+  const clientId = process.env.REACT_APP_CLIENT_ID;
 
   // react-hook-formの設定
   const {
@@ -17,6 +20,17 @@ export const Register = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterForm>({ resolver: zodResolver(registerValidation) });
+
+  // Googleログイン用の設定
+  useEffect(() => {
+    const start = () => {
+      gapi.client.init({
+        clientId: clientId,
+        scope: "",
+      });
+    };
+    gapi.load("client:auth2", start);
+  });
 
   // メールアドレスで新規登録ボタンが押されたときの処理
   const onSubmit = async (data: RegisterForm) => {
@@ -34,6 +48,8 @@ export const Register = () => {
         localStorage.setItem("refresh", res.data["refreshToken"]);
         alert("登録完了しました");
         navigate("/event-register");
+      } else if (res.status === 409) {
+        alert("すでに使用されているメールアドレスです");
       } else {
         alert("新規登録に失敗しました");
       }
@@ -43,28 +59,33 @@ export const Register = () => {
     }
   };
 
-  // Googleで新規登録ボタンが押されたときの処理
-  // const handleGoogle = async () => {
-  // try {
-  //     // googleアカウントにログインして登録を行う
-  //     const { uid, token, name } = await googleLogin();
-  //     if (token !== undefined) {
-  //         const registerData = { uid: uid, name: name, type: 2 };
-  //         apiRegister(registerData, token);
-  //     }
-  // } catch (err) {
-  //     if (err instanceof FirebaseError) {
-  //         if (err.code === "auth/popup-closed-by-user") {
-  //             // ユーザがキャンセルした場合
-  //             // 何も処理を行わない
-  //         } else {
-  //             alert(err);
-  //         }
-  //     } else {
-  //         alert(err);
-  //     }
-  // }
-  // };
+  // Googleのログインに成功したときの処理
+  const onSuccess = async (response: any) => {
+    try {
+      const email = response.profileObj.email;
+      const name = response.profileObj.name;
+
+      const res = await authApi.register({ email: email, name: name, password: "dummy", type: 2 });
+      if (res.status === 200) {
+        localStorage.setItem("token", res.data["accessToken"]);
+        localStorage.setItem("refresh", res.data["refreshToken"]);
+        alert("登録完了しました");
+        navigate("/event-register");
+      } else if (res.status === 409) {
+        alert("すでに登録されているユーザーです");
+      } else {
+        alert("登録に失敗しました");
+      }
+    } catch (err: any) {
+      alert("エラーが発生しました");
+      console.log(err);
+    }
+  };
+  // Googleのログインに失敗したときの処理
+  const onFailure = (res: any) => {
+    console.log(res);
+    alert("ログインに失敗しました");
+  };
 
   return (
     <div className={styles.container}>
@@ -128,12 +149,17 @@ export const Register = () => {
           </Button>
         </div>
       </form>
-      {/* <p className={styles.subText}>または</p>
+      <p className={styles.subText}>または</p>
       <div className={styles.form}>
-        <button className={styles.google} onClick={handleGoogle}>
-          Googleアカウントで新規登録
-        </button>
-      </div> */}
+        <GoogleLogin
+          clientId={clientId!}
+          buttonText="Googleアカウントで新規登録"
+          onSuccess={onSuccess}
+          onFailure={onFailure}
+          cookiePolicy={"single_host_origin"}
+          // isSignedIn={true}
+        />
+      </div>
       <div style={{ marginLeft: "20px" }}>
         <p className={styles.linkText}>アカウントをお持ちの方は</p>
         <Link to="/login">ログイン</Link>

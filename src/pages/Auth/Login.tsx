@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginValidation } from "../../components/util/validation";
@@ -7,15 +7,30 @@ import styles from "./Auth.module.css";
 import { Button, TextField } from "@mui/material";
 import { LoginForm } from "../../../src/types";
 import { authApi } from "../../api/authApi";
+import { gapi } from "gapi-script";
+import { GoogleLogin } from "react-google-login";
 
 export const Login = () => {
   const navigate = useNavigate();
+  const clientId = process.env.REACT_APP_CLIENT_ID;
+
   // react-hook-formの設定
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginForm>({ resolver: zodResolver(loginValidation) });
+
+  // Googleログイン用の設定
+  useEffect(() => {
+    const start = () => {
+      gapi.client.init({
+        clientId: clientId,
+        scope: "",
+      });
+    };
+    gapi.load("client:auth2", start);
+  });
 
   // メールアドレスでログインボタンが押されたときの処理
   const onSubmit = async (data: LoginForm) => {
@@ -25,38 +40,46 @@ export const Login = () => {
         password: data.password,
       };
       const res = await authApi.login(param);
-      localStorage.setItem("token", res.data["accessToken"]);
-      localStorage.setItem("refresh", res.data["refreshToken"]);
-      navigate("/event-register");
+      if (res.status === 200) {
+        localStorage.setItem("token", res.data["accessToken"]);
+        localStorage.setItem("refresh", res.data["refreshToken"]);
+        navigate("/event-register");
+      } else {
+        alert("メールアドレスかパスワードが間違っています");
+      }
     } catch (err) {
       console.log(err);
-      alert("メールアドレスかパスワードが間違っています");
+      alert("エラーが発生しました");
     }
   };
 
-  //   // Googleで新規登録ボタンが押されたときの処理
-  //   const handleGoogle = async () => {
-  //     try {
-  //       const { uid, token } = await googleLogin();
-  //       if (token !== undefined) {
-  //         const loginData = { uid: uid };
-  //         // apiLogin(loginData);
-  //       } else {
-  //         alert("認証エラーが発生しました\nアカウントが登録されていない、またはパスワードが間違っています");
-  //       }
-  //     } catch (err) {
-  //       if (err instanceof FirebaseError) {
-  //         if (err.code === "auth/popup-closed-by-user") {
-  //           // ユーザがキャンセルした場合
-  //           // 何も処理を行わない
-  //         } else {
-  //           alert(err);
-  //         }
-  //       } else {
-  //         alert(err);
-  //       }
-  //     }
-  //   };
+  // Googleのログインに成功したときの処理
+  const onSuccess = async (response: any) => {
+    const email = response.profileObj.email;
+
+    const res = await authApi.googleLogin({ email: email });
+    try {
+      // ユーザ登録されていたらログイン
+      if (res.status === 200) {
+        localStorage.setItem("token", res.data["accessToken"]);
+        localStorage.setItem("refresh", res.data["refreshToken"]);
+        navigate("/event-register");
+      }
+      // 未登録の場合
+      else {
+        alert("ユーザー情報が登録されていません\nまずは新規登録を行ってください");
+        navigate("/register");
+      }
+    } catch (err: any) {
+      console.log(err);
+      alert("エラーが発生しました");
+    }
+  };
+  // Googleのログインに失敗したときの処理
+  const onFailure = (res: any) => {
+    console.log(res);
+    alert("ログインに失敗しました");
+  };
 
   return (
     <div className={styles.container}>
@@ -99,12 +122,18 @@ export const Login = () => {
           </Button>
         </div>
       </form>
-      {/* <p className={styles.subText}>または</p>
+      <p className={styles.subText}>または</p>
       <div className={styles.form}>
-        <button className={styles.google} onClick={handleGoogle}>
-          Googleアカウントでログイン
-        </button>
-      </div> */}
+        <GoogleLogin
+          clientId={clientId!}
+          buttonText="Googleアカウントでログイン"
+          onSuccess={onSuccess}
+          onFailure={onFailure}
+          cookiePolicy={"single_host_origin"}
+          // isSignedIn={true}
+        />
+      </div>
+
       <div style={{ marginLeft: "20px" }}>
         <p className={styles.linkText}>アカウントをお持ちでない方は</p>
         <Link to="/register">新規登録</Link>
