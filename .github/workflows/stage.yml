@@ -1,0 +1,23 @@
+name: CD Dev
+on:
+  pull_request_target:
+    branches: [stage]
+    types:
+      - closed
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install SSH Key for Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          key: ${{ secrets.SSH_KEY }}
+          host: ${{ secrets.HOST_NAME }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd /var/www/stage-kakebo.smamiya.site/html/kakebo-react
+            git fetch origin stage
+            git reset --hard origin/stage
+            sh ./deploy/build.sh

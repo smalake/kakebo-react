@@ -19,7 +19,7 @@ export interface OneEvent {
   id: number;
   amount: number;
   category: number;
-  storeName: string;
+  store_name: string;
 }
 
 export interface Event {
