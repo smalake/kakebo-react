@@ -33,7 +33,7 @@ export const Setting = () => {
       }
     };
     checkParent();
-  }, []);
+  }, [navigate]);
 
   const clickLogout = async () => {
     const res = window.confirm("ログアウトしてもよろしいですか？");

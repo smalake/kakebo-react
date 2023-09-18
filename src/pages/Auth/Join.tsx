@@ -52,7 +52,7 @@ export const Join = () => {
       }
     };
     getParentName();
-  }, []);
+  }, [group]);
 
   // Googleのログインに成功したときの処理
   const onSuccess = async (response: any) => {
