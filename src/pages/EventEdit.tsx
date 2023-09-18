@@ -53,7 +53,7 @@ export const EventEdit = () => {
       }
     };
     getEvent();
-  }, [id]);
+  }, [id, navigate, setValue]);
 
   // 更新ボタンをクリックしたときの処理
   const onSubmit = async (data: EventEditForm) => {
