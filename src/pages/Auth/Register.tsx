@@ -1,17 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerValidation } from "../../components/util/validation";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./Auth.module.css";
 import { authApi } from "../../api/authApi";
-import { Button, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
 import { RegisterForm } from "../../../src/types";
 import { gapi } from "gapi-script";
 import { GoogleLogin } from "react-google-login";
 
 export const Register = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const clientId = process.env.REACT_APP_CLIENT_ID;
 
   // react-hook-formの設定
@@ -34,6 +36,7 @@ export const Register = () => {
 
   // メールアドレスで新規登録ボタンが押されたときの処理
   const onSubmit = async (data: RegisterForm) => {
+    setLoading(true);
     try {
       // DBに新規登録
       const registerData = {
@@ -56,6 +59,8 @@ export const Register = () => {
     } catch (err: any) {
       alert("エラーが発生しました");
       console.log(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -134,9 +139,10 @@ export const Register = () => {
           />
         </div>
         <div className={styles.form}>
-          <Button
+          <LoadingButton
             type="submit"
             variant="contained"
+            loading={loading}
             color="info"
             sx={{
               width: "90%",
@@ -146,7 +152,7 @@ export const Register = () => {
             }}
           >
             メールアドレスで新規登録
-          </Button>
+          </LoadingButton>
         </div>
       </form>
       <p className={styles.subText}>または</p>

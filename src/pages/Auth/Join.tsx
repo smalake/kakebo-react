@@ -5,7 +5,8 @@ import { registerValidation } from "../../components/util/validation";
 import { useNavigate, useParams } from "react-router-dom";
 import { authApi } from "../../api/authApi";
 import styles from "./Auth.module.css";
-import { Button, TextField, Box } from "@mui/material";
+import { TextField, Box } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
 import CircularProgress from "@mui/material/CircularProgress";
 import { RegisterForm } from "../../../src/types";
 import { gapi } from "gapi-script";
@@ -16,6 +17,7 @@ export const Join = () => {
   const { group } = useParams();
   const [parentName, setParentName] = useState("");
   const [loading, setLoading] = useState(true);
+  const [buttonLoading, setButtonLoading] = useState(false);
   const clientId = process.env.REACT_APP_CLIENT_ID;
 
   // react-hook-formの設定
@@ -83,6 +85,7 @@ export const Join = () => {
   };
 
   const onSubmit = async (data: RegisterForm) => {
+    setButtonLoading(true);
     try {
       // DBに新規登録
       const registerData = {
@@ -105,6 +108,8 @@ export const Join = () => {
     } catch (err) {
       console.log(err);
       alert("認証エラーが発生しました");
+    } finally {
+      setButtonLoading(false);
     }
   };
 
@@ -169,9 +174,10 @@ export const Join = () => {
                   />
                 </div>
                 <div className={styles.form}>
-                  <Button
+                  <LoadingButton
                     type="submit"
                     variant="contained"
+                    loading={buttonLoading}
                     color="info"
                     sx={{
                       width: "90%",
@@ -181,7 +187,7 @@ export const Join = () => {
                     }}
                   >
                     {parentName}さんの家計簿に参加
-                  </Button>
+                  </LoadingButton>
                 </div>
               </form>
               <div className={styles.form}>
