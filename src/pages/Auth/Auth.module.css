@@ -11,6 +11,10 @@
   text-align: center;
 }
 
+.subText {
+  text-align: center;
+}
+
 /* 送信ボタン */
 .submit {
   width: 100%;
@@ -28,4 +32,18 @@
 
 .submit:hover {
   background-color: #2779bd;
+}
+
+.google {
+  width: 70%;
+  justify-content: center;
+  height: 45px;
+  font-size: 16px !important;
+  font-weight: bold !important;
+  color: black !important;
+  /* border: 1px black solid; */
+}
+
+.google > div {
+  padding: 12px 2px 8px 10px !important;
 }
