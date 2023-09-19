@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginValidation } from "../../components/util/validation";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./Auth.module.css";
-import { Button, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
 import { LoginForm } from "../../../src/types";
 import { authApi } from "../../api/authApi";
 import { gapi } from "gapi-script";
@@ -12,6 +13,7 @@ import { GoogleLogin } from "react-google-login";
 
 export const Login = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const clientId = process.env.REACT_APP_CLIENT_ID;
 
   // react-hook-formの設定
@@ -34,6 +36,7 @@ export const Login = () => {
 
   // メールアドレスでログインボタンが押されたときの処理
   const onSubmit = async (data: LoginForm) => {
+    setLoading(true);
     try {
       const param = {
         email: data.email,
@@ -50,6 +53,8 @@ export const Login = () => {
     } catch (err) {
       console.log(err);
       alert("エラーが発生しました");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -107,19 +112,20 @@ export const Login = () => {
           />
         </div>
         <div className={styles.form}>
-          <Button
+          <LoadingButton
             type="submit"
             variant="contained"
+            loading={loading}
             color="info"
             sx={{
-              width: "90%",
+              width: "70%",
               height: "45px",
               fontSize: "16px",
               fontWeight: "bold",
             }}
           >
             メールアドレスでログイン
-          </Button>
+          </LoadingButton>
         </div>
       </form>
       <p className={styles.subText}>または</p>
@@ -130,6 +136,7 @@ export const Login = () => {
           onSuccess={onSuccess}
           onFailure={onFailure}
           cookiePolicy={"single_host_origin"}
+          className={styles.google}
           // isSignedIn={true}
         />
       </div>

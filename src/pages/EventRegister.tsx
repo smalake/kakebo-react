@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import styles from "./Event.module.css";
 import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
 import { eventApi } from "../api/eventApi";
 import { useNavigate } from "react-router-dom";
 import { EventRegisterForm } from "../types";
 
 export const EventRegister = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [display, setDisplay] = useState(false);
 
   // react-hook-formの設定
@@ -21,6 +23,7 @@ export const EventRegister = () => {
 
   // 登録ボタンをクリックしたときの処理
   const onSubmit = async (data: EventRegisterForm) => {
+    setLoading(true);
     const d = new Date(data.date);
     try {
       // 送信用のフォーマットへと変換
@@ -47,6 +50,8 @@ export const EventRegister = () => {
         alert("登録に失敗しました");
         console.log(err);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -184,9 +189,15 @@ export const EventRegister = () => {
           </div>
         )}
         <div className={styles.form}>
-          <Button type="submit" variant="contained" color="info" sx={{ width: "90%", height: "45px", fontSize: "16px", fontWeight: "bold" }}>
+          <LoadingButton
+            type="submit"
+            variant="contained"
+            loading={loading}
+            color="info"
+            sx={{ width: "90%", height: "45px", fontSize: "16px", fontWeight: "bold" }}
+          >
             登録
-          </Button>
+          </LoadingButton>
         </div>
       </form>
     </div>
