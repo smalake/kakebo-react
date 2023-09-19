@@ -145,7 +145,7 @@ export const Register = () => {
             loading={loading}
             color="info"
             sx={{
-              width: "90%",
+              width: "50%",
               height: "45px",
               fontSize: "16px",
               fontWeight: "bold",
@@ -162,6 +162,7 @@ export const Register = () => {
           buttonText="Googleアカウントで新規登録"
           onSuccess={onSuccess}
           onFailure={onFailure}
+          className={styles.google}
           cookiePolicy={"single_host_origin"}
           // isSignedIn={true}
         />

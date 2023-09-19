@@ -180,7 +180,7 @@ export const Join = () => {
                     loading={buttonLoading}
                     color="info"
                     sx={{
-                      width: "90%",
+                      width: "50%",
                       height: "45px",
                       fontSize: "16px",
                       fontWeight: "bold",
@@ -196,6 +196,7 @@ export const Join = () => {
                   buttonText="Googleアカウントで参加"
                   onSuccess={onSuccess}
                   onFailure={onFailure}
+                  className={styles.google}
                   cookiePolicy={"single_host_origin"}
                   // isSignedIn={true}
                 />

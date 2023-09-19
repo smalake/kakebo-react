@@ -118,7 +118,7 @@ export const Login = () => {
             loading={loading}
             color="info"
             sx={{
-              width: "90%",
+              width: "50%",
               height: "45px",
               fontSize: "16px",
               fontWeight: "bold",
@@ -136,6 +136,7 @@ export const Login = () => {
           onSuccess={onSuccess}
           onFailure={onFailure}
           cookiePolicy={"single_host_origin"}
+          className={styles.google}
           // isSignedIn={true}
         />
       </div>
