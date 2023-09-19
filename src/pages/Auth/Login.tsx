@@ -118,7 +118,7 @@ export const Login = () => {
             loading={loading}
             color="info"
             sx={{
-              width: "50%",
+              width: "70%",
               height: "45px",
               fontSize: "16px",
               fontWeight: "bold",
