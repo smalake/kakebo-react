@@ -65,7 +65,7 @@ export const Join = () => {
       const res = await authApi.join({ email: email, name: name, password: "dummy", type: 2, group: group });
       if (res.status === 200) {
         localStorage.setItem("token", res.data["accessToken"]);
-        localStorage.setItem("refresh", res.data["refreshToken"]);
+        // localStorage.setItem("refresh", res.data["refreshToken"]);
         alert("登録完了しました");
         navigate("/event-register");
       } else if (res.status === 409) {
@@ -98,7 +98,7 @@ export const Join = () => {
       const res = await authApi.join(registerData);
       if (res.status === 200) {
         localStorage.setItem("token", res.data["accessToken"]);
-        localStorage.setItem("refresh", res.data["refreshToken"]);
+        // localStorage.setItem("refresh", res.data["refreshToken"]);
         alert("登録完了しました");
         navigate("/event-register");
       } else {

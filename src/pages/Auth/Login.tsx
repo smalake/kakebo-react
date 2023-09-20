@@ -4,8 +4,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginValidation } from "../../components/util/validation";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./Auth.module.css";
-import { TextField } from "@mui/material";
+import { TextField, Box } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
+import CircularProgress from "@mui/material/CircularProgress";
 import { LoginForm } from "../../../src/types";
 import { authApi } from "../../api/authApi";
 import { gapi } from "gapi-script";
@@ -13,7 +14,8 @@ import { GoogleLogin } from "react-google-login";
 
 export const Login = () => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [buttonLoading, setButtonLoading] = useState(false);
   const clientId = process.env.REACT_APP_CLIENT_ID;
 
   // react-hook-formの設定
@@ -22,6 +24,25 @@ export const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginForm>({ resolver: zodResolver(loginValidation) });
+
+  // ログインチェック
+  useEffect(() => {
+    const loginCheck = async () => {
+      try {
+        if (localStorage.getItem("token")) {
+          const res = await authApi.isLogin();
+          if (res.status === 200) {
+            navigate("/event-register");
+          }
+        }
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loginCheck();
+  }, [navigate]);
 
   // Googleログイン用の設定
   useEffect(() => {
@@ -36,7 +57,7 @@ export const Login = () => {
 
   // メールアドレスでログインボタンが押されたときの処理
   const onSubmit = async (data: LoginForm) => {
-    setLoading(true);
+    setButtonLoading(true);
     try {
       const param = {
         email: data.email,
@@ -45,7 +66,7 @@ export const Login = () => {
       const res = await authApi.login(param);
       if (res.status === 200) {
         localStorage.setItem("token", res.data["accessToken"]);
-        localStorage.setItem("refresh", res.data["refreshToken"]);
+        // localStorage.setItem("refresh", res.data["refreshToken"]);
         navigate("/event-register");
       } else {
         alert("メールアドレスかパスワードが間違っています");
@@ -54,7 +75,7 @@ export const Login = () => {
       console.log(err);
       alert("エラーが発生しました");
     } finally {
-      setLoading(false);
+      setButtonLoading(false);
     }
   };
 
@@ -67,7 +88,7 @@ export const Login = () => {
       // ユーザ登録されていたらログイン
       if (res.status === 200) {
         localStorage.setItem("token", res.data["accessToken"]);
-        localStorage.setItem("refresh", res.data["refreshToken"]);
+        // localStorage.setItem("refresh", res.data["refreshToken"]);
         navigate("/event-register");
       }
       // 未登録の場合
@@ -88,63 +109,77 @@ export const Login = () => {
 
   return (
     <div className={styles.container}>
-      <h2>ログイン</h2>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className={styles.form}>
-          <TextField
-            id="email"
-            label="メールアドレス"
-            {...register("email")}
-            error={Boolean(errors.email)}
-            helperText={errors.email?.message}
-            sx={{ width: "90%" }}
-          />
-        </div>
-        <div className={styles.form}>
-          <TextField
-            id="password"
-            label="パスワード"
-            type="password"
-            {...register("password")}
-            error={Boolean(errors.password)}
-            helperText={errors.password?.message}
-            sx={{ width: "90%" }}
-          />
-        </div>
-        <div className={styles.form}>
-          <LoadingButton
-            type="submit"
-            variant="contained"
-            loading={loading}
-            color="info"
-            sx={{
-              width: "70%",
-              height: "45px",
-              fontSize: "16px",
-              fontWeight: "bold",
-            }}
-          >
-            メールアドレスでログイン
-          </LoadingButton>
-        </div>
-      </form>
-      <p className={styles.subText}>または</p>
-      <div className={styles.form}>
-        <GoogleLogin
-          clientId={clientId!}
-          buttonText="Googleアカウントでログイン"
-          onSuccess={onSuccess}
-          onFailure={onFailure}
-          cookiePolicy={"single_host_origin"}
-          className={styles.google}
-          // isSignedIn={true}
-        />
-      </div>
+      {loading ? (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "330px",
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      ) : (
+        <>
+          <h2>ログイン</h2>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className={styles.form}>
+              <TextField
+                id="email"
+                label="メールアドレス"
+                {...register("email")}
+                error={Boolean(errors.email)}
+                helperText={errors.email?.message}
+                sx={{ width: "90%" }}
+              />
+            </div>
+            <div className={styles.form}>
+              <TextField
+                id="password"
+                label="パスワード"
+                type="password"
+                {...register("password")}
+                error={Boolean(errors.password)}
+                helperText={errors.password?.message}
+                sx={{ width: "90%" }}
+              />
+            </div>
+            <div className={styles.form}>
+              <LoadingButton
+                type="submit"
+                variant="contained"
+                loading={buttonLoading}
+                color="info"
+                sx={{
+                  width: "70%",
+                  height: "45px",
+                  fontSize: "16px",
+                  fontWeight: "bold",
+                }}
+              >
+                メールアドレスでログイン
+              </LoadingButton>
+            </div>
+          </form>
+          <p className={styles.subText}>または</p>
+          <div className={styles.form}>
+            <GoogleLogin
+              clientId={clientId!}
+              buttonText="Googleアカウントでログイン"
+              onSuccess={onSuccess}
+              onFailure={onFailure}
+              cookiePolicy={"single_host_origin"}
+              className={styles.google}
+              // isSignedIn={true}
+            />
+          </div>
 
-      <div style={{ marginLeft: "20px" }}>
-        <p className={styles.linkText}>アカウントをお持ちでない方は</p>
-        <Link to="/register">新規登録</Link>
-      </div>
+          <div style={{ marginLeft: "20px" }}>
+            <p className={styles.linkText}>アカウントをお持ちでない方は</p>
+            <Link to="/register">新規登録</Link>
+          </div>
+        </>
+      )}
     </div>
   );
 };
