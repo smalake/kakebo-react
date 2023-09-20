@@ -48,7 +48,7 @@ export const Register = () => {
       const res = await authApi.register(registerData);
       if (res.status === 200) {
         localStorage.setItem("token", res.data["accessToken"]);
-        localStorage.setItem("refresh", res.data["refreshToken"]);
+        // localStorage.setItem("refresh", res.data["refreshToken"]);
         alert("登録完了しました");
         navigate("/event-register");
       } else if (res.status === 409) {
@@ -73,7 +73,7 @@ export const Register = () => {
       const res = await authApi.register({ email: email, name: name, password: "dummy", type: 2 });
       if (res.status === 200) {
         localStorage.setItem("token", res.data["accessToken"]);
-        localStorage.setItem("refresh", res.data["refreshToken"]);
+        // localStorage.setItem("refresh", res.data["refreshToken"]);
         alert("登録完了しました");
         navigate("/event-register");
       } else if (res.status === 409) {
