@@ -134,7 +134,9 @@ export const EventEdit = () => {
           sx={{
             display: "flex",
             justifyContent: "center",
-            marginTop: "330px",
+            // marginTop: "330px",
+            alignItems: "center",
+            height: "100%",
           }}
         >
           <CircularProgress />
