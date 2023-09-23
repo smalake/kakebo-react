@@ -4,9 +4,9 @@ import styles from "./Event.module.css";
 import { Button, FormControl, InputLabel, MenuItem, Select, TextField, Box } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import CircularProgress from "@mui/material/CircularProgress";
-import { eventApi } from "../api/eventApi";
+import { eventApi } from "../../api/eventApi";
 import { useNavigate, useParams } from "react-router-dom";
-import { EventEditForm } from "../types";
+import { EventEditForm } from "../../types";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 export const EventEdit = () => {

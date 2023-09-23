@@ -1,15 +1,17 @@
-import { Box, Stack } from "@mui/material";
+import { Box, FormControl, MenuItem, Select, Stack } from "@mui/material";
 import { useState } from "react";
 import { PieChart, ResponsiveContainer, Pie, Cell } from "recharts";
 import styles from "./Graph.module.css";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import { Category } from "../components/Category";
+import { Category } from "../../components/Category";
 import { useRecoilValue } from "recoil";
-import { categoryAtom } from "../recoil/CategoryAtom";
-import { eventAtom } from "../recoil/EventAtom";
+import { categoryAtom } from "../../recoil/CategoryAtom";
+import { eventAtom } from "../../recoil/EventAtom";
+import { useNavigate } from "react-router-dom";
 
 export const Graph = () => {
+  const navigate = useNavigate();
   const graphData = useRecoilValue(eventAtom).graph;
   const total = useRecoilValue(eventAtom).total;
   const category = useRecoilValue(categoryAtom);
@@ -42,9 +44,23 @@ export const Graph = () => {
     setYearMonth(`${newYear.toString()}-${newMonth.toString().padStart(2, "0")}`);
   };
 
+  const handleChange = (event: any) => {
+    if (event.target.value === 1) {
+      navigate("/graph-private");
+    }
+  };
+
   return (
     <div>
       <div className={styles.container}>
+        <Box sx={{ textAlign: "right", marginBottom: "10px" }}>
+          <FormControl variant="standard" sx={{ width: "50%", textAlign: "center" }}>
+            <Select labelId="select-label" id="select-kakebo" value={0} label="家計簿選択" onChange={handleChange}>
+              <MenuItem value={0}>共有家計簿</MenuItem>
+              <MenuItem value={1}>プライベート家計簿</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <div onClick={handleDown}>
             <KeyboardArrowLeftIcon

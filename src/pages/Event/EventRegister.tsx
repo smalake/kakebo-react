@@ -3,9 +3,9 @@ import { Controller, useForm } from "react-hook-form";
 import styles from "./Event.module.css";
 import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { eventApi } from "../api/eventApi";
+import { eventApi } from "../../api/eventApi";
 import { useNavigate } from "react-router-dom";
-import { EventRegisterForm } from "../types";
+import { EventRegisterForm } from "../../types";
 
 export const EventRegister = () => {
   const navigate = useNavigate();
