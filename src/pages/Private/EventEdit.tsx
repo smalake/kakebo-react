@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import styles from "./Event.module.css";
+import styles from "../Event/Event.module.css";
 import { Button, FormControl, InputLabel, MenuItem, Select, TextField, Box } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import CircularProgress from "@mui/material/CircularProgress";
-import { eventApi } from "../api/eventApi";
+import { privateApi } from "../../api/privateApi";
 import { useNavigate, useParams } from "react-router-dom";
-import { EventEditForm } from "../types";
+import { EventEditForm } from "../../types";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-export const EventEdit = () => {
+export const EventPrivateEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [createUser, setCreateUser] = useState("");
-  const [updateUser, setUpdateUser] = useState("");
   const [createdAt, setCreatedAt] = useState("");
   const [updatedAt, setUpdatedAt] = useState("");
   const [loading, setLoading] = useState(true);
@@ -33,15 +31,13 @@ export const EventEdit = () => {
     const getEvent = async () => {
       try {
         if (id !== undefined) {
-          const event = await eventApi.getOne(parseInt(id));
+          const event = await privateApi.getOne(parseInt(id));
           const formatedDate = event.data["date"].split("T");
           setValue("amount", event.data["amount"]);
           setValue("category", event.data["category"]);
           setValue("storeName", event.data["store_name"]);
           setValue("date", formatedDate[0]);
-          setCreateUser(event.data["create_user"]);
           setCreatedAt(event.data["created_at"]);
-          setUpdateUser(event.data["update_user"]);
           setUpdatedAt(event.data["updated_at"]);
         } else {
           alert("読み込みに失敗しました");
@@ -74,7 +70,7 @@ export const EventEdit = () => {
         date: d.toISOString(),
       };
 
-      const res = await eventApi.update(parseInt(id!), send);
+      const res = await privateApi.update(parseInt(id!), send);
       if (res.status === 200) {
         navigate("/calendar");
         alert("更新しました");
@@ -105,7 +101,7 @@ export const EventEdit = () => {
     if (result) {
       setButtonLoading(true);
       try {
-        const res = await eventApi.delete(parseInt(id!));
+        const res = await privateApi.delete(parseInt(id!));
         if (res.status === 200) {
           navigate("/calendar");
           alert("削除しました");
@@ -255,12 +251,8 @@ export const EventEdit = () => {
             </form>
           </div>
           <div className={styles.desc}>
-            <div>
-              作成: {createUser}さん ({createdAt})
-            </div>
-            <div>
-              更新: {updateUser}さん ({updatedAt})
-            </div>
+            <div>作成: {createdAt}</div>
+            <div>更新: {updatedAt}</div>
           </div>
         </>
       )}

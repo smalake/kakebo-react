@@ -3,9 +3,9 @@ import { Controller, useForm } from "react-hook-form";
 import styles from "./Event.module.css";
 import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { eventApi } from "../api/eventApi";
+import { eventApi } from "../../api/eventApi";
 import { useNavigate } from "react-router-dom";
-import { EventRegisterForm } from "../types";
+import { EventRegisterForm } from "../../types";
 
 export const EventRegister = () => {
   const navigate = useNavigate();
@@ -34,6 +34,7 @@ export const EventRegister = () => {
         category2: data.category2,
         storeName: data.storeName,
         date: d.toISOString(),
+        isPrivate: data.isPrivate,
       };
       const res = await eventApi.create(send);
       if (res.status === 200) {
@@ -161,6 +162,22 @@ export const EventRegister = () => {
             helperText={errors.date?.message}
             {...register("date", { required: "日付を入力してください" })}
             sx={{ width: "90%" }}
+          />
+        </div>
+        <div className={styles.form}>
+          <Controller
+            name="isPrivate"
+            control={control}
+            defaultValue={0}
+            render={({ field }) => (
+              <FormControl sx={{ width: "90%", textAlign: "left" }}>
+                <InputLabel id="isPrivate-label">登録先の家計簿</InputLabel>
+                <Select {...field} id="isPrivate" label="登録先の家計簿" labelId="isPrivate-label">
+                  <MenuItem value={0}>共有</MenuItem>
+                  <MenuItem value={1}>プライベート</MenuItem>
+                </Select>
+              </FormControl>
+            )}
           />
         </div>
         {!display && (

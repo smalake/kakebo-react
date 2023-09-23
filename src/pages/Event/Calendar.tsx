@@ -4,16 +4,18 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import jaLocale from "@fullcalendar/core/locales/ja";
 import styles from "./Calendar.module.css";
 import "./calendar.css";
+import { Box, FormControl, MenuItem, Select } from "@mui/material";
 import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 import { EventClickArg } from "@fullcalendar/core";
 import { format } from "date-fns";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { eventAtom, eventFormatAtom } from "../recoil/EventAtom";
-import { Category } from "../components/Category";
-import { Event } from "../types";
+import { eventAtom, eventFormatAtom } from "../../recoil/EventAtom";
+import { Category } from "../../components/Category";
+import { Event } from "../../types";
 
 export const Calendar = memo(() => {
+  const navigate = useNavigate();
   const events = useRecoilValue(eventAtom).event;
   const eventFormat = useRecoilValue(eventFormatAtom);
   const [selectedDate, setSelectedDate] = useState("");
@@ -45,9 +47,24 @@ export const Calendar = memo(() => {
     }
   }, []);
 
+  const handleChange = (event: any) => {
+    if (event.target.value === 1) {
+      navigate("/calendar-private");
+    }
+  };
+
   return (
     <div>
       <div className={styles.calendar}>
+        <Box sx={{ textAlign: "right", marginBottom: "10px" }}>
+          <FormControl variant="standard" sx={{ width: "50%", textAlign: "center" }}>
+            <Select labelId="select-label" id="select-kakebo" value={0} label="家計簿選択" onChange={handleChange}>
+              <MenuItem value={0}>共有家計簿</MenuItem>
+              <MenuItem value={1}>プライベート家計簿</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+
         <div>
           <FullCalendar
             plugins={[dayGridPlugin, interactionPlugin]}

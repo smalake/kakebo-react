@@ -5,6 +5,7 @@ export interface EventRegisterForm {
   category2: number;
   storeName: string;
   date: Date;
+  isPrivate: number;
 }
 
 export interface EventEditForm {
