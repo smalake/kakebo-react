@@ -15,8 +15,10 @@ import { GoogleLogin } from "react-google-login";
 export const Join = () => {
   const navigate = useNavigate();
   const { group } = useParams();
-  const [parentName, setParentName] = useState("");
-  const [loading, setLoading] = useState(true);
+  // const [parentName, setParentName] = useState("");
+  const parentName = "";
+  // const [loading, setLoading] = useState(true);
+  const loading = true;
   const [buttonLoading, setButtonLoading] = useState(false);
   const clientId = process.env.REACT_APP_CLIENT_ID;
 
