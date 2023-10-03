@@ -39,22 +39,22 @@ export const Join = () => {
   });
 
   useEffect(() => {
-    const getParentName = async () => {
-      try {
-        console.log(group);
-        const res = await authApi.getName(group!);
-        if (res.status === 200) {
-          setParentName(res.data.name);
-        } else {
-          alert("エラーが発生しました\nお手数ですがお問い合わせしてください");
-        }
-      } catch (err) {
-        alert("エラーが発生しました\nお手数ですがお問い合わせしてください");
-      } finally {
-        setLoading(false);
-      }
-    };
-    getParentName();
+    // const getParentName = async () => {
+    //   try {
+    //     const res = await authApi.getName(group!);
+    //     if (res.status === 200) {
+    //       setParentName(res.data.name);
+    //     } else {
+    //       alert("エラーが発生しました\nお手数ですがお問い合わせしてください");
+    //     }
+    //   } catch (err) {
+    //     alert("エラーが発生しました\nお手数ですがお問い合わせしてください");
+    //   } finally {
+    //     setLoading(false);
+    //   }
+    // };
+    // getParentName();
+    console.log(group);
   }, [group]);
 
   // Googleのログインに成功したときの処理
