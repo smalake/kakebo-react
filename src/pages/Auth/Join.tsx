@@ -15,10 +15,8 @@ import { GoogleLogin } from "react-google-login";
 export const Join = () => {
   const navigate = useNavigate();
   const { group } = useParams();
-  // const [parentName, setParentName] = useState("");
-  const parentName = "";
-  // const [loading, setLoading] = useState(true);
-  const loading = true;
+  const [parentName, setParentName] = useState("");
+  const [loading, setLoading] = useState(true);
   const [buttonLoading, setButtonLoading] = useState(false);
   const clientId = process.env.REACT_APP_CLIENT_ID;
 
@@ -41,22 +39,21 @@ export const Join = () => {
   });
 
   useEffect(() => {
-    // const getParentName = async () => {
-    //   try {
-    //     const res = await authApi.getName(group!);
-    //     if (res.status === 200) {
-    //       setParentName(res.data.name);
-    //     } else {
-    //       alert("エラーが発生しました\nお手数ですがお問い合わせしてください");
-    //     }
-    //   } catch (err) {
-    //     alert("エラーが発生しました\nお手数ですがお問い合わせしてください");
-    //   } finally {
-    //     setLoading(false);
-    //   }
-    // };
-    // getParentName();
-    console.log(group);
+    const getParentName = async () => {
+      try {
+        const res = await authApi.getName(group!);
+        if (res.status === 200) {
+          setParentName(res.data.name);
+        } else {
+          alert("エラーが発生しました\nお手数ですがお問い合わせしてください");
+        }
+      } catch (err) {
+        alert("エラーが発生しました\nお手数ですがお問い合わせしてください");
+      } finally {
+        setLoading(false);
+      }
+    };
+    getParentName();
   }, [group]);
 
   // Googleのログインに成功したときの処理

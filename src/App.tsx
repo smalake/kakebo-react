@@ -28,8 +28,8 @@ function App() {
             <Route path="/" element={<Login />} />
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
-            <Route path="join/:group" element={<Join />} />
             <Route path="/" element={<NoMenuLayout />}>
+              <Route path="join/:group" element={<Join />} />
               <Route path="event-edit/:id" element={<EventEdit />} />
               <Route path="event-private-edit/:id" element={<EventPrivateEdit />} />
               <Route path="change-name" element={<ChangeName />} />
