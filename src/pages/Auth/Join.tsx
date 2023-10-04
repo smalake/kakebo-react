@@ -12,9 +12,9 @@ import { RegisterForm } from "../../../src/types";
 import { gapi } from "gapi-script";
 import { GoogleLogin } from "react-google-login";
 
-export const Join = () => {
+export const JoinGroup = () => {
   const navigate = useNavigate();
-  const { group } = useParams();
+  const { id } = useParams();
   const [parentName, setParentName] = useState("");
   const [loading, setLoading] = useState(true);
   const [buttonLoading, setButtonLoading] = useState(false);
@@ -41,7 +41,7 @@ export const Join = () => {
   useEffect(() => {
     const getParentName = async () => {
       try {
-        const res = await authApi.getName(group!);
+        const res = await authApi.getName(id!);
         if (res.status === 200) {
           setParentName(res.data.name);
         } else {
@@ -54,7 +54,7 @@ export const Join = () => {
       }
     };
     getParentName();
-  }, [group]);
+  }, [id]);
 
   // Googleのログインに成功したときの処理
   const onSuccess = async (response: any) => {
@@ -62,7 +62,7 @@ export const Join = () => {
       const email = response.profileObj.email;
       const name = response.profileObj.name;
 
-      const res = await authApi.join({ email: email, name: name, password: "dummy", type: 2, group: group });
+      const res = await authApi.join({ email: email, name: name, password: "dummy", type: 2, group: id });
       if (res.status === 200) {
         localStorage.setItem("token", res.data["accessToken"]);
         // localStorage.setItem("refresh", res.data["refreshToken"]);
@@ -93,7 +93,7 @@ export const Join = () => {
         password: data.password,
         name: data.name,
         type: 1,
-        group: group,
+        group: id,
       };
       const res = await authApi.join(registerData);
       if (res.status === 200) {
