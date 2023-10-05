@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerValidation } from "../../components/util/validation";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { authApi } from "../../api/authApi";
 import styles from "./Auth.module.css";
 import { TextField, Box } from "@mui/material";
