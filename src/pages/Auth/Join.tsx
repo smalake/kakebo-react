@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerValidation } from "../../components/util/validation";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { authApi } from "../../api/authApi";
 import styles from "./Auth.module.css";
 import { TextField, Box } from "@mui/material";
@@ -13,9 +13,8 @@ import { gapi } from "gapi-script";
 import { GoogleLogin } from "react-google-login";
 
 export const JoinGroup = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
-  // const { id } = useParams();
-  const id = "test";
   const [parentName, setParentName] = useState("");
   const [loading, setLoading] = useState(true);
   const [buttonLoading, setButtonLoading] = useState(false);
