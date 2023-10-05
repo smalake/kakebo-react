@@ -14,7 +14,8 @@ import { GoogleLogin } from "react-google-login";
 
 export const JoinGroup = () => {
   const navigate = useNavigate();
-  const { id } = useParams();
+  // const { id } = useParams();
+  const id = "test";
   const [parentName, setParentName] = useState("");
   const [loading, setLoading] = useState(true);
   const [buttonLoading, setButtonLoading] = useState(false);
