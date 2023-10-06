@@ -26,10 +26,10 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Login />} />
-            <Route path="login" element={<Login />} />
-            <Route path="register" element={<Register />} />
+            <Route path="/join-group/:id" element={<JoinGroup />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
             <Route path="/" element={<NoMenuLayout />}>
-              <Route path="join-group/:id" element={<JoinGroup />} />
               <Route path="event-edit/:id" element={<EventEdit />} />
               <Route path="event-private-edit/:id" element={<EventPrivateEdit />} />
               <Route path="change-name" element={<ChangeName />} />
