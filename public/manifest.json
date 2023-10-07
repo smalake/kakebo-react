@@ -3,7 +3,7 @@
   "background_color": "#35d1f6",
   "display": "standalone",
   "scope": "/",
-  "start_url": ".",
+  "start_url": "./",
   "name": "\u4f7f\u3044\u3084\u3059\u3044\u5bb6\u8a08\u7c3f",
   "short_name": "\u4f7f\u3044\u3084\u3059\u3044\u5bb6\u8a08\u7c3f",
   "icons": [
