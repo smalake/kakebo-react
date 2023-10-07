@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerValidation } from "../../components/util/validation";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import styles from "./Auth.module.css";
 import { authApi } from "../../api/authApi";
 import { TextField } from "@mui/material";
@@ -12,9 +12,18 @@ import { gapi } from "gapi-script";
 import { GoogleLogin } from "react-google-login";
 
 export const Register = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const clientId = process.env.REACT_APP_CLIENT_ID;
+
+  useEffect(() => {
+    if (id) {
+      console.log(id);
+    } else {
+      console.log("none id");
+    }
+  });
 
   // react-hook-formの設定
   const {
