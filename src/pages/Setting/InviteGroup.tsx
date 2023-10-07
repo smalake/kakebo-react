@@ -119,7 +119,6 @@ export const InviteGroup = () => {
             >
               戻る
             </Button>
-            <a href="/join/aaaa">join link</a>
           </div>
         ))}
       </div>
