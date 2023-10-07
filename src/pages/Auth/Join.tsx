@@ -54,7 +54,6 @@ export const Join = () => {
         setLoading(false);
       }
     };
-    console.log(group);
     getParentName();
   }, [group]);
 
