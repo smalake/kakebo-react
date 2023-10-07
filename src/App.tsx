@@ -26,9 +26,9 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Login />} />
-            <Route path="login" element={<Login />} />
-            <Route path="register" element={<Register />} />
-            <Route path="join/:group" element={<Join />} />
+            <Route path="/join" element={<Join />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
             <Route path="/" element={<NoMenuLayout />}>
               <Route path="event-edit/:id" element={<EventEdit />} />
               <Route path="event-private-edit/:id" element={<EventPrivateEdit />} />

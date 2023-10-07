@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerValidation } from "../../components/util/validation";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { authApi } from "../../api/authApi";
 import styles from "./Auth.module.css";
 import { TextField, Box } from "@mui/material";
@@ -13,8 +13,9 @@ import { gapi } from "gapi-script";
 import { GoogleLogin } from "react-google-login";
 
 export const Join = () => {
+  const [params] = useSearchParams();
+  const group = params.get("group");
   const navigate = useNavigate();
-  const { group } = useParams();
   const [parentName, setParentName] = useState("");
   const [loading, setLoading] = useState(true);
   const [buttonLoading, setButtonLoading] = useState(false);
@@ -40,8 +41,8 @@ export const Join = () => {
 
   useEffect(() => {
     const getParentName = async () => {
+      console.log(group);
       try {
-        console.log(group);
         const res = await authApi.getName(group!);
         if (res.status === 200) {
           setParentName(res.data.name);
