@@ -3,6 +3,7 @@ import styles from "./Setting.module.css";
 import { Button, TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { settingApi } from "../../api/settingApi";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 export const InviteGroup = () => {
   const navigate = useNavigate();
@@ -10,8 +11,10 @@ export const InviteGroup = () => {
   const [textboxes, setTextboxes] = useState<any[]>([]);
   const [showButton, setShowButton] = useState(true);
   const [copyMessage, setCopyMessage] = useState("");
+  const [buttonLoading, setButtonLoading] = useState(false);
 
   const getURL = async () => {
+    setButtonLoading(true);
     try {
       const res = await settingApi.invite();
       setUrl(res.data.url);
@@ -25,6 +28,8 @@ export const InviteGroup = () => {
         alert("読み込みに失敗しました");
         console.log(err);
       }
+    } finally {
+      setButtonLoading(false);
     }
   };
 
@@ -40,8 +45,9 @@ export const InviteGroup = () => {
       <div className={styles.contents}>
         {showButton && (
           <div>
-            <Button
+            <LoadingButton
               variant="contained"
+              loading={buttonLoading}
               sx={{
                 width: "60%",
                 margin: "20px auto",
@@ -54,7 +60,7 @@ export const InviteGroup = () => {
               }}
             >
               招待用URLを発行する
-            </Button>
+            </LoadingButton>
             <Button
               variant="contained"
               color="inherit"
