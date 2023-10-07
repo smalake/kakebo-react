@@ -41,7 +41,6 @@ export const Join = () => {
 
   useEffect(() => {
     const getParentName = async () => {
-      console.log(group);
       try {
         const res = await authApi.getName(group!);
         if (res.status === 200) {
@@ -55,6 +54,7 @@ export const Join = () => {
         setLoading(false);
       }
     };
+    console.log(group);
     getParentName();
   }, [group]);
 
