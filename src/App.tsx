@@ -10,7 +10,7 @@ import { MenuLayout } from "./components/layout/MenuLayout";
 import { EventEdit } from "./pages/Event/EventEdit";
 import { NoMenuLayout } from "./components/layout/NoMenuLayout";
 import { ChangeName } from "./pages/Setting/ChangeName";
-import { JoinGroup } from "./pages/Auth/Join";
+import { Join } from "./pages/Auth/Join";
 import { Suspense } from "react";
 import { Box, CircularProgress } from "@mui/material";
 import { Register } from "./pages/Auth/Register";
@@ -26,9 +26,9 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Login />} />
-            <Route path="/join-group/:id?" element={<JoinGroup />} />
+            <Route path="/join" element={<Join />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/register/:id?" element={<Register />} />
+            <Route path="/register" element={<Register />} />
             <Route path="/" element={<NoMenuLayout />}>
               <Route path="event-edit/:id" element={<EventEdit />} />
               <Route path="event-private-edit/:id" element={<EventPrivateEdit />} />
