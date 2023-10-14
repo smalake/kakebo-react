@@ -13,6 +13,7 @@ import { gapi } from "gapi-script";
 import { GoogleLogin } from "react-google-login";
 import { eventApi } from "../../api/eventApi";
 import { db } from "../../db/db";
+import { privateApi } from "../../api/privateApi";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -69,8 +70,10 @@ export const Login = () => {
       if (res.status === 200) {
         localStorage.setItem("token", res.data["accessToken"]);
         // localStorage.setItem("refresh", res.data["refreshToken"]);
-        const data = await eventApi.getAll();
-        await db.event.bulkAdd(data.data.result);
+        const eventData = await eventApi.getAll();
+        const privateData = await privateApi.getAll();
+        await db.event.bulkAdd(eventData.data.result);
+        await db.private.bulkAdd(privateData.data.result);
         navigate("/event-register");
       } else {
         alert("メールアドレスかパスワードが間違っています");

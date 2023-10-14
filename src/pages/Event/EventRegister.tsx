@@ -9,12 +9,14 @@ import { EventRegisterForm } from "../../types";
 import { db } from "../../db/db";
 import { useRecoilState } from "recoil";
 import { eventFlagAtom } from "../../recoil/EventAtom";
+import { privateFlagAtom } from "../../recoil/PrivateAtom";
 
 export const EventRegister = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [display, setDisplay] = useState(false);
   const [eventFlag, setEventFlag] = useRecoilState(eventFlagAtom);
+  const [privateFlag, setPrivateFlag] = useRecoilState(privateFlagAtom);
 
   // react-hook-formの設定
   const {
@@ -44,7 +46,7 @@ export const EventRegister = () => {
       if (res.status === 200) {
         // DBに登録した内容をIndexedDBに保存
         if (res.data.data.length === 2) {
-          await db.event.bulkAdd([
+          const toDB = [
             {
               id: res.data.data[0],
               amount: data.amount1 - data.amount2,
@@ -59,15 +61,25 @@ export const EventRegister = () => {
               store: data.storeName,
               date: String(data.date),
             },
-          ]);
+          ];
+          if (data.isPrivate === 0) {
+            await db.event.bulkAdd(toDB);
+          } else {
+            await db.private.bulkAdd(toDB);
+          }
         } else {
-          await db.event.add({
+          const toDB = {
             id: res.data.data[0],
             amount: Number(data.amount1),
             category: data.category1,
             store: data.storeName,
             date: String(data.date),
-          });
+          };
+          if (data.isPrivate === 0) {
+            await db.event.add(toDB);
+          } else {
+            await db.private.add(toDB);
+          }
         }
         alert("登録しました");
       } else {
@@ -86,7 +98,9 @@ export const EventRegister = () => {
       setLoading(false);
       // Recoil Selectorの再計算用
       var flag = eventFlag + 1;
+      var pflag = privateFlag + 1;
       setEventFlag(flag);
+      setPrivateFlag(pflag);
     }
   };
 

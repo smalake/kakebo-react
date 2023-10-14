@@ -10,14 +10,14 @@ import { EventClickArg } from "@fullcalendar/core";
 import { format } from "date-fns";
 import { Link, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { privateAtom, privateFormatAtom } from "../../recoil/PrivateAtom";
+import { privateSelector } from "../../recoil/PrivateAtom";
 import { Category } from "../../components/Category";
 import { Event } from "../../types";
 
 export const CalendarPrivate = memo(() => {
   const navigate = useNavigate();
-  const events = useRecoilValue(privateAtom).event;
-  const eventFormat = useRecoilValue(privateFormatAtom);
+  const events = useRecoilValue(privateSelector).event;
+  const eventFormat = useRecoilValue(privateSelector).calendar;
   const [selectedDate, setSelectedDate] = useState("");
   const [amount, setAmount] = useState<
     {

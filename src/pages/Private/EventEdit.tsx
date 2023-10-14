@@ -8,9 +8,9 @@ import { privateApi } from "../../api/privateApi";
 import { useNavigate, useParams } from "react-router-dom";
 import { EventEditForm } from "../../types";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { eventFlagAtom } from "../../recoil/EventAtom";
 import { useRecoilState } from "recoil";
 import { db } from "../../db/db";
+import { privateFlagAtom } from "../../recoil/PrivateAtom";
 
 export const EventPrivateEdit = () => {
   const { id } = useParams();
@@ -19,7 +19,7 @@ export const EventPrivateEdit = () => {
   const [updatedAt, setUpdatedAt] = useState("");
   const [loading, setLoading] = useState(true);
   const [buttonLoading, setButtonLoading] = useState(false);
-  const [eventFlag, setEventFlag] = useRecoilState(eventFlagAtom);
+  const [eventFlag, setEventFlag] = useRecoilState(privateFlagAtom);
 
   // react-hook-formの設定
   const {
@@ -76,6 +76,13 @@ export const EventPrivateEdit = () => {
 
       const res = await privateApi.update(parseInt(id!), send);
       if (res.status === 200) {
+        await db.private.put({
+          id: Number(id),
+          amount: Number(data.amount),
+          category: data.category,
+          store: data.storeName,
+          date: String(data.date),
+        });
         navigate("/calendar");
         alert("更新しました");
       } else {
@@ -92,6 +99,9 @@ export const EventPrivateEdit = () => {
       }
     } finally {
       setButtonLoading(false);
+      // Recoil Selectorの再計算用
+      var flag = eventFlag + 1;
+      setEventFlag(flag);
     }
   };
 
@@ -107,6 +117,7 @@ export const EventPrivateEdit = () => {
       try {
         const res = await privateApi.delete(parseInt(id!));
         if (res.status === 200) {
+          await db.private.delete(Number(id));
           navigate("/calendar");
           alert("削除しました");
         } else {
@@ -123,6 +134,9 @@ export const EventPrivateEdit = () => {
         }
       } finally {
         setButtonLoading(false);
+        // Recoil Selectorの再計算用
+        var flag = eventFlag + 1;
+        setEventFlag(flag);
       }
     }
   };

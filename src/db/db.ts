@@ -14,10 +14,11 @@ export interface EventTable {
 
 export class EventDB extends Dexie {
   event!: Table<EventTable>;
+  private!: Table<EventTable>;
 
   constructor() {
     super("eventDB");
-    this.version(1).stores({ event: "id, amount, category, store, date" });
+    this.version(1).stores({ event: "id, amount, category, store, date", private: "id, amount, category, store, date" });
   }
 }
 
