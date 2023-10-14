@@ -105,10 +105,20 @@ export const Login = () => {
       if (res.status === 200) {
         localStorage.setItem("token", res.data["accessToken"]);
         // localStorage.setItem("refresh", res.data["refreshToken"]);
-        const data = await eventApi.getAll();
-        console.log(data);
-        await db.event.bulkAdd(data.data.result);
-        navigate("/event-register");
+        const eventData = await eventApi.getAll();
+        const privateData = await privateApi.getAll();
+        db.transaction("rw", db.event, db.private, () => {
+          db.event.bulkAdd(eventData.data.events);
+          db.private.bulkAdd(privateData.data.events);
+        })
+          .then(() => {
+            navigate("/event-register");
+          })
+          .catch((error) => {
+            console.log(error);
+            localStorage.removeItem("token");
+            alert("エラーが発生しました");
+          });
       }
       // 未登録の場合
       else {
