@@ -72,9 +72,18 @@ export const Login = () => {
         // localStorage.setItem("refresh", res.data["refreshToken"]);
         const eventData = await eventApi.getAll();
         const privateData = await privateApi.getAll();
-        await db.event.bulkAdd(eventData.data.result);
-        await db.private.bulkAdd(privateData.data.result);
-        navigate("/event-register");
+        db.transaction("rw", db.event, db.private, () => {
+          db.event.bulkAdd(eventData.data.events);
+          db.private.bulkAdd(privateData.data.events);
+        })
+          .then(() => {
+            navigate("/event-register");
+          })
+          .catch((error) => {
+            console.log(error);
+            localStorage.removeItem("token");
+            alert("エラーが発生しました");
+          });
       } else {
         alert("メールアドレスかパスワードが間違っています");
       }
