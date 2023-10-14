@@ -11,6 +11,9 @@ import { LoginForm } from "../../../src/types";
 import { authApi } from "../../api/authApi";
 import { gapi } from "gapi-script";
 import { GoogleLogin } from "react-google-login";
+import { eventApi } from "../../api/eventApi";
+import { db } from "../../db/db";
+import { privateApi } from "../../api/privateApi";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -67,7 +70,20 @@ export const Login = () => {
       if (res.status === 200) {
         localStorage.setItem("token", res.data["accessToken"]);
         // localStorage.setItem("refresh", res.data["refreshToken"]);
-        navigate("/event-register");
+        const eventData = await eventApi.getAll();
+        const privateData = await privateApi.getAll();
+        db.transaction("rw", db.event, db.private, () => {
+          db.event.bulkAdd(eventData.data.events);
+          db.private.bulkAdd(privateData.data.events);
+        })
+          .then(() => {
+            navigate("/event-register");
+          })
+          .catch((error) => {
+            console.log(error);
+            localStorage.removeItem("token");
+            alert("エラーが発生しました");
+          });
       } else {
         alert("メールアドレスかパスワードが間違っています");
       }
@@ -89,6 +105,9 @@ export const Login = () => {
       if (res.status === 200) {
         localStorage.setItem("token", res.data["accessToken"]);
         // localStorage.setItem("refresh", res.data["refreshToken"]);
+        const data = await eventApi.getAll();
+        console.log(data);
+        await db.event.bulkAdd(data.data.result);
         navigate("/event-register");
       }
       // 未登録の場合

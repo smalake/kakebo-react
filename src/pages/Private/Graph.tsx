@@ -7,13 +7,13 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { Category } from "../../components/Category";
 import { useRecoilValue } from "recoil";
 import { categoryAtom } from "../../recoil/CategoryAtom";
-import { privateAtom } from "../../recoil/PrivateAtom";
+import { privateSelector } from "../../recoil/PrivateAtom";
 import { useNavigate } from "react-router-dom";
 
 export const GraphPrivate = () => {
   const navigate = useNavigate();
-  const graphData = useRecoilValue(privateAtom).graph;
-  const total = useRecoilValue(privateAtom).total;
+  const graphData = useRecoilValue(privateSelector).graph;
+  const total = useRecoilValue(privateSelector).total;
   const category = useRecoilValue(categoryAtom);
   const date = new Date();
   const [year, setYear] = useState(date.getFullYear());

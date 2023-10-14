@@ -5,6 +5,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { useNavigate } from "react-router-dom";
 import { authApi } from "../../api/authApi";
 import { settingApi } from "../../api/settingApi";
+import { db } from "../../db/db";
 
 export const Setting = () => {
   const navigate = useNavigate();
@@ -42,7 +43,8 @@ export const Setting = () => {
         const res = await authApi.logout();
         if (res.status === 200) {
           localStorage.removeItem("token");
-          localStorage.removeItem("refresh");
+          // localStorage.removeItem("refresh");
+          await db.delete();
           alert("ログアウトしました");
           navigate("/login");
         } else {

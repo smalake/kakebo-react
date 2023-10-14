@@ -8,6 +8,9 @@ import { eventApi } from "../../api/eventApi";
 import { useNavigate, useParams } from "react-router-dom";
 import { EventEditForm } from "../../types";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { eventFlagAtom } from "../../recoil/EventAtom";
+import { useRecoilState } from "recoil";
+import { db } from "../../db/db";
 
 export const EventEdit = () => {
   const { id } = useParams();
@@ -18,6 +21,7 @@ export const EventEdit = () => {
   const [updatedAt, setUpdatedAt] = useState("");
   const [loading, setLoading] = useState(true);
   const [buttonLoading, setButtonLoading] = useState(false);
+  const [eventFlag, setEventFlag] = useRecoilState(eventFlagAtom);
 
   // react-hook-formの設定
   const {
@@ -76,6 +80,13 @@ export const EventEdit = () => {
 
       const res = await eventApi.update(parseInt(id!), send);
       if (res.status === 200) {
+        await db.event.put({
+          id: Number(id),
+          amount: Number(data.amount),
+          category: data.category,
+          store: data.storeName,
+          date: String(data.date),
+        });
         navigate("/calendar");
         alert("更新しました");
       } else {
@@ -92,6 +103,9 @@ export const EventEdit = () => {
       }
     } finally {
       setButtonLoading(false);
+      // Recoil Selectorの再計算用
+      var flag = eventFlag + 1;
+      setEventFlag(flag);
     }
   };
 
@@ -107,6 +121,7 @@ export const EventEdit = () => {
       try {
         const res = await eventApi.delete(parseInt(id!));
         if (res.status === 200) {
+          await db.event.delete(Number(id));
           navigate("/calendar");
           alert("削除しました");
         } else {
@@ -123,6 +138,9 @@ export const EventEdit = () => {
         }
       } finally {
         setButtonLoading(false);
+        // Recoil Selectorの再計算用
+        var flag = eventFlag + 1;
+        setEventFlag(flag);
       }
     }
   };

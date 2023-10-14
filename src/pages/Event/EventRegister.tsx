@@ -6,11 +6,17 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { eventApi } from "../../api/eventApi";
 import { useNavigate } from "react-router-dom";
 import { EventRegisterForm } from "../../types";
+import { db } from "../../db/db";
+import { useRecoilState } from "recoil";
+import { eventFlagAtom } from "../../recoil/EventAtom";
+import { privateFlagAtom } from "../../recoil/PrivateAtom";
 
 export const EventRegister = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [display, setDisplay] = useState(false);
+  const [eventFlag, setEventFlag] = useRecoilState(eventFlagAtom);
+  const [privateFlag, setPrivateFlag] = useRecoilState(privateFlagAtom);
 
   // react-hook-formの設定
   const {
@@ -38,6 +44,43 @@ export const EventRegister = () => {
       };
       const res = await eventApi.create(send);
       if (res.status === 200) {
+        // DBに登録した内容をIndexedDBに保存
+        if (res.data.data.length === 2) {
+          const toDB = [
+            {
+              id: res.data.data[0],
+              amount: data.amount1 - data.amount2,
+              category: data.category1,
+              store: data.storeName,
+              date: String(data.date),
+            },
+            {
+              id: res.data.data[1],
+              amount: Number(data.amount2),
+              category: data.category2,
+              store: data.storeName,
+              date: String(data.date),
+            },
+          ];
+          if (data.isPrivate === 0) {
+            await db.event.bulkAdd(toDB);
+          } else {
+            await db.private.bulkAdd(toDB);
+          }
+        } else {
+          const toDB = {
+            id: res.data.data[0],
+            amount: Number(data.amount1),
+            category: data.category1,
+            store: data.storeName,
+            date: String(data.date),
+          };
+          if (data.isPrivate === 0) {
+            await db.event.add(toDB);
+          } else {
+            await db.private.add(toDB);
+          }
+        }
         alert("登録しました");
       } else {
         alert("登録に失敗しました");
@@ -53,6 +96,11 @@ export const EventRegister = () => {
       }
     } finally {
       setLoading(false);
+      // Recoil Selectorの再計算用
+      var flag = eventFlag + 1;
+      var pflag = privateFlag + 1;
+      setEventFlag(flag);
+      setPrivateFlag(pflag);
     }
   };
 
