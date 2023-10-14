@@ -29,7 +29,7 @@ export const Calendar = memo(() => {
   // カレンダー内の金額をセット
   useEffect(() => {
     setAmount(eventAmount);
-  });
+  }, [eventAmount]);
 
   const headerToolbar = {
     start: "prev",
