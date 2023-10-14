@@ -8,6 +8,9 @@ import { privateApi } from "../../api/privateApi";
 import { useNavigate, useParams } from "react-router-dom";
 import { EventEditForm } from "../../types";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { eventFlagAtom } from "../../recoil/EventAtom";
+import { useRecoilState } from "recoil";
+import { db } from "../../db/db";
 
 export const EventPrivateEdit = () => {
   const { id } = useParams();
@@ -16,6 +19,7 @@ export const EventPrivateEdit = () => {
   const [updatedAt, setUpdatedAt] = useState("");
   const [loading, setLoading] = useState(true);
   const [buttonLoading, setButtonLoading] = useState(false);
+  const [eventFlag, setEventFlag] = useRecoilState(eventFlagAtom);
 
   // react-hook-formの設定
   const {

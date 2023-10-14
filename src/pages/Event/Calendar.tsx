@@ -10,14 +10,14 @@ import { EventClickArg } from "@fullcalendar/core";
 import { format } from "date-fns";
 import { Link, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { eventAtom, eventFormatAtom } from "../../recoil/EventAtom";
+import { eventSelector } from "../../recoil/EventAtom";
 import { Category } from "../../components/Category";
 import { Event } from "../../types";
 
 export const Calendar = memo(() => {
   const navigate = useNavigate();
-  const events = useRecoilValue(eventAtom).event;
-  const eventFormat = useRecoilValue(eventFormatAtom);
+  const events = useRecoilValue(eventSelector).event;
+  const eventAmount = useRecoilValue(eventSelector).calendar;
   const [selectedDate, setSelectedDate] = useState("");
   const [amount, setAmount] = useState<
     {
@@ -26,9 +26,10 @@ export const Calendar = memo(() => {
     }[]
   >();
 
+  // カレンダー内の金額をセット
   useEffect(() => {
-    setAmount(eventFormat);
-  }, [eventFormat]);
+    setAmount(eventAmount);
+  });
 
   const headerToolbar = {
     start: "prev",

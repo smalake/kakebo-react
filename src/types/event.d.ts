@@ -35,6 +35,10 @@ export interface Total {
   [date: string]: number;
 }
 
+export interface FormatAmount {
+  [date: string]: number;
+}
+
 export interface Events {
   event: Event;
   graph: Graph;

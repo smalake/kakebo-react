@@ -11,6 +11,8 @@ import { LoginForm } from "../../../src/types";
 import { authApi } from "../../api/authApi";
 import { gapi } from "gapi-script";
 import { GoogleLogin } from "react-google-login";
+import { eventApi } from "../../api/eventApi";
+import { db } from "../../db/db";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -67,6 +69,8 @@ export const Login = () => {
       if (res.status === 200) {
         localStorage.setItem("token", res.data["accessToken"]);
         // localStorage.setItem("refresh", res.data["refreshToken"]);
+        const data = await eventApi.getAll();
+        await db.event.bulkAdd(data.data.result);
         navigate("/event-register");
       } else {
         alert("メールアドレスかパスワードが間違っています");
@@ -89,6 +93,9 @@ export const Login = () => {
       if (res.status === 200) {
         localStorage.setItem("token", res.data["accessToken"]);
         // localStorage.setItem("refresh", res.data["refreshToken"]);
+        const data = await eventApi.getAll();
+        console.log(data);
+        await db.event.bulkAdd(data.data.result);
         navigate("/event-register");
       }
       // 未登録の場合
