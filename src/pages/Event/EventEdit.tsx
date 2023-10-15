@@ -87,6 +87,11 @@ export const EventEdit = () => {
           store: data.storeName,
           date: String(data.date),
         });
+        // Recoil Selectorの再計算用
+        var flag = eventFlag + 1;
+        setEventFlag(flag);
+        const revision = Number(localStorage.getItem("revision")) + 1;
+        localStorage.setItem("revision", String(revision));
         navigate("/calendar");
         alert("更新しました");
       } else {
@@ -103,9 +108,6 @@ export const EventEdit = () => {
       }
     } finally {
       setButtonLoading(false);
-      // Recoil Selectorの再計算用
-      var flag = eventFlag + 1;
-      setEventFlag(flag);
     }
   };
 
@@ -122,6 +124,8 @@ export const EventEdit = () => {
         const res = await eventApi.delete(parseInt(id!));
         if (res.status === 200) {
           await db.event.delete(Number(id));
+          const revision = Number(localStorage.getItem("revision")) + 1;
+          localStorage.setItem("revision", String(revision));
           navigate("/calendar");
           alert("削除しました");
         } else {

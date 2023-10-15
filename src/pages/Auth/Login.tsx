@@ -72,12 +72,17 @@ export const Login = () => {
         // localStorage.setItem("refresh", res.data["refreshToken"]);
         const eventData = await eventApi.getAll();
         const privateData = await privateApi.getAll();
-        db.transaction("rw", db.event, db.private, () => {
-          db.event.bulkAdd(eventData.data.events);
-          db.private.bulkAdd(privateData.data.events);
-        })
+        const revision = await eventApi.revision();
+        db.open()
           .then(() => {
-            navigate("/event-register");
+            db.transaction("rw", db.event, db.private, () => {
+              db.event.bulkAdd(eventData.data.events);
+              db.private.bulkAdd(privateData.data.events);
+            }).then(() => {
+              // リビジョンを保存
+              localStorage.setItem("revision", revision.data.revision);
+              navigate("/event-register");
+            });
           })
           .catch((error) => {
             console.log(error);
@@ -107,12 +112,17 @@ export const Login = () => {
         // localStorage.setItem("refresh", res.data["refreshToken"]);
         const eventData = await eventApi.getAll();
         const privateData = await privateApi.getAll();
-        db.transaction("rw", db.event, db.private, () => {
-          db.event.bulkAdd(eventData.data.events);
-          db.private.bulkAdd(privateData.data.events);
-        })
+        const revision = await eventApi.revision();
+        db.open()
           .then(() => {
-            navigate("/event-register");
+            db.transaction("rw", db.event, db.private, () => {
+              db.event.bulkAdd(eventData.data.events);
+              db.private.bulkAdd(privateData.data.events);
+            }).then(() => {
+              // リビジョンを保存
+              localStorage.setItem("revision", revision.data.revision);
+              navigate("/event-register");
+            });
           })
           .catch((error) => {
             console.log(error);
