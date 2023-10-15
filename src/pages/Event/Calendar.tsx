@@ -4,27 +4,62 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import jaLocale from "@fullcalendar/core/locales/ja";
 import styles from "./Calendar.module.css";
 import "./calendar.css";
-import { Box, FormControl, MenuItem, Select } from "@mui/material";
+import { Box, CircularProgress, FormControl, MenuItem, Select } from "@mui/material";
 import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 import { EventClickArg } from "@fullcalendar/core";
 import { format } from "date-fns";
 import { Link, useNavigate } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { eventSelector } from "../../recoil/EventAtom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { eventFlagAtom, eventSelector } from "../../recoil/EventAtom";
 import { Category } from "../../components/Category";
 import { Event } from "../../types";
+import { eventApi } from "../../api/eventApi";
+import { db } from "../../db/db";
 
 export const Calendar = memo(() => {
   const navigate = useNavigate();
   const events = useRecoilValue(eventSelector).event;
   const eventAmount = useRecoilValue(eventSelector).calendar;
   const [selectedDate, setSelectedDate] = useState("");
+  const revision = localStorage.getItem("revision");
+  const [eventFlag, setEventFlag] = useRecoilState(eventFlagAtom);
+  const [loading, setLoading] = useState(true);
   const [amount, setAmount] = useState<
     {
       title: string;
       start: string;
     }[]
   >();
+
+  useEffect(() => {
+    const checkRevision = async () => {
+      try {
+        const res = await eventApi.revision();
+        if (res.data.revision !== Number(revision)) {
+          const eventData = await eventApi.getAll();
+          const revision = await eventApi.revision();
+          db.transaction("rw", db.event, () => {
+            db.event.clear();
+            db.event.bulkAdd(eventData.data.events);
+          })
+            .then(() => {
+              const flag = eventFlag + 1;
+              setEventFlag(flag);
+              // リビジョンを保存
+              localStorage.setItem("revision", revision.data.revision);
+            })
+            .catch((error) => {
+              console.log(error);
+              alert("エラーが発生しました");
+            });
+        }
+      } catch (err) {
+      } finally {
+        setLoading(false);
+      }
+    };
+    checkRevision();
+  }, []);
 
   // カレンダー内の金額をセット
   useEffect(() => {
@@ -56,33 +91,49 @@ export const Calendar = memo(() => {
 
   return (
     <div>
-      <div className={styles.calendar}>
-        <Box sx={{ textAlign: "right", marginBottom: "10px" }}>
-          <FormControl variant="standard" sx={{ width: "50%", textAlign: "center" }}>
-            <Select labelId="select-label" id="select-kakebo" value={0} label="家計簿選択" onChange={handleChange}>
-              <MenuItem value={0}>共有家計簿</MenuItem>
-              <MenuItem value={1}>プライベート家計簿</MenuItem>
-            </Select>
-          </FormControl>
+      {loading ? (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "330px",
+            alignItems: "center",
+            height: "100%",
+          }}
+        >
+          <CircularProgress />
         </Box>
-
+      ) : (
         <div>
-          <FullCalendar
-            plugins={[dayGridPlugin, interactionPlugin]}
-            initialView="dayGridMonth"
-            locales={[jaLocale]}
-            locale="ja"
-            headerToolbar={headerToolbar}
-            contentHeight="auto"
-            events={amount}
-            dateClick={handleClick}
-            eventClick={handleEventClick}
-          />
+          <div className={styles.calendar}>
+            <Box sx={{ textAlign: "right", marginBottom: "10px" }}>
+              <FormControl variant="standard" sx={{ width: "50%", textAlign: "center" }}>
+                <Select labelId="select-label" id="select-kakebo" value={0} label="家計簿選択" onChange={handleChange}>
+                  <MenuItem value={0}>共有家計簿</MenuItem>
+                  <MenuItem value={1}>プライベート家計簿</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+
+            <div>
+              <FullCalendar
+                plugins={[dayGridPlugin, interactionPlugin]}
+                initialView="dayGridMonth"
+                locales={[jaLocale]}
+                locale="ja"
+                headerToolbar={headerToolbar}
+                contentHeight="auto"
+                events={amount}
+                dateClick={handleClick}
+                eventClick={handleEventClick}
+              />
+            </div>
+          </div>
+          <div>
+            <EventList events={events} selectedDate={selectedDate} />
+          </div>
         </div>
-      </div>
-      <div>
-        <EventList events={events} selectedDate={selectedDate} />
-      </div>
+      )}
     </div>
   );
 });
