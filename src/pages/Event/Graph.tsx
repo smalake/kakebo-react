@@ -53,6 +53,7 @@ export const Graph = () => {
       }
     };
     checkRevision();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleDown = () => {

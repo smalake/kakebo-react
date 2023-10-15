@@ -59,6 +59,7 @@ export const Calendar = memo(() => {
       }
     };
     checkRevision();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // カレンダー内の金額をセット
