@@ -1,9 +1,5 @@
 import Dexie, { Table } from "dexie";
 
-export interface Data {
-  date: string;
-  data: EventTable[];
-}
 export interface EventTable {
   id: number;
   date: string;
