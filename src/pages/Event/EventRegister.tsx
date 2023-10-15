@@ -31,6 +31,9 @@ export const EventRegister = () => {
   const onSubmit = async (data: EventRegisterForm) => {
     setLoading(true);
     const d = new Date(data.date);
+    // Recoil Selectorの再計算用
+    const flag = eventFlag + 1;
+    const pflag = privateFlag + 1;
     try {
       // 送信用のフォーマットへと変換
       const send = {
@@ -64,8 +67,12 @@ export const EventRegister = () => {
           ];
           if (data.isPrivate === 0) {
             await db.event.bulkAdd(toDB);
+            const revision = Number(localStorage.getItem("revision")) + 1;
+            localStorage.setItem("revision", String(revision));
+            setEventFlag(flag);
           } else {
             await db.private.bulkAdd(toDB);
+            setPrivateFlag(pflag);
           }
         } else {
           const toDB = {
@@ -76,9 +83,13 @@ export const EventRegister = () => {
             date: String(data.date),
           };
           if (data.isPrivate === 0) {
+            const revision = Number(localStorage.getItem("revision")) + 1;
+            localStorage.setItem("revision", String(revision));
             await db.event.add(toDB);
+            setEventFlag(flag);
           } else {
             await db.private.add(toDB);
+            setPrivateFlag(pflag);
           }
         }
         alert("登録しました");
@@ -96,11 +107,6 @@ export const EventRegister = () => {
       }
     } finally {
       setLoading(false);
-      // Recoil Selectorの再計算用
-      var flag = eventFlag + 1;
-      var pflag = privateFlag + 1;
-      setEventFlag(flag);
-      setPrivateFlag(pflag);
     }
   };
 
