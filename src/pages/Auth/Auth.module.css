@@ -47,3 +47,9 @@
 .google > div {
   padding: 12px 2px 8px 10px !important;
 }
+
+.description {
+  margin: 0 auto;
+  width: 90%;
+  display: block;
+}
