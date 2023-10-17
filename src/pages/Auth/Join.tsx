@@ -98,16 +98,14 @@ export const Join = () => {
       };
       const res = await authApi.join(registerData);
       if (res.status === 200) {
-        localStorage.setItem("token", res.data["accessToken"]);
-        // localStorage.setItem("refresh", res.data["refreshToken"]);
-        alert("登録完了しました");
-        navigate("/event-register");
+        alert("設定されたメールアドレス宛に認証コードを送信しました");
+        navigate("/verify-email");
+      } else if (res.status === 409) {
+        alert("すでに使用されているメールアドレスです");
       } else {
-        console.log(res);
-        alert("認証エラーが発生しました");
+        alert("新規登録に失敗しました");
       }
     } catch (err) {
-      console.log(err);
       alert("認証エラーが発生しました");
     } finally {
       setButtonLoading(false);
