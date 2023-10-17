@@ -8,4 +8,5 @@ export const authApi = {
   join: (params: object) => axiosClient.post("/join", params),
   getName: (group: string) => axiosClient.get(`/get-name/${group}`),
   isLogin: () => axiosClient.get("/login-check"),
+  verifyEmail: (params: object) => axiosClient.post("/auth-code", params),
 };

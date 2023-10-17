@@ -47,13 +47,14 @@ export const Register = () => {
       };
       const res = await authApi.register(registerData);
       if (res.status === 200) {
-        localStorage.setItem("token", res.data["accessToken"]);
+        // localStorage.setItem("token", res.data["accessToken"]);
         // localStorage.setItem("refresh", res.data["refreshToken"]);
-        alert("登録完了しました");
-        navigate("/event-register");
+        alert("設定されたメールアドレス宛に認証コードを送信しました");
+        navigate("/verify-email");
       } else if (res.status === 409) {
         alert("すでに使用されているメールアドレスです");
       } else {
+        console.log(res);
         alert("新規登録に失敗しました");
       }
     } catch (err: any) {
