@@ -68,7 +68,9 @@ export const VerifyEmail = () => {
         <div className={styles.authForm}>
           <TextField id="code" {...register("code", { required: "認証コードを入力してください" })} sx={{ width: "90%" }} />
         </div>
-        <Button onClick={resend}>認証コードを再送信</Button>
+        <div className={styles.description}>
+          <Button onClick={resend}>認証コードを再送信</Button>
+        </div>
         <div className={styles.form}>
           <LoadingButton
             type="submit"
