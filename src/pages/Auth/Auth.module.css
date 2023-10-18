@@ -48,6 +48,11 @@
   padding: 12px 2px 8px 10px !important;
 }
 
+.authForm {
+  margin: 20px 0 10px 0;
+  text-align: center;
+}
+
 .description {
   margin: 0 auto;
   width: 90%;

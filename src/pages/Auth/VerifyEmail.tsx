@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./Auth.module.css";
 import { authApi } from "../../api/authApi";
-import { TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 
 export interface AuthCode {
@@ -45,6 +45,14 @@ export const VerifyEmail = () => {
       setLoading(false);
     }
   };
+  const resend = async () => {
+    const res = await authApi.resendCode();
+    if (res.status === 200) {
+      alert("認証コードを再送信しました");
+    } else {
+      alert("エラーが発生しました");
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -57,8 +65,11 @@ export const VerifyEmail = () => {
         （※ 有効期限は5分です。）
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className={styles.form}>
+        <div className={styles.authForm}>
           <TextField id="code" {...register("code", { required: "認証コードを入力してください" })} sx={{ width: "90%" }} />
+        </div>
+        <div className={styles.description}>
+          <Button onClick={resend}>認証コードを再送信</Button>
         </div>
         <div className={styles.form}>
           <LoadingButton

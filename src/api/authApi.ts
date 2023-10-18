@@ -9,4 +9,5 @@ export const authApi = {
   getName: (group: string) => axiosClient.get(`/get-name/${group}`),
   isLogin: () => axiosClient.get("/login-check"),
   verifyEmail: (params: object) => axiosClient.post("/auth-code", params),
+  resendCode: () => axiosClient.get("/resend-code"),
 };
