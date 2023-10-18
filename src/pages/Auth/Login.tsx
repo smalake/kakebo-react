@@ -89,6 +89,8 @@ export const Login = () => {
             localStorage.removeItem("token");
             alert("エラーが発生しました");
           });
+      } else if (res.status === 400) {
+        alert("メールアドレスの認証が完了していません");
       } else {
         alert("メールアドレスかパスワードが間違っています");
       }
