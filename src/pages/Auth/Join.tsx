@@ -11,6 +11,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { RegisterForm } from "../../../src/types";
 import { gapi } from "gapi-script";
 import { GoogleLogin } from "react-google-login";
+import { useCookies } from "react-cookie";
 
 export const Join = () => {
   const [params] = useSearchParams();
@@ -19,6 +20,7 @@ export const Join = () => {
   const [parentName, setParentName] = useState("");
   const [loading, setLoading] = useState(true);
   const [buttonLoading, setButtonLoading] = useState(false);
+  const [cookies, setCookie] = useCookies(["email"]);
   const clientId = process.env.REACT_APP_CLIENT_ID;
 
   // react-hook-formの設定
@@ -98,6 +100,8 @@ export const Join = () => {
       };
       const res = await authApi.join(registerData);
       if (res.status === 200) {
+        setCookie("email", data.email);
+        console.log(cookies.email);
         alert("設定されたメールアドレス宛に認証コードを送信しました");
         navigate("/verify-email");
       } else if (res.status === 409) {
