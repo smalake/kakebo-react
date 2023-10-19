@@ -10,10 +10,12 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { RegisterForm } from "../../../src/types";
 import { gapi } from "gapi-script";
 import { GoogleLogin } from "react-google-login";
+import { useCookies } from "react-cookie";
 
 export const Register = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [cookies, setCookie] = useCookies(["email"]);
   const clientId = process.env.REACT_APP_CLIENT_ID;
 
   // react-hook-formの設定
@@ -47,6 +49,8 @@ export const Register = () => {
       };
       const res = await authApi.register(registerData);
       if (res.status === 200) {
+        setCookie("email", data.email);
+        console.log(cookies.email);
         alert("設定されたメールアドレス宛に認証コードを送信しました");
         navigate("/verify-email");
       } else if (res.status === 409) {

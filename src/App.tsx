@@ -19,36 +19,39 @@ import { CalendarPrivate } from "./pages/Private/Calendar";
 import { EventPrivateEdit } from "./pages/Private/EventEdit";
 import { GraphPrivate } from "./pages/Private/Graph";
 import { VerifyEmail } from "./pages/Auth/VerifyEmail";
+import { CookiesProvider } from "react-cookie";
 
 function App() {
   return (
-    <RecoilRoot>
-      <Suspense fallback={<Fallback />}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/join" element={<Join />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/verify-email" element={<VerifyEmail />} />
-            <Route path="/" element={<NoMenuLayout />}>
-              <Route path="event-edit/:id" element={<EventEdit />} />
-              <Route path="event-private-edit/:id" element={<EventPrivateEdit />} />
-              <Route path="change-name" element={<ChangeName />} />
-              <Route path="invite-group" element={<InviteGroup />} />
-            </Route>
-            <Route path="/" element={<MenuLayout />}>
-              <Route path="event-register" element={<EventRegister />} />
-              <Route path="calendar" element={<Calendar />} />
-              <Route path="calendar-private" element={<CalendarPrivate />} />
-              <Route path="graph" element={<Graph />} />
-              <Route path="graph-private" element={<GraphPrivate />} />
-              <Route path="setting" element={<Setting />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </Suspense>
-    </RecoilRoot>
+    <CookiesProvider>
+      <RecoilRoot>
+        <Suspense fallback={<Fallback />}>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Login />} />
+              <Route path="/join" element={<Join />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/verify-email" element={<VerifyEmail />} />
+              <Route path="/" element={<NoMenuLayout />}>
+                <Route path="event-edit/:id" element={<EventEdit />} />
+                <Route path="event-private-edit/:id" element={<EventPrivateEdit />} />
+                <Route path="change-name" element={<ChangeName />} />
+                <Route path="invite-group" element={<InviteGroup />} />
+              </Route>
+              <Route path="/" element={<MenuLayout />}>
+                <Route path="event-register" element={<EventRegister />} />
+                <Route path="calendar" element={<Calendar />} />
+                <Route path="calendar-private" element={<CalendarPrivate />} />
+                <Route path="graph" element={<Graph />} />
+                <Route path="graph-private" element={<GraphPrivate />} />
+                <Route path="setting" element={<Setting />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </Suspense>
+      </RecoilRoot>
+    </CookiesProvider>
   );
 }
 

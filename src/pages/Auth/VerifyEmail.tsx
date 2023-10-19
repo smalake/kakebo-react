@@ -5,6 +5,7 @@ import styles from "./Auth.module.css";
 import { authApi } from "../../api/authApi";
 import { Button, TextField } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
+import { useCookies } from "react-cookie";
 
 export interface AuthCode {
   code: string;
@@ -13,6 +14,7 @@ export interface AuthCode {
 export const VerifyEmail = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [cookies] = useCookies(["email"]);
 
   // react-hook-formの設定
   const { register, handleSubmit } = useForm<AuthCode>();
@@ -24,6 +26,7 @@ export const VerifyEmail = () => {
       // DBに新規登録
       const verifyData = {
         code: data.code,
+        email: cookies.email,
       };
       const res = await authApi.verifyEmail(verifyData);
       if (res.status === 200) {
