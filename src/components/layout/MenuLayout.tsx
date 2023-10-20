@@ -3,7 +3,6 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { FooterMenu } from "../FooterMenu";
 import { useEffect, useState } from "react";
 import { authApi } from "../../api/authApi";
-import { Adsense } from "../Adsense";
 
 export const MenuLayout = () => {
   const navigate = useNavigate();
