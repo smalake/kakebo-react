@@ -36,8 +36,8 @@ export const MenuLayout = () => {
     loginCheck();
   }, [navigate]);
   return (
-    <Box sx={{ display: "flex", width: "100%", position: "absolute", top: "0" }}>
-      <Box sx={{ flexGrow: 1, width: "max-content" }}>
+    <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
+      <Box sx={{ flexGrow: 1, width: "100%" }}>
         {loading ? (
           <Box
             sx={{
