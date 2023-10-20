@@ -3,6 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { FooterMenu } from "../FooterMenu";
 import { useEffect, useState } from "react";
 import { authApi } from "../../api/authApi";
+import { Adsense } from "../Adsense";
 
 export const MenuLayout = () => {
   const navigate = useNavigate();
@@ -36,8 +37,8 @@ export const MenuLayout = () => {
     loginCheck();
   }, [navigate]);
   return (
-    <Box sx={{ display: "flex", width: "100%", position: "absolute", top: "0" }}>
-      <Box sx={{ flexGrow: 1, width: "max-content" }}>
+    <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
+      <Box sx={{ flexGrow: 1, width: "100%" }}>
         {loading ? (
           <Box
             sx={{

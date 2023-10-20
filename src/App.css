@@ -26,11 +26,11 @@ h2 {
   height: 100%;
 }
 
-.MuiBottomNavigation-root {
+/* .MuiBottomNavigation-root {
   width: 100%;
   position: fixed;
   bottom: 0;
   left: 0;
   height: 36px;
   z-index: 1000;
-}
+} */
