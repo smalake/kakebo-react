@@ -99,6 +99,15 @@ export const Setting = () => {
                 共有家計簿への招待
               </Button>
             )}
+            <Button
+              variant="contained"
+              sx={{ fontSize: "18px", width: "80%", marginBottom: "30px" }}
+              onClick={() => {
+                navigate("/contact");
+              }}
+            >
+              お問い合わせ
+            </Button>
             <Button variant="contained" sx={{ fontSize: "18px", width: "80%" }} onClick={clickLogout}>
               ログアウト
             </Button>

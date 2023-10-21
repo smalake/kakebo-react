@@ -5,4 +5,5 @@ export const settingApi = {
   updateName: (params: any) => axiosClient.put("display-name", params),
   invite: () => axiosClient.get("/invite"),
   isParent: () => axiosClient.get("/is-parent"),
+  sendMail: (params: Object) => axiosClient.post("/send-mail", params),
 };

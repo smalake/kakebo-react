@@ -20,6 +20,7 @@ import { EventPrivateEdit } from "./pages/Private/EventEdit";
 import { GraphPrivate } from "./pages/Private/Graph";
 import { VerifyEmail } from "./pages/Auth/VerifyEmail";
 import { CookiesProvider } from "react-cookie";
+import { Contact } from "./pages/Setting/Contact";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
                 <Route path="event-private-edit/:id" element={<EventPrivateEdit />} />
                 <Route path="change-name" element={<ChangeName />} />
                 <Route path="invite-group" element={<InviteGroup />} />
+                <Route path="contact" element={<Contact />} />
               </Route>
               <Route path="/" element={<MenuLayout />}>
                 <Route path="event-register" element={<EventRegister />} />
