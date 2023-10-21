@@ -5,7 +5,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import EqualizerIcon from "@mui/icons-material/Equalizer";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Adsense } from "./Adsense";
 
 export const FooterMenu = () => {
   const navigate = useNavigate();
@@ -23,7 +22,6 @@ export const FooterMenu = () => {
         <BottomNavigationAction label="グラフ" value="/graph" icon={<EqualizerIcon />} />
         <BottomNavigationAction label="設定" value="/setting" icon={<SettingsIcon />} />
       </BottomNavigation>
-      <Adsense />
     </Box>
   );
 };
