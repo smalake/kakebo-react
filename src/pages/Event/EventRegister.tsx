@@ -10,11 +10,14 @@ import { db } from "../../db/db";
 import { useRecoilState } from "recoil";
 import { eventFlagAtom } from "../../recoil/EventAtom";
 import { privateFlagAtom } from "../../recoil/PrivateAtom";
+import AddIcon from "@mui/icons-material/Add";
 
 export const EventRegister = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [display, setDisplay] = useState(false);
+  const [amount2, setAmount2] = useState(0);
+  const [addedAmount, setAddedAmount] = useState(0);
   const [eventFlag, setEventFlag] = useRecoilState(eventFlagAtom);
   const [privateFlag, setPrivateFlag] = useRecoilState(privateFlagAtom);
 
@@ -34,11 +37,18 @@ export const EventRegister = () => {
     // Recoil Selectorの再計算用
     const flag = eventFlag + 1;
     const pflag = privateFlag + 1;
+    var amnt2;
+    // 追加カテゴリーの有無によって処理を分岐
+    if (addedAmount === 0) {
+      amnt2 = amount2;
+    } else {
+      amnt2 = addedAmount;
+    }
     try {
       // 送信用のフォーマットへと変換
       const send = {
         amount1: Number(data.amount1),
-        amount2: Number(data.amount2 || 0),
+        amount2: Number(amnt2),
         category1: data.category1,
         category2: data.category2,
         storeName: data.storeName,
@@ -52,14 +62,14 @@ export const EventRegister = () => {
           const toDB = [
             {
               id: res.data.data[0],
-              amount: data.amount1 - data.amount2,
+              amount: data.amount1 - amnt2,
               category: data.category1,
               store: data.storeName,
               date: String(data.date),
             },
             {
               id: res.data.data[1],
-              amount: Number(data.amount2),
+              amount: Number(amnt2),
               category: data.category2,
               store: data.storeName,
               date: String(data.date),
@@ -117,7 +127,19 @@ export const EventRegister = () => {
   // 削除ボタンを押したときの処理
   const removeSeconds = () => {
     setDisplay(false);
-    reset({ amount2: 0 });
+    setAmount2(0);
+    setAddedAmount(0);
+  };
+
+  // フォームの表示更新
+  const handleAmount2Change = (e: any) => {
+    setAmount2(e.target.value);
+  };
+
+  // カテゴリー2用の支出を追加
+  const calcAmount = () => {
+    const result = Number(amount2) + Number(addedAmount);
+    setAddedAmount(result);
   };
 
   return (
@@ -159,37 +181,6 @@ export const EventRegister = () => {
             )}
           />
         </div>
-        {display && (
-          <div>
-            <div className={styles.form}>
-              <TextField id="amount2" label="金額" {...register("amount2")} type="number" sx={{ width: "90%" }} />
-            </div>
-            <div className={styles.form}>
-              <Controller
-                name="category2"
-                control={control}
-                defaultValue={0}
-                render={({ field }) => (
-                  <FormControl sx={{ width: "90%", textAlign: "left" }}>
-                    <InputLabel id="category2-label">カテゴリー</InputLabel>
-                    <Select {...field} id="category2" label="カテゴリー" labelId="category2-label">
-                      <MenuItem value={0}>食費</MenuItem>
-                      <MenuItem value={1}>外食費</MenuItem>
-                      <MenuItem value={2}>日用品</MenuItem>
-                      <MenuItem value={3}>交通費</MenuItem>
-                      <MenuItem value={4}>医療費</MenuItem>
-                      <MenuItem value={5}>衣服</MenuItem>
-                      <MenuItem value={6}>趣味</MenuItem>
-                      <MenuItem value={7}>光熱費</MenuItem>
-                      <MenuItem value={8}>通信費</MenuItem>
-                      <MenuItem value={9}>その他</MenuItem>
-                    </Select>
-                  </FormControl>
-                )}
-              />
-            </div>
-          </div>
-        )}
         <div className={styles.form}>
           <TextField
             id="storeName"
@@ -234,6 +225,48 @@ export const EventRegister = () => {
             )}
           />
         </div>
+        {display && (
+          <div>
+            <div className={styles.form}>
+              <TextField id="amount2" label="追加の金額" value={amount2} onChange={handleAmount2Change} type="number" sx={{ width: "70%" }} />
+              <Button
+                onClick={() => {
+                  calcAmount();
+                }}
+              >
+                <AddIcon />
+              </Button>
+              <div>
+                <p>現在の追加金額</p>
+                <p>{addedAmount}</p>
+              </div>
+            </div>
+            <div className={styles.form}>
+              <Controller
+                name="category2"
+                control={control}
+                defaultValue={0}
+                render={({ field }) => (
+                  <FormControl sx={{ width: "90%", textAlign: "left" }}>
+                    <InputLabel id="category2-label">追加のカテゴリー</InputLabel>
+                    <Select {...field} id="category2" label="追加のカテゴリー" labelId="category2-label">
+                      <MenuItem value={0}>食費</MenuItem>
+                      <MenuItem value={1}>外食費</MenuItem>
+                      <MenuItem value={2}>日用品</MenuItem>
+                      <MenuItem value={3}>交通費</MenuItem>
+                      <MenuItem value={4}>医療費</MenuItem>
+                      <MenuItem value={5}>衣服</MenuItem>
+                      <MenuItem value={6}>趣味</MenuItem>
+                      <MenuItem value={7}>光熱費</MenuItem>
+                      <MenuItem value={8}>通信費</MenuItem>
+                      <MenuItem value={9}>その他</MenuItem>
+                    </Select>
+                  </FormControl>
+                )}
+              />
+            </div>
+          </div>
+        )}
         {!display && (
           <div className={styles.addButton}>
             <Button
