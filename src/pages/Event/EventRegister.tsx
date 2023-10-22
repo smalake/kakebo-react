@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import styles from "./Event.module.css";
-import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { Box, Button, FormControl, IconButton, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { eventApi } from "../../api/eventApi";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +10,8 @@ import { db } from "../../db/db";
 import { useRecoilState } from "recoil";
 import { eventFlagAtom } from "../../recoil/EventAtom";
 import { privateFlagAtom } from "../../recoil/PrivateAtom";
-import AddIcon from "@mui/icons-material/Add";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 
 export const EventRegister = () => {
   const navigate = useNavigate();
@@ -26,7 +27,6 @@ export const EventRegister = () => {
     register,
     handleSubmit,
     control,
-    reset,
     formState: { errors },
   } = useForm<EventRegisterForm>();
 
@@ -103,6 +103,7 @@ export const EventRegister = () => {
           }
         }
         alert("登録しました");
+        window.location.reload();
       } else {
         alert("登録に失敗しました");
         console.log(res);
@@ -136,10 +137,18 @@ export const EventRegister = () => {
     setAmount2(e.target.value);
   };
 
-  // カテゴリー2用の支出を追加
-  const calcAmount = () => {
+  // カテゴリー2用の支出を計算
+  const addAmount = () => {
     const result = Number(amount2) + Number(addedAmount);
     setAddedAmount(result);
+  };
+  const minusAmount = () => {
+    const result = Number(addedAmount) - Number(amount2);
+    if (result <= 0) {
+      setAddedAmount(0);
+    } else {
+      setAddedAmount(result);
+    }
   };
 
   return (
@@ -228,18 +237,28 @@ export const EventRegister = () => {
         {display && (
           <div>
             <div className={styles.form}>
-              <TextField id="amount2" label="追加の金額" value={amount2} onChange={handleAmount2Change} type="number" sx={{ width: "70%" }} />
-              <Button
-                onClick={() => {
-                  calcAmount();
-                }}
-              >
-                <AddIcon />
-              </Button>
-              <div>
-                <p>現在の追加金額</p>
-                <p>{addedAmount}</p>
-              </div>
+              <Box sx={{ width: "90%", margin: "0 auto" }}>
+                <TextField id="amount2" label="追加の金額" value={amount2} onChange={handleAmount2Change} type="number" sx={{ width: "70%" }} />
+                <IconButton
+                  sx={{ padding: "10px 0", marginLeft: "15px" }}
+                  onClick={() => {
+                    addAmount();
+                  }}
+                >
+                  <AddCircleOutlineIcon fontSize="large" />
+                </IconButton>
+                <IconButton
+                  onClick={() => {
+                    minusAmount();
+                  }}
+                >
+                  <RemoveCircleOutlineIcon fontSize="large" />
+                </IconButton>
+                <div>
+                  <p>現在の追加金額</p>
+                  <p>{addedAmount}</p>
+                </div>
+              </Box>
             </div>
             <div className={styles.form}>
               <Controller
