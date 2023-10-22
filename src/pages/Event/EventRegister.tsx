@@ -235,55 +235,72 @@ export const EventRegister = () => {
           />
         </div>
         {display && (
-          <div>
-            <div className={styles.form}>
-              <Box sx={{ width: "90%", margin: "0 auto" }}>
-                <TextField id="amount2" label="追加の金額" value={amount2} onChange={handleAmount2Change} type="number" sx={{ width: "70%" }} />
-                <IconButton
-                  sx={{ padding: "10px 0", marginLeft: "15px" }}
+          <div className={styles.additionalForm}>
+            <Box sx={{ margin: "0 20px" }}>
+              <div className={styles.form}>
+                <Box sx={{ display: "flex" }}>
+                  <TextField id="amount2" label="追加の金額" value={amount2} onChange={handleAmount2Change} type="number" sx={{ width: "65%" }} />
+                  <Box>
+                    <IconButton
+                      sx={{ padding: "10px 0", marginLeft: "15px" }}
+                      onClick={() => {
+                        addAmount();
+                      }}
+                    >
+                      <AddCircleOutlineIcon fontSize="large" />
+                    </IconButton>
+                    <IconButton
+                      onClick={() => {
+                        minusAmount();
+                      }}
+                    >
+                      <RemoveCircleOutlineIcon fontSize="large" />
+                    </IconButton>
+                  </Box>
+                </Box>
+              </div>
+              <div>
+                <Box sx={{ textAlign: "left", width: "100%", margin: "0 auto", paddingLeft: "10px" }}>
+                  <Box sx={{ marginBottom: "2px", fontSize: "0.8em" }}>現在の追加金額</Box>
+                  <Box>{addedAmount}</Box>
+                </Box>
+              </div>
+              <div className={styles.form}>
+                <Controller
+                  name="category2"
+                  control={control}
+                  defaultValue={0}
+                  render={({ field }) => (
+                    <FormControl sx={{ textAlign: "left", width: "100%" }}>
+                      <InputLabel id="category2-label">追加のカテゴリー</InputLabel>
+                      <Select {...field} id="category2" label="追加のカテゴリー" labelId="category2-label">
+                        <MenuItem value={0}>食費</MenuItem>
+                        <MenuItem value={1}>外食費</MenuItem>
+                        <MenuItem value={2}>日用品</MenuItem>
+                        <MenuItem value={3}>交通費</MenuItem>
+                        <MenuItem value={4}>医療費</MenuItem>
+                        <MenuItem value={5}>衣服</MenuItem>
+                        <MenuItem value={6}>趣味</MenuItem>
+                        <MenuItem value={7}>光熱費</MenuItem>
+                        <MenuItem value={8}>通信費</MenuItem>
+                        <MenuItem value={9}>その他</MenuItem>
+                      </Select>
+                    </FormControl>
+                  )}
+                />
+              </div>
+              <div className={styles.addButton}>
+                <Button
+                  variant="outlined"
+                  color="error"
                   onClick={() => {
-                    addAmount();
+                    removeSeconds();
                   }}
                 >
-                  <AddCircleOutlineIcon fontSize="large" />
-                </IconButton>
-                <IconButton
-                  onClick={() => {
-                    minusAmount();
-                  }}
-                >
-                  <RemoveCircleOutlineIcon fontSize="large" />
-                </IconButton>
-                <div>
-                  <p>現在の追加金額</p>
-                  <p>{addedAmount}</p>
-                </div>
-              </Box>
-            </div>
-            <div className={styles.form}>
-              <Controller
-                name="category2"
-                control={control}
-                defaultValue={0}
-                render={({ field }) => (
-                  <FormControl sx={{ width: "90%", textAlign: "left" }}>
-                    <InputLabel id="category2-label">追加のカテゴリー</InputLabel>
-                    <Select {...field} id="category2" label="追加のカテゴリー" labelId="category2-label">
-                      <MenuItem value={0}>食費</MenuItem>
-                      <MenuItem value={1}>外食費</MenuItem>
-                      <MenuItem value={2}>日用品</MenuItem>
-                      <MenuItem value={3}>交通費</MenuItem>
-                      <MenuItem value={4}>医療費</MenuItem>
-                      <MenuItem value={5}>衣服</MenuItem>
-                      <MenuItem value={6}>趣味</MenuItem>
-                      <MenuItem value={7}>光熱費</MenuItem>
-                      <MenuItem value={8}>通信費</MenuItem>
-                      <MenuItem value={9}>その他</MenuItem>
-                    </Select>
-                  </FormControl>
-                )}
-              />
-            </div>
+                  追加カテゴリー削除
+                </Button>
+              </div>
+            </Box>
           </div>
         )}
         {!display && (
@@ -295,19 +312,6 @@ export const EventRegister = () => {
               }}
             >
               カテゴリー追加
-            </Button>
-          </div>
-        )}
-        {display && (
-          <div className={styles.addButton}>
-            <Button
-              variant="outlined"
-              color="error"
-              onClick={() => {
-                removeSeconds();
-              }}
-            >
-              追加カテゴリー削除
             </Button>
           </div>
         )}

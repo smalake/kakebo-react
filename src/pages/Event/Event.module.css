@@ -31,3 +31,8 @@
   top: 10px;
   right: 20px;
 }
+
+.additionalForm {
+  border: 1px dashed #3788d8;
+  margin: 0 15px;
+}
