@@ -19,6 +19,7 @@ export const Login = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [buttonLoading, setButtonLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const clientId = process.env.REACT_APP_CLIENT_ID;
 
   // react-hook-formの設定
@@ -104,6 +105,7 @@ export const Login = () => {
 
   // Googleのログインに成功したときの処理
   const onSuccess = async (response: any) => {
+    setGoogleLoading(true);
     const email = response.profileObj.email;
 
     const res = await authApi.googleLogin({ email: email });
@@ -140,6 +142,8 @@ export const Login = () => {
     } catch (err: any) {
       console.log(err);
       alert("エラーが発生しました");
+    } finally {
+      setGoogleLoading(false);
     }
   };
   // Googleのログインに失敗したときの処理
@@ -160,7 +164,7 @@ export const Login = () => {
             height: "100%",
           }}
         >
-          <CircularProgress />
+          <CircularProgress size="20rem" />
         </Box>
       ) : (
         <>
@@ -216,12 +220,18 @@ export const Login = () => {
               // isSignedIn={true}
             />
           </div>
-
           <div style={{ marginLeft: "20px" }}>
             <p className={styles.linkText}>アカウントをお持ちでない方は</p>
             <Link to="/register">新規登録</Link>
           </div>
         </>
+      )}
+      {googleLoading ? (
+        <div className={styles.modal}>
+          <CircularProgress />
+        </div>
+      ) : (
+        <div></div>
       )}
     </div>
   );
