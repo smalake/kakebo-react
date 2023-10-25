@@ -5,7 +5,7 @@ import { registerValidation } from "../../components/util/validation";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./Auth.module.css";
 import { authApi } from "../../api/authApi";
-import { TextField } from "@mui/material";
+import { CircularProgress, TextField } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { RegisterForm } from "../../../src/types";
 import { gapi } from "gapi-script";
@@ -16,6 +16,7 @@ export const Register = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [cookies, setCookie] = useCookies(["email"]);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const clientId = process.env.REACT_APP_CLIENT_ID;
 
   // react-hook-formの設定
@@ -67,6 +68,7 @@ export const Register = () => {
 
   // Googleのログインに成功したときの処理
   const onSuccess = async (response: any) => {
+    setGoogleLoading(true);
     try {
       const email = response.profileObj.email;
       const name = response.profileObj.name;
@@ -85,12 +87,9 @@ export const Register = () => {
     } catch (err: any) {
       alert("エラーが発生しました");
       console.log(err);
+    } finally {
+      setGoogleLoading(false);
     }
-  };
-  // Googleのログインに失敗したときの処理
-  const onFailure = (res: any) => {
-    console.log(res);
-    alert("ログインに失敗しました");
   };
 
   return (
@@ -162,7 +161,6 @@ export const Register = () => {
           clientId={clientId!}
           buttonText="Googleアカウントで新規登録"
           onSuccess={onSuccess}
-          onFailure={onFailure}
           className={styles.google}
           cookiePolicy={"single_host_origin"}
           // isSignedIn={true}
@@ -172,6 +170,13 @@ export const Register = () => {
         <p className={styles.linkText}>アカウントをお持ちの方は</p>
         <Link to="/login">ログイン</Link>
       </div>
+      {googleLoading ? (
+        <div className={styles.modal}>
+          <CircularProgress />
+        </div>
+      ) : (
+        <div></div>
+      )}
     </div>
   );
 };
