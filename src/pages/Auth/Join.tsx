@@ -20,6 +20,7 @@ export const Join = () => {
   const [parentName, setParentName] = useState("");
   const [loading, setLoading] = useState(true);
   const [buttonLoading, setButtonLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const [cookies, setCookie] = useCookies(["email"]);
   const clientId = process.env.REACT_APP_CLIENT_ID;
 
@@ -61,6 +62,7 @@ export const Join = () => {
 
   // Googleのログインに成功したときの処理
   const onSuccess = async (response: any) => {
+    setGoogleLoading(true);
     try {
       const email = response.profileObj.email;
       const name = response.profileObj.name;
@@ -79,6 +81,8 @@ export const Join = () => {
     } catch (err: any) {
       alert("エラーが発生しました");
       console.log(err);
+    } finally {
+      setGoogleLoading(false);
     }
   };
 
@@ -205,6 +209,13 @@ export const Join = () => {
             <div>無効なリンクです</div>
           )}
         </div>
+      )}
+      {googleLoading ? (
+        <div className={styles.modal}>
+          <CircularProgress />
+        </div>
+      ) : (
+        <div></div>
       )}
     </div>
   );
