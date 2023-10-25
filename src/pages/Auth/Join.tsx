@@ -81,11 +81,6 @@ export const Join = () => {
       console.log(err);
     }
   };
-  // Googleのログインに失敗したときの処理
-  const onFailure = (res: any) => {
-    console.log(res);
-    alert("ログインに失敗しました");
-  };
 
   const onSubmit = async (data: RegisterForm) => {
     setButtonLoading(true);
@@ -200,7 +195,6 @@ export const Join = () => {
                   clientId={clientId!}
                   buttonText="Googleアカウントで参加"
                   onSuccess={onSuccess}
-                  onFailure={onFailure}
                   className={styles.google}
                   cookiePolicy={"single_host_origin"}
                   // isSignedIn={true}

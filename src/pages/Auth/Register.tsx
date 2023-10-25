@@ -87,11 +87,6 @@ export const Register = () => {
       console.log(err);
     }
   };
-  // Googleのログインに失敗したときの処理
-  const onFailure = (res: any) => {
-    console.log(res);
-    alert("ログインに失敗しました");
-  };
 
   return (
     <div className={styles.container}>
@@ -162,7 +157,6 @@ export const Register = () => {
           clientId={clientId!}
           buttonText="Googleアカウントで新規登録"
           onSuccess={onSuccess}
-          onFailure={onFailure}
           className={styles.google}
           cookiePolicy={"single_host_origin"}
           // isSignedIn={true}

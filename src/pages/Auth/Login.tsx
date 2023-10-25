@@ -146,11 +146,6 @@ export const Login = () => {
       setGoogleLoading(false);
     }
   };
-  // Googleのログインに失敗したときの処理
-  const onFailure = (res: any) => {
-    console.log(res);
-    alert("ログインに失敗しました");
-  };
 
   return (
     <div className={styles.container}>
@@ -214,7 +209,6 @@ export const Login = () => {
               clientId={clientId!}
               buttonText="Googleアカウントでログイン"
               onSuccess={onSuccess}
-              onFailure={onFailure}
               cookiePolicy={"single_host_origin"}
               className={styles.google}
               // isSignedIn={true}
