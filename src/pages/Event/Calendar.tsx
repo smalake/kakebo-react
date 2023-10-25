@@ -105,7 +105,7 @@ export const Calendar = memo(() => {
           <CircularProgress />
         </Box>
       ) : (
-        <div>
+        <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
           <div className={styles.calendar}>
             <Box sx={{ textAlign: "right", marginBottom: "10px" }}>
               <FormControl variant="standard" sx={{ width: "50%", textAlign: "center" }}>
@@ -130,10 +130,10 @@ export const Calendar = memo(() => {
               />
             </div>
           </div>
-          <div>
+          <div className={styles.list}>
             <EventList events={events} selectedDate={selectedDate} />
           </div>
-        </div>
+        </Box>
       )}
     </div>
   );
