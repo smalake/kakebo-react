@@ -5,6 +5,8 @@
   height: 100%;
   padding: 30px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
 }
 
 .form {
@@ -65,9 +67,9 @@
   margin: auto;
   top: 0;
   bottom: 0;
-  width: 100%;
+  width: 88%;
   height: 100%;
   text-align: center;
   line-height: 35em;
-  background-color: rgba(169, 169, 169, 0.8);
+  background-color: rgba(185, 185, 185, 0.5);
 }
