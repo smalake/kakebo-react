@@ -4,12 +4,22 @@
   padding: 25px 0 5px 0;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 100%;
+  position: fixed;
 }
 
 .selector {
   margin: 0 25px;
   font-size: 28px;
   font-weight: bold;
+}
+
+.list {
+  position: relative;
+  width: 100%;
+  top: 415px;
+  z-index: 0;
+  overflow: hidden !important;
+  padding-bottom: 45px;
 }
 
 .eventList {
@@ -54,6 +64,7 @@
   flex-direction: row;
   justify-content: space-between;
   margin-top: 1px;
+  border-top: 0.5px solid;
 }
 
 .totalTitle {

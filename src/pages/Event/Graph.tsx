@@ -101,7 +101,7 @@ export const Graph = () => {
           <CircularProgress />
         </Box>
       ) : (
-        <div>
+        <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
           <div className={styles.container}>
             <Box sx={{ textAlign: "right", marginBottom: "10px" }}>
               <FormControl variant="standard" sx={{ width: "50%", textAlign: "center" }}>
@@ -171,12 +171,12 @@ export const Graph = () => {
                 )}
               </ResponsiveContainer>
             </Stack>
+            <div className={styles.total}>
+              <p className={styles.totalTitle}>1ヶ月の支出合計</p>
+              <p className={styles.totalContents}>{total[yearMonth] ?? 0}円</p>
+            </div>
           </div>
-          <div className={styles.total}>
-            <p className={styles.totalTitle}>1ヶ月の支出合計</p>
-            <p className={styles.totalContents}>{total[yearMonth] ?? 0}円</p>
-          </div>
-          <div>
+          <div className={styles.list}>
             <ul className={styles.eventList}>
               {graphData[yearMonth] ? (
                 graphData[yearMonth].map((value, cat) => (
@@ -194,7 +194,7 @@ export const Graph = () => {
               )}
             </ul>
           </div>
-        </div>
+        </Box>
       )}
     </div>
   );
