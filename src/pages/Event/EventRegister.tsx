@@ -1,17 +1,20 @@
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import styles from "./Event.module.css";
-import { Box, Button, FormControl, IconButton, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { Box, Button, FormControl, IconButton, InputLabel, MenuItem, Select, TextField, ThemeProvider } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { eventApi } from "../../api/eventApi";
 import { useNavigate } from "react-router-dom";
-import { EventRegisterForm } from "../../types";
+import { EventRegisterForm, Pattern } from "../../types";
 import { db } from "../../db/db";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { eventFlagAtom } from "../../recoil/EventAtom";
 import { privateFlagAtom } from "../../recoil/PrivateAtom";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import { patternAtom } from "../../recoil/PatternAtom";
+import { Category } from "../../components/Category";
+import { createTheme } from "@mui/material";
 
 export const EventRegister = () => {
   const navigate = useNavigate();
@@ -21,14 +24,80 @@ export const EventRegister = () => {
   const [addedAmount, setAddedAmount] = useState(0);
   const [eventFlag, setEventFlag] = useRecoilState(eventFlagAtom);
   const [privateFlag, setPrivateFlag] = useRecoilState(privateFlagAtom);
+  const [modalFlag, setModalFlag] = useState(false);
+  const patternList = useRecoilValue(patternAtom);
+  console.log(patternList);
 
   // react-hook-formの設定
   const {
     register,
     handleSubmit,
     control,
+    setValue,
+    reset,
     formState: { errors },
   } = useForm<EventRegisterForm>();
+
+  const theme = createTheme({
+    components: {
+      // TextField 関連のコンポーネントのスタイルを調整する
+      MuiInputLabel: {
+        styleOverrides: {
+          formControl: {
+            // 移動をクリック時に動かないように固定
+            position: "static",
+            transform: "none",
+            transition: "none",
+            // クリックを可能に
+            pointerEvents: "auto",
+            cursor: "pointer",
+            // 幅いっぱいを解除
+            display: "inline",
+            alignSelf: "start",
+            // タイポグラフィを指定
+            fontWeight: "bold",
+            fontSize: "0.75rem",
+            // テーマの Composition を使えば以下のようにも書ける
+            // base.typography.subtitle2
+          },
+        },
+      },
+      MuiOutlinedInput: {
+        styleOverrides: {
+          root: {
+            // デフォルトだと、
+            // ラベルをはみ出させるための小さなmarginがある
+            marginTop: 0,
+          },
+          input: {
+            paddingTop: "10px",
+            paddingBottom: "8px",
+            height: "auto",
+          },
+          notchedOutline: {
+            // デフォルトだと、 position が absolute、
+            // ラベルをはみ出させるため上に少しの余白がある
+            top: 0,
+            legend: {
+              // 内包された legend 要素によって、四角の左側の切り欠きが実現されているので、
+              // 表示されないように。
+              // (SCSS と同様にネスト記述が可能です。)
+              display: "none",
+            },
+          },
+        },
+      },
+      MuiFormHelperText: {
+        styleOverrides: {
+          root: {
+            // フォーム下部のテキスト、エラーメッセージ
+            // お好みで左余白を無くしています。
+            marginLeft: 0,
+          },
+        },
+      },
+    },
+  });
 
   // 登録ボタンをクリックしたときの処理
   const onSubmit = async (data: EventRegisterForm) => {
@@ -103,7 +172,8 @@ export const EventRegister = () => {
           }
         }
         alert("登録しました");
-        window.location.reload();
+        // window.location.reload();
+        reset();
       } else {
         alert("登録に失敗しました");
         console.log(res);
@@ -151,182 +221,223 @@ export const EventRegister = () => {
     }
   };
 
+  const ModalOpen = () => {
+    setModalFlag(true);
+  };
+  const ModalClose = () => {
+    setModalFlag(false);
+  };
+
   return (
     <div className={styles.container}>
       <h2>家計簿入力</h2>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className={styles.form}>
-          <TextField
-            id="amount1"
-            label="金額"
-            error={Boolean(errors.amount1)}
-            {...register("amount1", { required: "金額を入力してください", min: { value: 1, message: "1以上の数値を入力してください" } })}
-            type="number"
-            helperText={errors.amount1?.message}
-            sx={{ width: "90%" }}
-          />
-        </div>
-        <div className={styles.form}>
-          <Controller
-            name="category1"
-            control={control}
-            defaultValue={0}
-            render={({ field }) => (
-              <FormControl sx={{ width: "90%", textAlign: "left" }}>
-                <InputLabel id="category1-label">カテゴリー</InputLabel>
-                <Select {...field} id="category1" label="カテゴリー" labelId="category1-label">
-                  <MenuItem value={0}>食費</MenuItem>
-                  <MenuItem value={1}>外食費</MenuItem>
-                  <MenuItem value={2}>日用品</MenuItem>
-                  <MenuItem value={3}>交通費</MenuItem>
-                  <MenuItem value={4}>医療費</MenuItem>
-                  <MenuItem value={5}>衣服</MenuItem>
-                  <MenuItem value={6}>趣味</MenuItem>
-                  <MenuItem value={7}>光熱費</MenuItem>
-                  <MenuItem value={8}>通信費</MenuItem>
-                  <MenuItem value={9}>その他</MenuItem>
-                </Select>
-              </FormControl>
-            )}
-          />
-        </div>
-        <div className={styles.form}>
-          <TextField
-            id="storeName"
-            label="店名"
-            error={Boolean(errors.storeName)}
-            helperText={errors.storeName?.message}
-            {...register("storeName", { maxLength: { value: 20, message: "20文字以内で入力してください" } })}
-            sx={{ width: "90%" }}
-          />
-        </div>
-        <div className={styles.form}>
-          <TextField
-            id="date"
-            label="日付"
-            type="date"
-            defaultValue={new Date().toISOString().substr(0, 10)}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            InputProps={{
-              style: { paddingRight: "0px" },
-            }}
-            error={Boolean(errors.date)}
-            helperText={errors.date?.message}
-            {...register("date", { required: "日付を入力してください" })}
-            sx={{ width: "90%" }}
-          />
-        </div>
-        <div className={styles.form}>
-          <Controller
-            name="isPrivate"
-            control={control}
-            defaultValue={0}
-            render={({ field }) => (
-              <FormControl sx={{ width: "90%", textAlign: "left" }}>
-                <InputLabel id="isPrivate-label">登録先の家計簿</InputLabel>
-                <Select {...field} id="isPrivate" label="登録先の家計簿" labelId="isPrivate-label">
-                  <MenuItem value={0}>共有</MenuItem>
-                  <MenuItem value={1}>プライベート</MenuItem>
-                </Select>
-              </FormControl>
-            )}
-          />
-        </div>
-        {display && (
-          <div className={styles.additionalForm}>
-            <Box sx={{ margin: "0 20px" }}>
-              <div className={styles.form}>
-                <Box sx={{ display: "flex" }}>
-                  <TextField id="amount2" label="追加の金額" value={amount2} onChange={handleAmount2Change} type="number" sx={{ width: "65%" }} />
-                  <Box>
-                    <IconButton
-                      sx={{ padding: "10px 0", marginLeft: "15px" }}
-                      onClick={() => {
-                        addAmount();
-                      }}
-                    >
-                      <AddCircleOutlineIcon fontSize="large" />
-                    </IconButton>
-                    <IconButton
-                      onClick={() => {
-                        minusAmount();
-                      }}
-                    >
-                      <RemoveCircleOutlineIcon fontSize="large" />
-                    </IconButton>
-                  </Box>
-                </Box>
-              </div>
-              <div>
-                <Box sx={{ textAlign: "left", width: "100%", margin: "0 auto", paddingLeft: "10px" }}>
-                  <Box sx={{ marginBottom: "2px", fontSize: "0.8em" }}>現在の追加金額</Box>
-                  <Box>{addedAmount}</Box>
-                </Box>
-              </div>
-              <div className={styles.form}>
-                <Controller
-                  name="category2"
-                  control={control}
-                  defaultValue={0}
-                  render={({ field }) => (
-                    <FormControl sx={{ textAlign: "left", width: "100%" }}>
-                      <InputLabel id="category2-label">追加のカテゴリー</InputLabel>
-                      <Select {...field} id="category2" label="追加のカテゴリー" labelId="category2-label">
-                        <MenuItem value={0}>食費</MenuItem>
-                        <MenuItem value={1}>外食費</MenuItem>
-                        <MenuItem value={2}>日用品</MenuItem>
-                        <MenuItem value={3}>交通費</MenuItem>
-                        <MenuItem value={4}>医療費</MenuItem>
-                        <MenuItem value={5}>衣服</MenuItem>
-                        <MenuItem value={6}>趣味</MenuItem>
-                        <MenuItem value={7}>光熱費</MenuItem>
-                        <MenuItem value={8}>通信費</MenuItem>
-                        <MenuItem value={9}>その他</MenuItem>
-                      </Select>
-                    </FormControl>
-                  )}
-                />
-              </div>
-              <div className={styles.addButton}>
-                <Button
-                  variant="outlined"
-                  color="error"
-                  onClick={() => {
-                    removeSeconds();
-                  }}
-                >
-                  追加カテゴリー削除
-                </Button>
-              </div>
-            </Box>
+      <ThemeProvider theme={theme}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className={styles.form}>
+            <TextField
+              id="amount1"
+              label="金額"
+              error={Boolean(errors.amount1)}
+              {...register("amount1", { required: "金額を入力してください", min: { value: 1, message: "1以上の数値を入力してください" } })}
+              type="number"
+              helperText={errors.amount1?.message}
+              sx={{ width: "90%" }}
+            />
           </div>
-        )}
-        {!display && (
-          <div className={styles.addButton}>
-            <Button
-              variant="outlined"
-              onClick={() => {
-                addSeconds();
-              }}
-            >
-              カテゴリー追加
+          <div className={styles.form}>
+            <TextField
+              id="storeName"
+              label="店名"
+              error={Boolean(errors.storeName)}
+              helperText={errors.storeName?.message}
+              {...register("storeName", { maxLength: { value: 20, message: "20文字以内で入力してください" } })}
+              sx={{ width: "90%" }}
+            />
+            <Button sx={{ display: "block", marginLeft: "20px" }} onClick={ModalOpen}>
+              お気に入りから選択
             </Button>
           </div>
-        )}
-        <div className={styles.form}>
-          <LoadingButton
-            type="submit"
-            variant="contained"
-            loading={loading}
-            color="info"
-            sx={{ width: "90%", height: "45px", fontSize: "16px", fontWeight: "bold" }}
-          >
-            登録
-          </LoadingButton>
+          <div className={styles.form}>
+            <Controller
+              name="category1"
+              control={control}
+              defaultValue={0}
+              render={({ field }) => (
+                <FormControl sx={{ width: "90%", textAlign: "left" }}>
+                  <InputLabel id="category1-label">カテゴリー</InputLabel>
+                  <Select {...field} id="category1" label="カテゴリー" labelId="category1-label">
+                    <MenuItem value={0}>食費</MenuItem>
+                    <MenuItem value={1}>外食費</MenuItem>
+                    <MenuItem value={2}>日用品</MenuItem>
+                    <MenuItem value={3}>交通費</MenuItem>
+                    <MenuItem value={4}>医療費</MenuItem>
+                    <MenuItem value={5}>衣服</MenuItem>
+                    <MenuItem value={6}>趣味</MenuItem>
+                    <MenuItem value={7}>光熱費</MenuItem>
+                    <MenuItem value={8}>通信費</MenuItem>
+                    <MenuItem value={9}>その他</MenuItem>
+                  </Select>
+                </FormControl>
+              )}
+            />
+          </div>
+          <div className={styles.form}>
+            <TextField
+              id="date"
+              label="日付"
+              type="date"
+              defaultValue={new Date().toISOString().substr(0, 10)}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              InputProps={{
+                style: { paddingRight: "0px" },
+              }}
+              error={Boolean(errors.date)}
+              helperText={errors.date?.message}
+              {...register("date", { required: "日付を入力してください" })}
+              sx={{ width: "90%" }}
+            />
+          </div>
+          <div className={styles.form}>
+            <Controller
+              name="isPrivate"
+              control={control}
+              defaultValue={0}
+              render={({ field }) => (
+                <FormControl sx={{ width: "90%", textAlign: "left" }}>
+                  <InputLabel id="isPrivate-label">登録先の家計簿</InputLabel>
+                  <Select {...field} id="isPrivate" label="登録先の家計簿" labelId="isPrivate-label">
+                    <MenuItem value={0}>共有</MenuItem>
+                    <MenuItem value={1}>プライベート</MenuItem>
+                  </Select>
+                </FormControl>
+              )}
+            />
+          </div>
+          {display && (
+            <div className={styles.additionalForm}>
+              <Box sx={{ margin: "0 20px" }}>
+                <div className={styles.form}>
+                  <Box sx={{ display: "flex" }}>
+                    <TextField id="amount2" label="追加の金額" value={amount2} onChange={handleAmount2Change} type="number" sx={{ width: "65%" }} />
+                    <Box>
+                      <IconButton
+                        sx={{ padding: "10px 0", marginLeft: "15px" }}
+                        onClick={() => {
+                          addAmount();
+                        }}
+                      >
+                        <AddCircleOutlineIcon fontSize="large" />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => {
+                          minusAmount();
+                        }}
+                      >
+                        <RemoveCircleOutlineIcon fontSize="large" />
+                      </IconButton>
+                    </Box>
+                  </Box>
+                </div>
+                <div>
+                  <Box sx={{ textAlign: "left", width: "100%", margin: "0 auto", paddingLeft: "10px" }}>
+                    <Box sx={{ marginBottom: "2px", fontSize: "0.8em" }}>現在の追加金額</Box>
+                    <Box>{addedAmount}</Box>
+                  </Box>
+                </div>
+                <div className={styles.form}>
+                  <Controller
+                    name="category2"
+                    control={control}
+                    defaultValue={0}
+                    render={({ field }) => (
+                      <FormControl sx={{ textAlign: "left", width: "100%" }}>
+                        <InputLabel id="category2-label">追加のカテゴリー</InputLabel>
+                        <Select {...field} id="category2" label="追加のカテゴリー" labelId="category2-label">
+                          <MenuItem value={0}>食費</MenuItem>
+                          <MenuItem value={1}>外食費</MenuItem>
+                          <MenuItem value={2}>日用品</MenuItem>
+                          <MenuItem value={3}>交通費</MenuItem>
+                          <MenuItem value={4}>医療費</MenuItem>
+                          <MenuItem value={5}>衣服</MenuItem>
+                          <MenuItem value={6}>趣味</MenuItem>
+                          <MenuItem value={7}>光熱費</MenuItem>
+                          <MenuItem value={8}>通信費</MenuItem>
+                          <MenuItem value={9}>その他</MenuItem>
+                        </Select>
+                      </FormControl>
+                    )}
+                  />
+                </div>
+                <div className={styles.addButton}>
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    onClick={() => {
+                      removeSeconds();
+                    }}
+                  >
+                    追加カテゴリー削除
+                  </Button>
+                </div>
+              </Box>
+            </div>
+          )}
+          {!display && (
+            <div className={styles.addButton}>
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  addSeconds();
+                }}
+              >
+                カテゴリー追加
+              </Button>
+            </div>
+          )}
+          <div className={styles.form}>
+            <LoadingButton
+              type="submit"
+              variant="contained"
+              loading={loading}
+              color="info"
+              sx={{ width: "90%", height: "45px", fontSize: "16px", fontWeight: "bold" }}
+            >
+              登録
+            </LoadingButton>
+          </div>
+        </form>
+      </ThemeProvider>
+      {modalFlag ? (
+        <div className={styles.modal}>
+          <div className={styles.modalContainer}>
+            <ul className={styles.modalList}>
+              {patternList.map((item: Pattern) => (
+                <li key={item.id} className={styles.listItem}>
+                  <div className={styles.listItem}>
+                    <Button
+                      sx={{ marginTop: "15px" }}
+                      onClick={() => {
+                        setValue("storeName", item.store_name);
+                        setValue("category1", item.category);
+                        setModalFlag(false);
+                      }}
+                    >
+                      <Category catNum={item.category} /> - {item.store_name}
+                    </Button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <Button onClick={ModalClose} variant="contained" sx={{ position: "relative", bottom: "15%" }}>
+              反映
+            </Button>
+          </div>
         </div>
-      </form>
+      ) : (
+        <div></div>
+      )}
     </div>
   );
 };
