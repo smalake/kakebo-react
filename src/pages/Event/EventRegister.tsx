@@ -172,7 +172,6 @@ export const EventRegister = () => {
           }
         }
         alert("登録しました");
-        // window.location.reload();
         reset();
       } else {
         alert("登録に失敗しました");
@@ -424,7 +423,7 @@ export const EventRegister = () => {
                         setModalFlag(false);
                       }}
                     >
-                      <Category catNum={item.category} /> - {item.store_name}
+                      <Category catNum={item.category} /> ({item.store_name})
                     </Button>
                   </div>
                 </li>
