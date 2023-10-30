@@ -430,8 +430,8 @@ export const EventRegister = () => {
                 </li>
               ))}
             </ul>
-            <Button onClick={ModalClose} variant="contained" sx={{ position: "relative", bottom: "15%" }}>
-              反映
+            <Button onClick={ModalClose} variant="contained" color="inherit" sx={{ position: "relative", bottom: "15%" }}>
+              キャンセル
             </Button>
           </div>
         </div>
