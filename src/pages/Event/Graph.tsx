@@ -183,7 +183,9 @@ export const Graph = () => {
                   <li key={cat} className={value ? styles.listDisplay : styles.listHidden}>
                     <div className={styles.listItem}>
                       <span className={styles.itemName}>
-                        <CategoryIcon catNum={cat} />
+                        <span className={styles.icon}>
+                          <CategoryIcon catNum={cat} />
+                        </span>
                         {category[cat].name}
                       </span>
                       <span className={styles.itemValue}>{value}円</span>
