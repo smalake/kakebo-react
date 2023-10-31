@@ -28,7 +28,6 @@ export const EventRegister = () => {
   const categories = useRecoilValue(categoryAtom);
   const [modalFlag, setModalFlag] = useState(false);
   const patternList = useRecoilValue(patternAtom);
-  console.log(patternList);
 
   // react-hook-formの設定
   const {
@@ -222,13 +221,6 @@ export const EventRegister = () => {
     }
   };
 
-  const ModalOpen = () => {
-    setModalFlag(true);
-  };
-  const ModalClose = () => {
-    setModalFlag(false);
-  };
-
   return (
     <div className={styles.container}>
       <h2>家計簿入力</h2>
@@ -254,7 +246,12 @@ export const EventRegister = () => {
               {...register("storeName", { maxLength: { value: 20, message: "20文字以内で入力してください" } })}
               sx={{ width: "90%" }}
             />
-            <Button sx={{ display: "block", marginLeft: "20px" }} onClick={ModalOpen}>
+            <Button
+              sx={{ display: "block", marginLeft: "20px" }}
+              onClick={() => {
+                setModalFlag(true);
+              }}
+            >
               お気に入りから選択
             </Button>
           </div>
@@ -434,7 +431,14 @@ export const EventRegister = () => {
                 </li>
               ))}
             </ul>
-            <Button onClick={ModalClose} variant="contained" color="inherit" sx={{ position: "relative", bottom: "15%" }}>
+            <Button
+              onClick={() => {
+                setModalFlag(false);
+              }}
+              variant="contained"
+              color="inherit"
+              sx={{ position: "relative", bottom: "15%" }}
+            >
               キャンセル
             </Button>
           </div>
