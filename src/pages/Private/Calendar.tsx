@@ -11,8 +11,9 @@ import { format } from "date-fns";
 import { Link, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { privateSelector } from "../../recoil/PrivateAtom";
-import { Category } from "../../components/Category";
+import { CategoryIcon } from "../../components/Category";
 import { Event } from "../../types";
+import { categoryAtom } from "../../recoil/CategoryAtom";
 
 export const CalendarPrivate = memo(() => {
   const navigate = useNavigate();
@@ -87,6 +88,7 @@ export const CalendarPrivate = memo(() => {
 });
 
 export const EventList = ({ events, selectedDate }: { events: Event; selectedDate: string }) => {
+  const categories = useRecoilValue(categoryAtom);
   return (
     <ul className={styles.eventList}>
       {selectedDate && events[selectedDate] ? (
@@ -94,7 +96,8 @@ export const EventList = ({ events, selectedDate }: { events: Event; selectedDat
           <li key={index} className={styles.eventContents}>
             <Link to={`/event-private-edit/${item.id}`} className={styles.eventItem}>
               <span className={styles.detail}>
-                <Category catNum={item.category} /> {item.store_name ? `(${item.store_name})` : ""}
+                <CategoryIcon catNum={item.category} />
+                {categories[item.category].name} {item.store_name ? `(${item.store_name})` : ""}
               </span>
               <span className={styles.eventAmount}>{item.amount}円</span>
             </Link>

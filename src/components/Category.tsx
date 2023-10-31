@@ -18,80 +18,30 @@ type CategoryProps = {
 };
 
 // カテゴリー番号を取得
-export const Category = ({ catNum }: CategoryProps): JSX.Element => {
+export const CategoryIcon = ({ catNum }: CategoryProps): JSX.Element => {
   const category = useRecoilValue(categoryAtom);
   const color = category[catNum].color;
   const style = { fill: color };
   switch (catNum) {
     case 0:
-      return (
-        <>
-          <Food style={style} className={styles.icon} />
-          <span className={styles.name}>{category[catNum].name}</span>
-        </>
-      );
+      return <Food style={style} className={styles.icon} />;
     case 1:
-      return (
-        <>
-          <EatingOut style={style} className={styles.icon} />
-          <span className={styles.name}>{category[catNum].name}</span>
-        </>
-      );
+      return <EatingOut style={style} className={styles.icon} />;
     case 2:
-      return (
-        <>
-          <Lifework style={style} className={styles.icon} />
-          <span className={styles.name}>{category[catNum].name}</span>
-        </>
-      );
+      return <Lifework style={style} className={styles.icon} />;
     case 3:
-      return (
-        <>
-          <Traffic style={style} className={styles.icon} />
-          <span className={styles.name}>{category[catNum].name}</span>
-        </>
-      );
+      return <Traffic style={style} className={styles.icon} />;
     case 4:
-      return (
-        <>
-          <Medical style={style} className={styles.icon} />
-          <span className={styles.name}>{category[catNum].name}</span>
-        </>
-      );
+      return <Medical style={style} className={styles.icon} />;
     case 5:
-      return (
-        <>
-          <Clothing style={style} className={styles.icon} />
-          <span className={styles.name}>{category[catNum].name}</span>
-        </>
-      );
+      return <Clothing style={style} className={styles.icon} />;
     case 6:
-      return (
-        <>
-          <Hobby style={style} className={styles.icon} />
-          <span className={styles.name}>{category[catNum].name}</span>
-        </>
-      );
+      return <Hobby style={style} className={styles.icon} />;
     case 7:
-      return (
-        <>
-          <Utility style={style} className={styles.icon} />
-          <span className={styles.name}>{category[catNum].name}</span>
-        </>
-      );
+      return <Utility style={style} className={styles.icon} />;
     case 8:
-      return (
-        <>
-          <Connection style={style} className={styles.icon} />
-          <span className={styles.name}>{category[catNum].name}</span>
-        </>
-      );
+      return <Connection style={style} className={styles.icon} />;
     default:
-      return (
-        <>
-          <Unselected style={style} className={styles.icon} />
-          <span className={styles.name}>{category[catNum].name}</span>
-        </>
-      );
+      return <Unselected style={style} className={styles.icon} />;
   }
 };

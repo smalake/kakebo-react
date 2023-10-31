@@ -13,8 +13,9 @@ import { privateFlagAtom } from "../../recoil/PrivateAtom";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import { patternAtom } from "../../recoil/PatternAtom";
-import { Category } from "../../components/Category";
+import { CategoryIcon } from "../../components/Category";
 import { createTheme } from "@mui/material";
+import { categoryAtom } from "../../recoil/CategoryAtom";
 
 export const EventRegister = () => {
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ export const EventRegister = () => {
   const [addedAmount, setAddedAmount] = useState(0);
   const [eventFlag, setEventFlag] = useRecoilState(eventFlagAtom);
   const [privateFlag, setPrivateFlag] = useRecoilState(privateFlagAtom);
+  const categories = useRecoilValue(categoryAtom);
   const [modalFlag, setModalFlag] = useState(false);
   const patternList = useRecoilValue(patternAtom);
   console.log(patternList);
@@ -423,7 +425,8 @@ export const EventRegister = () => {
                         setModalFlag(false);
                       }}
                     >
-                      <Category catNum={item.category} /> ({item.store_name})
+                      <CategoryIcon catNum={item.category} />
+                      {categories[item.category].name} ({item.store_name})
                     </Button>
                   </div>
                 </li>
