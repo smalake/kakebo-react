@@ -425,7 +425,9 @@ export const EventRegister = () => {
                         setModalFlag(false);
                       }}
                     >
-                      <CategoryIcon catNum={item.category} />
+                      <span className={styles.icon}>
+                        <CategoryIcon catNum={item.category} />
+                      </span>
                       {categories[item.category].name} ({item.store_name})
                     </Button>
                   </div>
