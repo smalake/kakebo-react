@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import styles from "./Event.module.css";
 import { Box, Button, FormControl, IconButton, InputLabel, MenuItem, Select, TextField, ThemeProvider } from "@mui/material";
@@ -12,7 +12,7 @@ import { eventFlagAtom } from "../../recoil/EventAtom";
 import { privateFlagAtom } from "../../recoil/PrivateAtom";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
-import { patternAtom } from "../../recoil/PatternAtom";
+import { PatternSelector, patternAtom } from "../../recoil/PatternAtom";
 import { CategoryIcon } from "../../components/Category";
 import { createTheme } from "@mui/material";
 import { categoryAtom } from "../../recoil/CategoryAtom";
@@ -27,7 +27,8 @@ export const EventRegister = () => {
   const [privateFlag, setPrivateFlag] = useRecoilState(privateFlagAtom);
   const categories = useRecoilValue(categoryAtom);
   const [modalFlag, setModalFlag] = useState(false);
-  const patternList = useRecoilValue(patternAtom);
+  const patternList = useRecoilValue(PatternSelector);
+  const [patternFlag, setPatternFlag] = useRecoilState(patternAtom);
 
   // react-hook-formの設定
   const {
@@ -99,6 +100,13 @@ export const EventRegister = () => {
       },
     },
   });
+
+  // パターン更新用
+  useEffect(() => {
+    const flag = patternFlag + 1;
+    setPatternFlag(flag);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // 登録ボタンをクリックしたときの処理
   const onSubmit = async (data: EventRegisterForm) => {
