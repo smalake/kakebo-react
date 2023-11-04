@@ -21,6 +21,8 @@ import { GraphPrivate } from "./pages/Private/Graph";
 import { VerifyEmail } from "./pages/Auth/VerifyEmail";
 import { CookiesProvider } from "react-cookie";
 import { Contact } from "./pages/Setting/Contact";
+import { PatternSetting } from "./pages/Setting/PatternSetting";
+import { PatternRegister } from "./pages/Setting/PatternRegister";
 
 function App() {
   return (
@@ -40,6 +42,8 @@ function App() {
                 <Route path="change-name" element={<ChangeName />} />
                 <Route path="invite-group" element={<InviteGroup />} />
                 <Route path="contact" element={<Contact />} />
+                <Route path="pattern-setting" element={<PatternSetting />} />
+                <Route path="pattern-register" element={<PatternRegister />} />
               </Route>
               <Route path="/" element={<MenuLayout />}>
                 <Route path="event-register" element={<EventRegister />} />

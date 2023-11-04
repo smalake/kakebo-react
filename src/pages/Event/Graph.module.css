@@ -52,6 +52,7 @@
 }
 .itemValue {
   margin-right: 30px;
+  margin-top: 5px;
 }
 
 .noData {
@@ -73,4 +74,10 @@
 }
 .totalContents {
   margin-right: 30px;
+}
+
+.icon {
+  position: relative;
+  top: 5px;
+  margin-right: 10px;
 }

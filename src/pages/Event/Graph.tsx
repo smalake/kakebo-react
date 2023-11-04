@@ -4,7 +4,7 @@ import { PieChart, ResponsiveContainer, Pie, Cell } from "recharts";
 import styles from "./Graph.module.css";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import { Category } from "../../components/Category";
+import { CategoryIcon } from "../../components/Category";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { categoryAtom } from "../../recoil/CategoryAtom";
 import { eventFlagAtom, eventSelector } from "../../recoil/EventAtom";
@@ -183,7 +183,10 @@ export const Graph = () => {
                   <li key={cat} className={value ? styles.listDisplay : styles.listHidden}>
                     <div className={styles.listItem}>
                       <span className={styles.itemName}>
-                        <Category catNum={cat} />
+                        <span className={styles.icon}>
+                          <CategoryIcon catNum={cat} />
+                        </span>
+                        {category[cat].name}
                       </span>
                       <span className={styles.itemValue}>{value}円</span>
                     </div>

@@ -11,10 +11,11 @@ import { format } from "date-fns";
 import { Link, useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { eventFlagAtom, eventSelector } from "../../recoil/EventAtom";
-import { Category } from "../../components/Category";
+import { CategoryIcon } from "../../components/Category";
 import { Event } from "../../types";
 import { eventApi } from "../../api/eventApi";
 import { db } from "../../db/db";
+import { categoryAtom } from "../../recoil/CategoryAtom";
 
 export const Calendar = memo(() => {
   const navigate = useNavigate();
@@ -140,6 +141,7 @@ export const Calendar = memo(() => {
 });
 
 export const EventList = ({ events, selectedDate }: { events: Event; selectedDate: string }) => {
+  const categories = useRecoilValue(categoryAtom);
   return (
     <ul className={styles.eventList}>
       {selectedDate && events[selectedDate] ? (
@@ -147,7 +149,10 @@ export const EventList = ({ events, selectedDate }: { events: Event; selectedDat
           <li key={index} className={styles.eventContents}>
             <Link to={`/event-edit/${item.id}`} className={styles.eventItem}>
               <span className={styles.detail}>
-                <Category catNum={item.category} /> {item.store_name ? `(${item.store_name})` : ""}
+                <span className={styles.icon}>
+                  <CategoryIcon catNum={item.category} />
+                </span>
+                {categories[item.category].name} {item.store_name ? `(${item.store_name})` : ""}
               </span>
               <span className={styles.eventAmount}>{item.amount}円</span>
             </Link>

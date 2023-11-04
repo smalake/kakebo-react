@@ -84,6 +84,15 @@ export const Setting = () => {
             >
               表示名の変更
             </Button>
+            <Button
+              variant="contained"
+              sx={{ fontSize: "18px", width: "80%", marginBottom: "30px" }}
+              onClick={() => {
+                navigate("/pattern-setting");
+              }}
+            >
+              お気に入りの登録・編集
+            </Button>
             {isParent && (
               <Button
                 variant="contained"
