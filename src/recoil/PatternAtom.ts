@@ -14,7 +14,11 @@ export const PatternSelector = selector({
     if (false) {
       console.log(flag);
     }
-    const res = await patternApi.get();
-    return res.data;
+    try {
+      const res = await patternApi.get();
+      return res.data;
+    } catch (err: any) {
+      throw err;
+    }
   },
 });
