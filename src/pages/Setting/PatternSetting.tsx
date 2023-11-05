@@ -35,7 +35,7 @@ export const PatternSetting = () => {
     const patternCheck = async () => {
       const pat = await patternList;
       try {
-        if (pat.length) {
+        if (pat[0].id) {
           // パターン更新用
           const flag = patternFlag + 1;
           setPatternFlag(flag);
