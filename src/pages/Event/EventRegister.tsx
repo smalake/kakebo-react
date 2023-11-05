@@ -459,7 +459,7 @@ export const EventRegister = () => {
               }}
               variant="contained"
               color="inherit"
-              sx={{ position: "relative", bottom: "15%" }}
+              sx={{ position: "fixed", bottom: "35%", right: "37%" }}
             >
               キャンセル
             </Button>
