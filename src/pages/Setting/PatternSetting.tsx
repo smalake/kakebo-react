@@ -34,12 +34,17 @@ export const PatternSetting = () => {
   useEffect(() => {
     const patternCheck = async () => {
       const pat = await patternList;
-      if (pat.length) {
-        // パターン更新用
-        const flag = patternFlag + 1;
-        setPatternFlag(flag);
-        setErrFlag(false);
-      } else {
+      try {
+        if (pat.length) {
+          // パターン更新用
+          const flag = patternFlag + 1;
+          setPatternFlag(flag);
+          setErrFlag(false);
+        } else {
+          alert("データ取得に失敗しました");
+          setErrFlag(true);
+        }
+      } catch (err: any) {
         alert("データ取得に失敗しました");
         setErrFlag(true);
       }
