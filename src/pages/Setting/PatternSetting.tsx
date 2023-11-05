@@ -13,7 +13,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 
 export const PatternSetting = () => {
   const navigate = useNavigate();
-  const [errFlag, setErrFlag] = useState(false);
+  const [hasPattern, setHasPattern] = useState(false);
   const [patternFlag, setPatternFlag] = useRecoilState(patternAtom);
   const [patternId, setPatternId] = useState(0);
   const patternList = useRecoilValue(PatternSelector);
@@ -34,19 +34,13 @@ export const PatternSetting = () => {
   useEffect(() => {
     const patternCheck = async () => {
       const pat = await patternList;
-      try {
-        if (pat[0].id) {
-          // パターン更新用
-          const flag = patternFlag + 1;
-          setPatternFlag(flag);
-          setErrFlag(false);
-        } else {
-          alert("データ取得に失敗しました");
-          setErrFlag(true);
-        }
-      } catch (err: any) {
-        alert("データ取得に失敗しました");
-        setErrFlag(true);
+      if (pat[0].id) {
+        // パターン更新用
+        const flag = patternFlag + 1;
+        setPatternFlag(flag);
+        setHasPattern(true);
+      } else {
+        setHasPattern(false);
       }
     };
     patternCheck();
@@ -113,14 +107,12 @@ export const PatternSetting = () => {
     setPatternId(item.id);
   };
 
-  if (errFlag) {
-    return <div>エラーが発生しました</div>;
-  } else {
-    return (
-      <div className={styles.container}>
-        <h2>お気に入りの登録・編集</h2>
-        <ul className={styles.list}>
-          {patternList.map((item: Pattern) => (
+  return (
+    <div className={styles.container}>
+      <h2>お気に入りの登録・編集</h2>
+      <ul className={styles.list}>
+        {hasPattern ? (
+          patternList.map((item: Pattern) => (
             <li key={item.id} className={styles.listItem}>
               <div className={styles.listItem}>
                 <Button
@@ -136,88 +128,90 @@ export const PatternSetting = () => {
                 </Button>
               </div>
             </li>
-          ))}
-          <li className={styles.listItem}>
-            <Button
-              variant="outlined"
-              sx={{ marginTop: "15px" }}
-              onClick={() => {
-                navigate("/pattern-register");
-              }}
-            >
-              お気に入りを登録
-            </Button>
-          </li>
-        </ul>
-        <Link to="/setting" className={styles.toBack}>
-          戻る
-        </Link>
-        {modalFlag ? (
-          <div className={styles.modal}>
-            <div className={styles.modalContainer}>
-              <form onSubmit={handleSubmit(onSubmit)} className={styles.formContainer}>
-                <div className={styles.form}>
-                  <TextField
-                    id="store_name"
-                    label="店名"
-                    error={Boolean(errors.store_name)}
-                    {...register("store_name", { required: "店名を入力してください" })}
-                    helperText={errors.store_name?.message}
-                    sx={{ width: "90%" }}
-                  />
-                </div>
-                <div className={styles.form}>
-                  <Controller
-                    name="category"
-                    control={control}
-                    render={({ field }) => (
-                      <FormControl sx={{ width: "90%", textAlign: "left" }}>
-                        <InputLabel id="category-label">カテゴリー</InputLabel>
-                        <Select {...field} id="category" label="カテゴリー" labelId="category-label">
-                          <MenuItem value={0}>食費</MenuItem>
-                          <MenuItem value={1}>外食費</MenuItem>
-                          <MenuItem value={2}>日用品</MenuItem>
-                          <MenuItem value={3}>交通費</MenuItem>
-                          <MenuItem value={4}>医療費</MenuItem>
-                          <MenuItem value={5}>衣服</MenuItem>
-                          <MenuItem value={6}>趣味</MenuItem>
-                          <MenuItem value={7}>光熱費</MenuItem>
-                          <MenuItem value={8}>通信費</MenuItem>
-                          <MenuItem value={9}>その他</MenuItem>
-                        </Select>
-                      </FormControl>
-                    )}
-                  />
-                </div>
-                <LoadingButton type="submit" variant="contained" loading={buttonLoading} sx={{ width: "70%", margin: "40px auto 15px auto" }}>
-                  保存
-                </LoadingButton>
-                <LoadingButton
-                  variant="contained"
-                  color="error"
-                  onClick={onDelete}
-                  loading={deleteButtonLoading}
-                  sx={{ width: "70%", margin: "10px auto" }}
-                >
-                  削除
-                </LoadingButton>
-                <Button
-                  onClick={() => {
-                    setModalFlag(false);
-                  }}
-                  variant="contained"
-                  color="inherit"
-                  sx={{ width: "70%", margin: "10px auto" }}
-                >
-                  キャンセル
-                </Button>
-              </form>
-            </div>
-          </div>
+          ))
         ) : (
           <div></div>
         )}
-      </div>
-    );
-  }
+        <li className={styles.listItem}>
+          <Button
+            variant="outlined"
+            sx={{ marginTop: "15px" }}
+            onClick={() => {
+              navigate("/pattern-register");
+            }}
+          >
+            お気に入りを登録
+          </Button>
+        </li>
+      </ul>
+      <Link to="/setting" className={styles.toBack}>
+        戻る
+      </Link>
+      {modalFlag ? (
+        <div className={styles.modal}>
+          <div className={styles.modalContainer}>
+            <form onSubmit={handleSubmit(onSubmit)} className={styles.formContainer}>
+              <div className={styles.form}>
+                <TextField
+                  id="store_name"
+                  label="店名"
+                  error={Boolean(errors.store_name)}
+                  {...register("store_name", { required: "店名を入力してください" })}
+                  helperText={errors.store_name?.message}
+                  sx={{ width: "90%" }}
+                />
+              </div>
+              <div className={styles.form}>
+                <Controller
+                  name="category"
+                  control={control}
+                  render={({ field }) => (
+                    <FormControl sx={{ width: "90%", textAlign: "left" }}>
+                      <InputLabel id="category-label">カテゴリー</InputLabel>
+                      <Select {...field} id="category" label="カテゴリー" labelId="category-label">
+                        <MenuItem value={0}>食費</MenuItem>
+                        <MenuItem value={1}>外食費</MenuItem>
+                        <MenuItem value={2}>日用品</MenuItem>
+                        <MenuItem value={3}>交通費</MenuItem>
+                        <MenuItem value={4}>医療費</MenuItem>
+                        <MenuItem value={5}>衣服</MenuItem>
+                        <MenuItem value={6}>趣味</MenuItem>
+                        <MenuItem value={7}>光熱費</MenuItem>
+                        <MenuItem value={8}>通信費</MenuItem>
+                        <MenuItem value={9}>その他</MenuItem>
+                      </Select>
+                    </FormControl>
+                  )}
+                />
+              </div>
+              <LoadingButton type="submit" variant="contained" loading={buttonLoading} sx={{ width: "70%", margin: "40px auto 15px auto" }}>
+                保存
+              </LoadingButton>
+              <LoadingButton
+                variant="contained"
+                color="error"
+                onClick={onDelete}
+                loading={deleteButtonLoading}
+                sx={{ width: "70%", margin: "10px auto" }}
+              >
+                削除
+              </LoadingButton>
+              <Button
+                onClick={() => {
+                  setModalFlag(false);
+                }}
+                variant="contained"
+                color="inherit"
+                sx={{ width: "70%", margin: "10px auto" }}
+              >
+                キャンセル
+              </Button>
+            </form>
+          </div>
+        </div>
+      ) : (
+        <div></div>
+      )}
+    </div>
+  );
 };
