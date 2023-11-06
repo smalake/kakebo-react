@@ -140,7 +140,9 @@ export const EventRegister = () => {
         amount2: Number(amnt2),
         category1: data.category1,
         category2: data.category2,
-        storeName: data.storeName,
+        memo1: data.memo1,
+        memo2: data.memo2,
+        store_name: data.storeName,
         date: d.toISOString(),
         isPrivate: data.isPrivate,
       };
@@ -254,16 +256,6 @@ export const EventRegister = () => {
               helperText={errors.amount1?.message}
               sx={{ width: "90%" }}
             />
-          </div>
-          <div className={styles.form}>
-            <TextField
-              id="storeName"
-              label="店名"
-              error={Boolean(errors.storeName)}
-              helperText={errors.storeName?.message}
-              {...register("storeName", { maxLength: { value: 20, message: "20文字以内で入力してください" } })}
-              sx={{ width: "90%" }}
-            />
             {hasPattern ? (
               <Button
                 sx={{ display: "block", marginLeft: "20px" }}
@@ -299,6 +291,28 @@ export const EventRegister = () => {
                   </Select>
                 </FormControl>
               )}
+            />
+          </div>
+          <div className={styles.form}>
+            <TextField
+              id="storeName"
+              label="店名"
+              error={Boolean(errors.storeName)}
+              helperText={errors.storeName?.message}
+              {...register("storeName", { maxLength: { value: 20, message: "20文字以内で入力してください" } })}
+              sx={{ width: "90%" }}
+            />
+          </div>
+          <div className={styles.form}>
+            <TextField
+              id="memo1"
+              label="メモ"
+              multiline
+              rows={3}
+              error={Boolean(errors.memo1)}
+              helperText={errors.memo1?.message}
+              {...register("memo1", { maxLength: { value: 100, message: "100文字以内で入力してください" } })}
+              sx={{ width: "90%" }}
             />
           </div>
           <div className={styles.form}>
@@ -388,6 +402,18 @@ export const EventRegister = () => {
                         </Select>
                       </FormControl>
                     )}
+                  />
+                </div>
+                <div className={styles.form}>
+                  <TextField
+                    id="memo2"
+                    label="追加のメモ"
+                    multiline
+                    rows={3}
+                    error={Boolean(errors.memo2)}
+                    helperText={errors.memo2?.message}
+                    {...register("memo2", { maxLength: { value: 100, message: "100文字以内で入力してください" } })}
+                    sx={{ width: "100%" }}
                   />
                 </div>
                 <div className={styles.addButton}>

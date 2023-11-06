@@ -38,10 +38,12 @@ export const EventEdit = () => {
       try {
         if (id !== undefined) {
           const event = await eventApi.getOne(parseInt(id));
+          console.log(event);
           const formatedDate = event.data["date"].split("T");
           setValue("amount", event.data["amount"]);
           setValue("category", event.data["category"]);
           setValue("storeName", event.data["store_name"]);
+          setValue("memo", event.data["memo"]);
           setValue("date", formatedDate[0]);
           setCreateUser(event.data["create_user"]);
           setCreatedAt(event.data["created_at"]);
@@ -75,6 +77,7 @@ export const EventEdit = () => {
         amount: Number(data.amount),
         category: data.category,
         store_name: data.storeName,
+        memo: data.memo,
         date: d.toISOString(),
       };
 
@@ -232,6 +235,18 @@ export const EventEdit = () => {
                   error={Boolean(errors.storeName)}
                   helperText={errors.storeName?.message}
                   {...register("storeName", { maxLength: { value: 20, message: "20文字以内で入力してください" } })}
+                  sx={{ width: "90%" }}
+                />
+              </div>
+              <div className={styles.form}>
+                <TextField
+                  id="memo"
+                  label="メモ"
+                  multiline
+                  rows={3}
+                  error={Boolean(errors.memo)}
+                  helperText={errors.memo?.message}
+                  {...register("memo", { maxLength: { value: 100, message: "100文字以内で入力してください" } })}
                   sx={{ width: "90%" }}
                 />
               </div>

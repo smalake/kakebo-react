@@ -3,6 +3,8 @@ export interface EventRegisterForm {
   amount2: number;
   category1: number;
   category2: number;
+  memo1: string;
+  memo2: string;
   storeName: string;
   date: Date;
   isPrivate: number;
@@ -12,6 +14,7 @@ export interface EventEditForm {
   amount: number;
   category: number;
   storeName: string;
+  memo: string;
   date: Date;
 }
 
