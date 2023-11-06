@@ -38,7 +38,6 @@ export const EventEdit = () => {
       try {
         if (id !== undefined) {
           const event = await eventApi.getOne(parseInt(id));
-          console.log(event);
           const formatedDate = event.data["date"].split("T");
           setValue("amount", event.data["amount"]);
           setValue("category", event.data["category"]);
