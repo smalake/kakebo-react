@@ -46,7 +46,7 @@ export const Contact = () => {
         <Box sx={{ textAlign: "center" }}>
           <h2>お問い合わせ</h2>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className={styles.form}>
+            <div className={styles.contactForm}>
               <TextField
                 id="name"
                 label="お名前"
@@ -57,7 +57,7 @@ export const Contact = () => {
                 helperText={errors.name?.message}
               />
             </div>
-            <div className={styles.form}>
+            <div className={styles.contactForm}>
               <TextField
                 id="emamil"
                 label="返信先のメールアドレス"
@@ -67,7 +67,7 @@ export const Contact = () => {
                 helperText={errors.email?.message}
               />
             </div>
-            <div className={styles.form}>
+            <div className={styles.contactForm}>
               <TextField
                 id="description"
                 label="お問い合わせ内容"
