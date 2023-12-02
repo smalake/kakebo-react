@@ -144,6 +144,7 @@ export const EventList = ({ events, selectedDate }: { events: Event; selectedDat
   const categories = useRecoilValue(categoryAtom);
   return (
     <ul className={styles.eventList}>
+      <li>{selectedDate}</li>
       {selectedDate && events[selectedDate] ? (
         events[selectedDate].map((item, index) => (
           <li key={index} className={styles.eventContents}>
