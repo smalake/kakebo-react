@@ -4,7 +4,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import jaLocale from "@fullcalendar/core/locales/ja";
 import styles from "./Calendar.module.css";
 import "./calendar.css";
-import { Box, Button, CircularProgress, FormControl, IconButton, MenuItem, Select } from "@mui/material";
+import { Box, CircularProgress, FormControl, IconButton, MenuItem, Select } from "@mui/material";
 import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 import { EventClickArg } from "@fullcalendar/core";
 import { format } from "date-fns";
@@ -22,7 +22,7 @@ export const Calendar = memo(() => {
   const navigate = useNavigate();
   const events = useRecoilValue(eventSelector).event;
   const eventAmount = useRecoilValue(eventSelector).calendar;
-  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().substr(0, 10));
   const revision = localStorage.getItem("revision");
   const [eventFlag, setEventFlag] = useRecoilState(eventFlagAtom);
   const [loading, setLoading] = useState(true);
