@@ -4,7 +4,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import jaLocale from "@fullcalendar/core/locales/ja";
 import styles from "./Calendar.module.css";
 import "./calendar.css";
-import { Box, CircularProgress, FormControl, MenuItem, Select } from "@mui/material";
+import { Box, Button, CircularProgress, FormControl, IconButton, MenuItem, Select } from "@mui/material";
 import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 import { EventClickArg } from "@fullcalendar/core";
 import { format } from "date-fns";
@@ -16,6 +16,7 @@ import { Event } from "../../types";
 import { eventApi } from "../../api/eventApi";
 import { db } from "../../db/db";
 import { categoryAtom } from "../../recoil/CategoryAtom";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 export const Calendar = memo(() => {
   const navigate = useNavigate();
@@ -144,7 +145,12 @@ export const EventList = ({ events, selectedDate }: { events: Event; selectedDat
   const categories = useRecoilValue(categoryAtom);
   return (
     <ul className={styles.eventList}>
-      <li>{selectedDate}</li>
+      <li className={styles.clickedDate}>
+        <p className={styles.clickedDateItem}>{selectedDate}</p>
+        <IconButton className={styles.clickedDateItem}>
+          <AddCircleOutlineIcon />
+        </IconButton>
+      </li>
       {selectedDate && events[selectedDate] ? (
         events[selectedDate].map((item, index) => (
           <li key={index} className={styles.eventContents}>
