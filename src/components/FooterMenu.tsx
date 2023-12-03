@@ -1,5 +1,5 @@
 import { BottomNavigation, BottomNavigationAction, Box } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import EditIcon from "@mui/icons-material/Edit";
 import EqualizerIcon from "@mui/icons-material/Equalizer";
@@ -14,6 +14,11 @@ export const FooterMenu = () => {
     setValue(newValue);
     navigate(newValue);
   };
+
+  useEffect(() => {
+    setValue(location.pathname);
+  }, [location.pathname]);
+
   return (
     <Box sx={{ width: "100%", position: "fixed", bottom: "0" }}>
       <BottomNavigation showLabels value={value} onChange={handleChange}>

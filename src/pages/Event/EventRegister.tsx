@@ -4,7 +4,7 @@ import styles from "./Event.module.css";
 import { Box, Button, FormControl, IconButton, InputLabel, MenuItem, Select, TextField, ThemeProvider } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { eventApi } from "../../api/eventApi";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { EventRegisterForm, Pattern } from "../../types";
 import { db } from "../../db/db";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -19,6 +19,8 @@ import { categoryAtom } from "../../recoil/CategoryAtom";
 
 export const EventRegister = () => {
   const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const selectedDate = params.get("date") ?? new Date().toISOString().substr(0, 10);
   const [hasPattern, setHasPattern] = useState(false);
   const [loading, setLoading] = useState(false);
   const [display, setDisplay] = useState(false);
@@ -320,7 +322,7 @@ export const EventRegister = () => {
               id="date"
               label="日付"
               type="date"
-              defaultValue={new Date().toISOString().substr(0, 10)}
+              defaultValue={selectedDate}
               InputLabelProps={{
                 shrink: true,
               }}

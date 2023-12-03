@@ -143,11 +143,17 @@ export const Calendar = memo(() => {
 
 export const EventList = ({ events, selectedDate }: { events: Event; selectedDate: string }) => {
   const categories = useRecoilValue(categoryAtom);
+  const navigate = useNavigate();
+
+  const toEventRegister = () => {
+    navigate(`/event-register?date=${selectedDate}`);
+  };
+
   return (
     <ul className={styles.eventList}>
       <li className={styles.clickedDate}>
         <p className={styles.clickedDateItem}>{selectedDate}</p>
-        <IconButton className={styles.clickedDateItem}>
+        <IconButton className={styles.clickedDateItem} onClick={toEventRegister}>
           <AddCircleOutlineIcon />
         </IconButton>
       </li>
