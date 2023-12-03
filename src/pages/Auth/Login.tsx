@@ -82,6 +82,7 @@ export const Login = () => {
             }).then(() => {
               // リビジョンを保存
               localStorage.setItem("revision", revision.data.revision);
+              alert("ログインしました");
               navigate("/event-register");
             });
           })
@@ -125,6 +126,7 @@ export const Login = () => {
             }).then(() => {
               // リビジョンを保存
               localStorage.setItem("revision", revision.data.revision);
+              alert("ログインしました");
               navigate("/event-register");
             });
           })
