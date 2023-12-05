@@ -81,20 +81,21 @@ export const CalendarPrivate = memo(() => {
           />
         </div>
       </div>
-      <div>
-        <EventList events={events} selectedDate={selectedDate} />
+      <div className={styles.list}>
+        <PrivateList events={events} selectedDate={selectedDate} />
       </div>
     </div>
   );
 });
 
-export const EventList = ({ events, selectedDate }: { events: Event; selectedDate: string }) => {
+export const PrivateList = ({ events, selectedDate }: { events: Event; selectedDate: string }) => {
   const categories = useRecoilValue(categoryAtom);
   const navigate = useNavigate();
 
   const toEventRegister = () => {
     navigate(`/event-register?date=${selectedDate}`);
   };
+
   return (
     <ul className={styles.eventList}>
       <li className={styles.clickedDate}>
