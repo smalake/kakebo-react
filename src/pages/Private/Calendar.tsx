@@ -93,7 +93,7 @@ export const PrivateList = ({ events, selectedDate }: { events: Event; selectedD
   const navigate = useNavigate();
 
   const toEventRegister = () => {
-    navigate(`/event-register?date=${selectedDate}`);
+    navigate(`/event-register?date=${selectedDate}&private=1`);
   };
 
   return (

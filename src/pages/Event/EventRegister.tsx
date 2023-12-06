@@ -21,6 +21,7 @@ export const EventRegister = () => {
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const selectedDate = params.get("date") ?? new Date().toISOString().substr(0, 10);
+  const defaultIsPrivate = Number(params.get("private")) ?? 0;
   const [hasPattern, setHasPattern] = useState(false);
   const [loading, setLoading] = useState(false);
   const [display, setDisplay] = useState(false);
@@ -339,7 +340,7 @@ export const EventRegister = () => {
             <Controller
               name="isPrivate"
               control={control}
-              defaultValue={0}
+              defaultValue={defaultIsPrivate}
               render={({ field }) => (
                 <FormControl sx={{ width: "90%", textAlign: "left" }}>
                   <InputLabel id="isPrivate-label">登録先の家計簿</InputLabel>
