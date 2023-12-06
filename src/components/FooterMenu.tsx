@@ -16,7 +16,7 @@ export const FooterMenu = () => {
   };
 
   useEffect(() => {
-    setValue(location.pathname);
+    setValue(location.pathname.split("-private")[0]);
   }, [location.pathname]);
 
   return (
