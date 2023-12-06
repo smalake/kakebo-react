@@ -82,8 +82,11 @@ export const Login = () => {
             }).then(() => {
               // リビジョンを保存
               localStorage.setItem("revision", revision.data.revision);
-              alert("ログインしました");
-              navigate("/event-register");
+              // alert("ログインしました");
+              // navigate("/event-register");
+              setTimeout(() => {
+                navigate("/event-register");
+              });
             });
           })
           .catch((error) => {
@@ -126,8 +129,10 @@ export const Login = () => {
             }).then(() => {
               // リビジョンを保存
               localStorage.setItem("revision", revision.data.revision);
-              alert("ログインしました");
-              navigate("/event-register");
+              // alert("ログインしました");
+              setTimeout(() => {
+                navigate("/event-register");
+              });
             });
           })
           .catch((error) => {
