@@ -126,7 +126,7 @@ export const GraphPrivate = () => {
         <p className={styles.totalTitle}>1ヶ月の支出合計</p>
         <p className={styles.totalContents}>{total[yearMonth] ?? 0}円</p>
       </div>
-      <div>
+      <div className={styles.list}>
         <ul className={styles.eventList}>
           {graphData[yearMonth] ? (
             graphData[yearMonth].map((value, cat) => (
