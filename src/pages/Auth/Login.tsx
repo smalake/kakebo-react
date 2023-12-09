@@ -14,6 +14,8 @@ import { GoogleLogin } from "react-google-login";
 import { eventApi } from "../../api/eventApi";
 import { db } from "../../db/db";
 import { privateApi } from "../../api/privateApi";
+import { useSetRecoilState } from "recoil";
+import { loginAtom } from "../../recoil/LoginAtom";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -21,6 +23,7 @@ export const Login = () => {
   const [buttonLoading, setButtonLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const clientId = process.env.REACT_APP_CLIENT_ID;
+  const setIsLogin = useSetRecoilState(loginAtom);
 
   // react-hook-formの設定
   const {
@@ -36,6 +39,7 @@ export const Login = () => {
         if (localStorage.getItem("token")) {
           const res = await authApi.isLogin();
           if (res.status === 200) {
+            setIsLogin(1);
             navigate("/event-register");
           }
         }
@@ -46,7 +50,8 @@ export const Login = () => {
       }
     };
     loginCheck();
-  }, [navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Googleログイン用の設定
   useEffect(() => {
@@ -82,6 +87,7 @@ export const Login = () => {
             }).then(() => {
               // リビジョンを保存
               localStorage.setItem("revision", revision.data.revision);
+              setIsLogin(1);
               setTimeout(() => {
                 navigate("/event-register");
               }, 1000);
@@ -127,6 +133,7 @@ export const Login = () => {
             }).then(() => {
               // リビジョンを保存
               localStorage.setItem("revision", revision.data.revision);
+              setIsLogin(1);
               setTimeout(() => {
                 navigate("/event-register");
               }, 1000);

@@ -1,44 +1,35 @@
-import { Box, CircularProgress } from "@mui/material";
+import { Box } from "@mui/material";
 import { Outlet, useNavigate } from "react-router-dom";
 import { FooterMenu } from "../FooterMenu";
 import { useEffect, useState } from "react";
-import { authApi } from "../../api/authApi";
+import { useRecoilValue } from "recoil";
+import { loginAtom } from "../../recoil/LoginAtom";
 
 export const MenuLayout = () => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
+  const isLogin = useRecoilValue(loginAtom);
+  const [err, setErr] = useState(false);
 
   useEffect(() => {
-    const loginCheck = async () => {
+    const loginCheck = () => {
       try {
         if (localStorage.getItem("token")) {
-          const res = await authApi.isLogin();
-          if (res.status === 401) {
-            alert("ログインしてください");
+          if (isLogin === 0) {
             navigate("/login");
-          } else if (res.status === 200) {
-            // 何もしない
-          } else {
-            alert("エラーが発生しました");
-            console.log(res);
           }
         } else {
-          alert("ログインしてください");
           navigate("/login");
         }
-      } catch (err) {
-        alert("エラーが発生しました");
-        console.log(err);
-      } finally {
-        setLoading(false);
+      } catch (error) {
+        setErr(true);
       }
     };
     loginCheck();
-  }, [navigate]);
+  }, [navigate, isLogin]);
   return (
     <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
       <Box sx={{ flexGrow: 1, width: "100%" }}>
-        {loading ? (
+        {err ? (
           <Box
             sx={{
               display: "flex",
@@ -48,7 +39,7 @@ export const MenuLayout = () => {
               height: "100%",
             }}
           >
-            <CircularProgress />
+            エラーが発生しました
           </Box>
         ) : (
           <Outlet />
