@@ -1,40 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styles from "./Setting.module.css";
 import { Box, Button } from "@mui/material";
-import CircularProgress from "@mui/material/CircularProgress";
 import { useNavigate } from "react-router-dom";
 import { authApi } from "../../api/authApi";
-import { settingApi } from "../../api/settingApi";
 import { db } from "../../db/db";
+import { useRecoilValue } from "recoil";
+import { parentFlagSelector } from "../../recoil/ParentFlagAtom";
 
 export const Setting = () => {
   const navigate = useNavigate();
-  const [isParent, setIsParent] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const isParent = useRecoilValue(parentFlagSelector);
 
   useEffect(() => {
     // グループの親かどうかチェック
     const checkParent = async () => {
-      try {
-        const res = await settingApi.isParent();
-        if (res.status === 200) {
-          setIsParent(res.data.parent);
-        } else if (res.status === 401) {
-          alert("ログインしてください");
-          navigate("/login");
-        } else {
-          alert("エラーが発生しました");
-          console.log(res);
-        }
-      } catch (err) {
-        alert("エラーが発生しました");
-        console.log(err);
-      } finally {
-        setLoading(false);
+      if (isParent === 401) {
+        alert("ログインしてください");
+        navigate("/login");
       }
     };
     checkParent();
-  }, [navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const clickLogout = async () => {
     const res = window.confirm("ログアウトしてもよろしいですか？");
@@ -59,18 +46,8 @@ export const Setting = () => {
   };
   return (
     <div className={styles.container}>
-      {loading ? (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            // marginTop: "330px",
-            alignItems: "center",
-            height: "100%",
-          }}
-        >
-          <CircularProgress />
-        </Box>
+      {isParent === -1 ? (
+        <div>エラーが発生しました</div>
       ) : (
         <div>
           <h2>設定</h2>
