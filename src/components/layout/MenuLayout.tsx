@@ -25,7 +25,8 @@ export const MenuLayout = () => {
       }
     };
     loginCheck();
-  }, [navigate, isLogin]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
       <Box sx={{ flexGrow: 1, width: "100%" }}>
