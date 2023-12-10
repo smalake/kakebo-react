@@ -16,6 +16,7 @@ import { db } from "../../db/db";
 import { privateApi } from "../../api/privateApi";
 import { useSetRecoilState } from "recoil";
 import { loginAtom } from "../../recoil/LoginAtom";
+import { parentFlagAtom } from "../../recoil/ParentFlagAtom";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ export const Login = () => {
   const [googleLoading, setGoogleLoading] = useState(false);
   const clientId = process.env.REACT_APP_CLIENT_ID;
   const setIsLogin = useSetRecoilState(loginAtom);
+  const setIsParent = useSetRecoilState(parentFlagAtom);
 
   // react-hook-formの設定
   const {
@@ -38,8 +40,14 @@ export const Login = () => {
       try {
         if (localStorage.getItem("token")) {
           const res = await authApi.isLogin();
+          console.log(res);
           if (res.status === 200) {
             setIsLogin(1);
+            if (res.data.parent) {
+              setIsParent(1);
+            } else {
+              setIsParent(0);
+            }
             navigate("/event-register");
           }
         }
