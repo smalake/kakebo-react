@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { registerValidation } from "../../components/util/validation";
-import { Link, useNavigate } from "react-router-dom";
-import styles from "./Auth.module.css";
-import { authApi } from "../../api/authApi";
-import { CircularProgress, TextField } from "@mui/material";
-import LoadingButton from "@mui/lab/LoadingButton";
-import { RegisterForm } from "../../../src/types";
-import { gapi } from "gapi-script";
-import { GoogleLogin } from "react-google-login";
-import { useCookies } from "react-cookie";
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { registerValidation } from '../../components/util/validation';
+import { Link, useNavigate } from 'react-router-dom';
+import styles from './Auth.module.css';
+import { authApi } from '../../api/authApi';
+import { TextField } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { RegisterData, RegisterForm } from '../../../src/types';
+import { createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { auth, provider } from '../../components/util/firebase';
+import { FirebaseError } from 'firebase/app';
+import { FcGoogle } from 'react-icons/fc';
+import { IoMdMail } from 'react-icons/io';
 
 export const Register = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [cookies, setCookie] = useCookies(["email"]);
   const [googleLoading, setGoogleLoading] = useState(false);
-  const clientId = process.env.REACT_APP_CLIENT_ID;
 
   // react-hook-formの設定
   const {
@@ -26,69 +26,105 @@ export const Register = () => {
     formState: { errors },
   } = useForm<RegisterForm>({ resolver: zodResolver(registerValidation) });
 
-  // Googleログイン用の設定
-  useEffect(() => {
-    const start = () => {
-      gapi.client.init({
-        clientId: clientId,
-        scope: "",
-      });
-    };
-    gapi.load("client:auth2", start);
-  });
-
   // メールアドレスで新規登録ボタンが押されたときの処理
   const onSubmit = async (data: RegisterForm) => {
     setLoading(true);
     try {
-      // DBに新規登録
-      const registerData = {
-        email: data.email,
-        password: data.password,
-        name: data.name,
-        type: 1,
-      };
-      const res = await authApi.register(registerData);
-      if (res.status === 200) {
-        setCookie("email", data.email);
-        console.log(cookies.email);
-        alert("設定されたメールアドレス宛に認証コードを送信しました");
-        navigate("/verify-email");
-      } else if (res.status === 409) {
-        alert("すでに使用されているメールアドレスです");
+      const res = await createUserWithEmailAndPassword(auth, data.email, data.password);
+      if (res.user.uid !== '') {
+        const registerData = {
+          uid: res.user.uid,
+          name: data.name,
+          type: 1,
+        };
+
+        // DBに登録
+        const result = await dbRegister(registerData);
+        if (result) {
+          const token = await res.user.getIdToken();
+          localStorage.setItem('token', token);
+          navigate('/');
+        } else {
+          throw new Error('db register failed');
+        }
       } else {
-        alert("新規登録に失敗しました");
+        throw new Error('Firebase register failed');
       }
-    } catch (err: any) {
-      alert("エラーが発生しました");
+    } catch (error) {
+      if (error instanceof FirebaseError) {
+        switch (error.code) {
+          case 'auth/email-already-in-use':
+            alert('このメールアドレスは既に使用されています。');
+            break;
+          case 'auth/invalid-email':
+            alert('無効なメールアドレス形式です。');
+            break;
+          case 'auth/operation-not-allowed':
+            alert('メールアドレスとパスワードによる登録が許可されていません。');
+            break;
+          case 'auth/weak-password':
+            alert('パスワードが弱すぎます。もっと強いパスワードを設定してください。');
+            break;
+          default:
+            alert('登録に失敗しました。');
+            console.error(error);
+        }
+      } else {
+        // 予期しないエラータイプ
+        console.error('An unexpected error occurred:', error);
+        alert('予期しないエラーが発生しました。');
+      }
     } finally {
       setLoading(false);
     }
   };
 
-  // Googleのログインに成功したときの処理
-  const onSuccess = async (response: any) => {
+  // Googleログイン
+  const googleLogin = async () => {
     setGoogleLoading(true);
     try {
-      const email = response.profileObj.email;
-      const name = response.profileObj.name;
-
-      const res = await authApi.register({ email: email, name: name, password: "dummy", type: 2 });
-      if (res.status === 200) {
-        localStorage.setItem("token", res.data["accessToken"]);
-        // localStorage.setItem("refresh", res.data["refreshToken"]);
-        alert("登録完了しました");
-        navigate("/event-register");
-      } else if (res.status === 409) {
-        alert("すでに登録されているユーザーです");
+      const res = await signInWithPopup(auth, provider);
+      if (res.user.uid !== '') {
+        const registerData = {
+          uid: res.user.uid,
+          name: res.user.displayName!,
+          type: 2,
+        };
+        // DBに登録
+        const result = await dbRegister(registerData);
+        if (result) {
+          const token = await res.user.getIdToken();
+          localStorage.setItem('token', token);
+          navigate('/');
+        } else {
+          throw new Error('db register failed');
+        }
       } else {
-        alert("登録に失敗しました");
+        throw new Error('Google login failed');
       }
-    } catch (err: any) {
-      alert("エラーが発生しました");
+    } catch (err) {
+      alert('エラーが発生しました');
       console.log(err);
     } finally {
       setGoogleLoading(false);
+    }
+  };
+
+  // DBに新規登録するためのAPIを叩く
+  const dbRegister = async (data: RegisterData) => {
+    try {
+      const res = await authApi.register(data);
+      if (res.status === 200) {
+        return true;
+      } else if (res.status === 409) {
+        alert('すでに登録されているためログインします');
+        return true;
+      } else {
+        return false;
+      }
+    } catch (err) {
+      alert('登録に失敗しました。\nサポートへお問い合わせください。');
+      console.log(err);
     }
   };
 
@@ -98,58 +134,59 @@ export const Register = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.form}>
           <TextField
-            id="email"
-            label="メールアドレス"
-            {...register("email")}
+            id='email'
+            label='メールアドレス'
+            {...register('email')}
             error={Boolean(errors.email)}
             helperText={errors.email?.message}
-            sx={{ width: "90%" }}
+            sx={{ width: '90%' }}
           />
         </div>
         <div className={styles.form}>
           <TextField
-            id="name"
-            label="表示名"
-            {...register("name")}
+            id='name'
+            label='表示名'
+            {...register('name')}
             error={Boolean(errors.name)}
             helperText={errors.name?.message}
-            sx={{ width: "90%" }}
+            sx={{ width: '90%' }}
           />
         </div>
         <div className={styles.form}>
           <TextField
-            id="password"
-            label="パスワード"
-            type="password"
-            {...register("password")}
+            id='password'
+            label='パスワード'
+            type='password'
+            {...register('password')}
             error={Boolean(errors.password)}
             helperText={errors.password?.message}
-            sx={{ width: "90%" }}
+            sx={{ width: '90%' }}
           />
         </div>
         <div className={styles.form}>
           <TextField
-            id="confirmPassword"
-            label="確認用パスワード"
-            type="password"
-            {...register("confirmPassword")}
+            id='confirmPassword'
+            label='確認用パスワード'
+            type='password'
+            {...register('confirmPassword')}
             error={Boolean(errors.confirmPassword)}
             helperText={errors.confirmPassword?.message}
-            sx={{ width: "90%" }}
+            sx={{ width: '90%' }}
           />
         </div>
         <div className={styles.form}>
           <LoadingButton
-            type="submit"
-            variant="contained"
+            type='submit'
+            variant='contained'
             loading={loading}
-            color="info"
+            color='info'
             sx={{
-              width: "70%",
-              height: "45px",
-              fontSize: "16px",
-              fontWeight: "bold",
+              width: '70%',
+              height: '45px',
+              fontSize: '16px',
+              fontWeight: 'bold',
             }}
+            startIcon={<IoMdMail />}
           >
             メールアドレスで新規登録
           </LoadingButton>
@@ -157,26 +194,27 @@ export const Register = () => {
       </form>
       <p className={styles.subText}>または</p>
       <div className={styles.form}>
-        <GoogleLogin
-          clientId={clientId!}
-          buttonText="Googleアカウントで新規登録"
-          onSuccess={onSuccess}
-          className={styles.google}
-          cookiePolicy={"single_host_origin"}
-          // isSignedIn={true}
-        />
+        <LoadingButton
+          onClick={googleLogin}
+          sx={{
+            width: '70%',
+            height: '45px',
+            fontSize: '16px',
+            fontWeight: 'bold',
+            color: '#4c4c4c',
+            borderColor: '#4c4c4c',
+          }}
+          variant='outlined'
+          loading={googleLoading}
+          startIcon={<FcGoogle />}
+        >
+          Googleアカウントで新規登録
+        </LoadingButton>
       </div>
-      <div style={{ marginLeft: "20px" }}>
+      <div style={{ marginLeft: '20px' }}>
         <p className={styles.linkText}>アカウントをお持ちの方は</p>
-        <Link to="/login">ログイン</Link>
+        <Link to='/login'>ログイン</Link>
       </div>
-      {googleLoading ? (
-        <div className={styles.modal}>
-          <CircularProgress />
-        </div>
-      ) : (
-        <div></div>
-      )}
     </div>
   );
 };
