@@ -121,26 +121,48 @@ export const Login = () => {
       console.log(res.data.error); // TODO: エラーメッセージが取得できるか確認
       return false;
     }
-    const eventData = await eventApi.getAll();
-    const privateData = await privateApi.getAll();
-    const revision = await eventApi.revision();
-    db.open()
-      .then(() => {
-        db.transaction('rw', db.event, db.private, () => {
-          db.event.bulkAdd(eventData.data);
-          db.private.bulkAdd(privateData.data);
-        }).then(() => {
-          // リビジョンを保存
-          localStorage.setItem('revision', revision.data);
-          setIsLogin(1);
-          return true;
+
+    try {
+      const eventData = await eventApi.getAll();
+      const privateData = await privateApi.getAll();
+      const revision = await eventApi.revision();
+
+      if (eventData.status === 200 && privateData.status === 200 && revision.status === 200) {
+        await db.open();
+        await db.transaction('rw', db.event, db.private, async () => {
+          // すでにDBが作られている場合エラーになってしまうため、そのエラーを無視させる
+          try {
+            await db.event.bulkAdd(eventData.data);
+          } catch (error) {
+            if ((error as Error).name === 'BulkError') {
+              console.warn('ConstraintError: Key already exists in the object store.');
+            } else {
+              throw error;
+            }
+          }
+
+          // eventと同様
+          try {
+            await db.private.bulkAdd(privateData.data);
+          } catch (error) {
+            if ((error as Error).name === 'BulkError') {
+              console.warn('ConstraintError: Key already exists in the object store.');
+            } else {
+              throw error;
+            }
+          }
         });
-      })
-      .catch((error) => {
-        console.log(error);
-        alert('[db catch]エラーが発生しました');
-        return false;
-      });
+        // リビジョンを保存
+        localStorage.setItem('revision', revision.data);
+        setIsLogin(1);
+        return true;
+      } else {
+        throw new Error(`event init failed: event=${eventData.status}, private=${privateData.status}, revision=${revision.status}`);
+      }
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   };
 
   return (
