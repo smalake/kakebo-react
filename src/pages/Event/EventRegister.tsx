@@ -1,27 +1,27 @@
-import React, { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import styles from "./Event.module.css";
-import { Box, Button, FormControl, IconButton, InputLabel, MenuItem, Select, TextField, ThemeProvider } from "@mui/material";
-import LoadingButton from "@mui/lab/LoadingButton";
-import { eventApi } from "../../api/eventApi";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { EventRegisterForm, Pattern } from "../../types";
-import { db } from "../../db/db";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { eventFlagAtom } from "../../recoil/EventAtom";
-import { privateFlagAtom } from "../../recoil/PrivateAtom";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
-import { PatternSelector, patternAtom } from "../../recoil/PatternAtom";
-import { CategoryIcon } from "../../components/Category";
-import { createTheme } from "@mui/material";
-import { categoryAtom } from "../../recoil/CategoryAtom";
+import React, { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import styles from './Event.module.css';
+import { Box, Button, FormControl, IconButton, InputLabel, MenuItem, Select, TextField, ThemeProvider } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { eventApi } from '../../api/eventApi';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { EventRegisterForm, Pattern } from '../../types';
+import { db } from '../../db/db';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { eventFlagAtom } from '../../recoil/EventAtom';
+import { privateFlagAtom } from '../../recoil/PrivateAtom';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
+import { PatternSelector, patternAtom } from '../../recoil/PatternAtom';
+import { CategoryIcon } from '../../components/Category';
+import { createTheme } from '@mui/material';
+import { categoryAtom } from '../../recoil/CategoryAtom';
 
 export const EventRegister = () => {
   const navigate = useNavigate();
   const [params] = useSearchParams();
-  const selectedDate = params.get("date") ?? new Date().toISOString().substr(0, 10);
-  const defaultIsPrivate = Number(params.get("private")) ?? 0;
+  const selectedDate = params.get('date') ?? new Date().toISOString().substr(0, 10);
+  const defaultIsPrivate = Number(params.get('private')) ?? 0;
   const [hasPattern, setHasPattern] = useState(false);
   const [loading, setLoading] = useState(false);
   const [display, setDisplay] = useState(false);
@@ -51,18 +51,18 @@ export const EventRegister = () => {
         styleOverrides: {
           formControl: {
             // 移動をクリック時に動かないように固定
-            position: "static",
-            transform: "none",
-            transition: "none",
+            position: 'static',
+            transform: 'none',
+            transition: 'none',
             // クリックを可能に
-            pointerEvents: "auto",
-            cursor: "pointer",
+            pointerEvents: 'auto',
+            cursor: 'pointer',
             // 幅いっぱいを解除
-            display: "inline",
-            alignSelf: "start",
+            display: 'inline',
+            alignSelf: 'start',
             // タイポグラフィを指定
-            fontWeight: "bold",
-            fontSize: "0.75rem",
+            fontWeight: 'bold',
+            fontSize: '0.75rem',
             // テーマの Composition を使えば以下のようにも書ける
             // base.typography.subtitle2
           },
@@ -76,9 +76,9 @@ export const EventRegister = () => {
             marginTop: 0,
           },
           input: {
-            paddingTop: "10px",
-            paddingBottom: "8px",
-            height: "auto",
+            paddingTop: '10px',
+            paddingBottom: '8px',
+            height: 'auto',
           },
           notchedOutline: {
             // デフォルトだと、 position が absolute、
@@ -88,7 +88,7 @@ export const EventRegister = () => {
               // 内包された legend 要素によって、四角の左側の切り欠きが実現されているので、
               // 表示されないように。
               // (SCSS と同様にネスト記述が可能です。)
-              display: "none",
+              display: 'none',
             },
           },
         },
@@ -152,17 +152,17 @@ export const EventRegister = () => {
       const res = await eventApi.create(send);
       if (res.status === 200) {
         // DBに登録した内容をIndexedDBに保存
-        if (res.data.data.length === 2) {
+        if (res.data.length === 2) {
           const toDB = [
             {
-              id: res.data.data[0],
+              id: res.data[0],
               amount: data.amount1 - amnt2,
               category: data.category1,
               store: data.storeName,
               date: String(data.date),
             },
             {
-              id: res.data.data[1],
+              id: res.data[1],
               amount: Number(amnt2),
               category: data.category2,
               store: data.storeName,
@@ -171,8 +171,8 @@ export const EventRegister = () => {
           ];
           if (data.isPrivate === 0) {
             await db.event.bulkAdd(toDB);
-            const revision = Number(localStorage.getItem("revision")) + 1;
-            localStorage.setItem("revision", String(revision));
+            const revision = Number(localStorage.getItem('revision')) + 1;
+            localStorage.setItem('revision', String(revision));
             setEventFlag(flag);
           } else {
             await db.private.bulkAdd(toDB);
@@ -180,15 +180,15 @@ export const EventRegister = () => {
           }
         } else {
           const toDB = {
-            id: res.data.data[0],
+            id: res.data[0],
             amount: Number(data.amount1),
             category: data.category1,
             store: data.storeName,
             date: String(data.date),
           };
           if (data.isPrivate === 0) {
-            const revision = Number(localStorage.getItem("revision")) + 1;
-            localStorage.setItem("revision", String(revision));
+            const revision = Number(localStorage.getItem('revision')) + 1;
+            localStorage.setItem('revision', String(revision));
             await db.event.add(toDB);
             setEventFlag(flag);
           } else {
@@ -196,18 +196,21 @@ export const EventRegister = () => {
             setPrivateFlag(pflag);
           }
         }
-        alert("登録しました");
+        alert('登録しました');
         reset();
+      } else if (res.status === 401) {
+        alert('認証エラー\n再ログインしてください');
+        navigate('/login');
       } else {
-        alert("登録に失敗しました");
+        alert('登録に失敗しました');
         console.log(res);
       }
     } catch (err: any) {
       if (err.status === 401) {
-        alert("認証エラー\n再ログインしてください");
-        navigate("/login");
+        alert('認証エラー\n再ログインしてください');
+        navigate('/login');
       } else {
-        alert("登録に失敗しました");
+        alert('登録に失敗しました');
         console.log(err);
       }
     } finally {
@@ -251,17 +254,17 @@ export const EventRegister = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className={styles.form}>
             <TextField
-              id="amount1"
-              label="金額"
+              id='amount1'
+              label='金額'
               error={Boolean(errors.amount1)}
-              {...register("amount1", { required: "金額を入力してください", min: { value: 1, message: "1以上の数値を入力してください" } })}
-              type="number"
+              {...register('amount1', { required: '金額を入力してください', min: { value: 1, message: '1以上の数値を入力してください' } })}
+              type='number'
               helperText={errors.amount1?.message}
-              sx={{ width: "90%" }}
+              sx={{ width: '90%' }}
             />
             {hasPattern ? (
               <Button
-                sx={{ display: "block", marginLeft: "20px" }}
+                sx={{ display: 'block', marginLeft: '20px' }}
                 onClick={() => {
                   setModalFlag(true);
                 }}
@@ -274,13 +277,13 @@ export const EventRegister = () => {
           </div>
           <div className={styles.form}>
             <Controller
-              name="category1"
+              name='category1'
               control={control}
               defaultValue={0}
               render={({ field }) => (
-                <FormControl sx={{ width: "90%", textAlign: "left" }}>
-                  <InputLabel id="category1-label">カテゴリー</InputLabel>
-                  <Select {...field} id="category1" label="カテゴリー" labelId="category1-label">
+                <FormControl sx={{ width: '90%', textAlign: 'left' }}>
+                  <InputLabel id='category1-label'>カテゴリー</InputLabel>
+                  <Select {...field} id='category1' label='カテゴリー' labelId='category1-label'>
                     <MenuItem value={0}>食費</MenuItem>
                     <MenuItem value={1}>外食費</MenuItem>
                     <MenuItem value={2}>日用品</MenuItem>
@@ -298,53 +301,53 @@ export const EventRegister = () => {
           </div>
           <div className={styles.form}>
             <TextField
-              id="storeName"
-              label="店名"
+              id='storeName'
+              label='店名'
               error={Boolean(errors.storeName)}
               helperText={errors.storeName?.message}
-              {...register("storeName", { maxLength: { value: 20, message: "20文字以内で入力してください" } })}
-              sx={{ width: "90%" }}
+              {...register('storeName', { maxLength: { value: 20, message: '20文字以内で入力してください' } })}
+              sx={{ width: '90%' }}
             />
           </div>
           <div className={styles.form}>
             <TextField
-              id="memo1"
-              label="メモ"
+              id='memo1'
+              label='メモ'
               multiline
               rows={3}
               error={Boolean(errors.memo1)}
               helperText={errors.memo1?.message}
-              {...register("memo1", { maxLength: { value: 100, message: "100文字以内で入力してください" } })}
-              sx={{ width: "90%" }}
+              {...register('memo1', { maxLength: { value: 100, message: '100文字以内で入力してください' } })}
+              sx={{ width: '90%' }}
             />
           </div>
           <div className={styles.form}>
             <TextField
-              id="date"
-              label="日付"
-              type="date"
+              id='date'
+              label='日付'
+              type='date'
               defaultValue={selectedDate}
               InputLabelProps={{
                 shrink: true,
               }}
               InputProps={{
-                style: { paddingRight: "0px" },
+                style: { paddingRight: '0px' },
               }}
               error={Boolean(errors.date)}
               helperText={errors.date?.message}
-              {...register("date", { required: "日付を入力してください" })}
-              sx={{ width: "90%" }}
+              {...register('date', { required: '日付を入力してください' })}
+              sx={{ width: '90%' }}
             />
           </div>
           <div className={styles.form}>
             <Controller
-              name="isPrivate"
+              name='isPrivate'
               control={control}
               defaultValue={defaultIsPrivate}
               render={({ field }) => (
-                <FormControl sx={{ width: "90%", textAlign: "left" }}>
-                  <InputLabel id="isPrivate-label">登録先の家計簿</InputLabel>
-                  <Select {...field} id="isPrivate" label="登録先の家計簿" labelId="isPrivate-label">
+                <FormControl sx={{ width: '90%', textAlign: 'left' }}>
+                  <InputLabel id='isPrivate-label'>登録先の家計簿</InputLabel>
+                  <Select {...field} id='isPrivate' label='登録先の家計簿' labelId='isPrivate-label'>
                     <MenuItem value={0}>共有</MenuItem>
                     <MenuItem value={1}>プライベート</MenuItem>
                   </Select>
@@ -354,44 +357,44 @@ export const EventRegister = () => {
           </div>
           {display && (
             <div className={styles.additionalForm}>
-              <Box sx={{ margin: "0 20px" }}>
+              <Box sx={{ margin: '0 20px' }}>
                 <div className={styles.form}>
-                  <Box sx={{ display: "flex" }}>
-                    <TextField id="amount2" label="追加の金額" value={amount2} onChange={handleAmount2Change} type="number" sx={{ width: "65%" }} />
+                  <Box sx={{ display: 'flex' }}>
+                    <TextField id='amount2' label='追加の金額' value={amount2} onChange={handleAmount2Change} type='number' sx={{ width: '65%' }} />
                     <Box>
                       <IconButton
-                        sx={{ padding: "10px 0", marginLeft: "15px" }}
+                        sx={{ padding: '10px 0', marginLeft: '15px' }}
                         onClick={() => {
                           addAmount();
                         }}
                       >
-                        <AddCircleOutlineIcon fontSize="large" />
+                        <AddCircleOutlineIcon fontSize='large' />
                       </IconButton>
                       <IconButton
                         onClick={() => {
                           minusAmount();
                         }}
                       >
-                        <RemoveCircleOutlineIcon fontSize="large" />
+                        <RemoveCircleOutlineIcon fontSize='large' />
                       </IconButton>
                     </Box>
                   </Box>
                 </div>
                 <div>
-                  <Box sx={{ textAlign: "left", width: "100%", margin: "0 auto", paddingLeft: "10px" }}>
-                    <Box sx={{ marginBottom: "2px", fontSize: "0.8em" }}>現在の追加金額</Box>
+                  <Box sx={{ textAlign: 'left', width: '100%', margin: '0 auto', paddingLeft: '10px' }}>
+                    <Box sx={{ marginBottom: '2px', fontSize: '0.8em' }}>現在の追加金額</Box>
                     <Box>{addedAmount}</Box>
                   </Box>
                 </div>
                 <div className={styles.form}>
                   <Controller
-                    name="category2"
+                    name='category2'
                     control={control}
                     defaultValue={0}
                     render={({ field }) => (
-                      <FormControl sx={{ textAlign: "left", width: "100%" }}>
-                        <InputLabel id="category2-label">追加のカテゴリー</InputLabel>
-                        <Select {...field} id="category2" label="追加のカテゴリー" labelId="category2-label">
+                      <FormControl sx={{ textAlign: 'left', width: '100%' }}>
+                        <InputLabel id='category2-label'>追加のカテゴリー</InputLabel>
+                        <Select {...field} id='category2' label='追加のカテゴリー' labelId='category2-label'>
                           <MenuItem value={0}>食費</MenuItem>
                           <MenuItem value={1}>外食費</MenuItem>
                           <MenuItem value={2}>日用品</MenuItem>
@@ -409,20 +412,20 @@ export const EventRegister = () => {
                 </div>
                 <div className={styles.form}>
                   <TextField
-                    id="memo2"
-                    label="追加のメモ"
+                    id='memo2'
+                    label='追加のメモ'
                     multiline
                     rows={3}
                     error={Boolean(errors.memo2)}
                     helperText={errors.memo2?.message}
-                    {...register("memo2", { maxLength: { value: 100, message: "100文字以内で入力してください" } })}
-                    sx={{ width: "100%" }}
+                    {...register('memo2', { maxLength: { value: 100, message: '100文字以内で入力してください' } })}
+                    sx={{ width: '100%' }}
                   />
                 </div>
                 <div className={styles.addButton}>
                   <Button
-                    variant="outlined"
-                    color="error"
+                    variant='outlined'
+                    color='error'
                     onClick={() => {
                       removeSeconds();
                     }}
@@ -436,7 +439,7 @@ export const EventRegister = () => {
           {!display && (
             <div className={styles.addButton}>
               <Button
-                variant="outlined"
+                variant='outlined'
                 onClick={() => {
                   addSeconds();
                 }}
@@ -447,11 +450,11 @@ export const EventRegister = () => {
           )}
           <div className={styles.form}>
             <LoadingButton
-              type="submit"
-              variant="contained"
+              type='submit'
+              variant='contained'
               loading={loading}
-              color="info"
-              sx={{ width: "90%", height: "45px", fontSize: "16px", fontWeight: "bold" }}
+              color='info'
+              sx={{ width: '90%', height: '45px', fontSize: '16px', fontWeight: 'bold' }}
             >
               登録
             </LoadingButton>
@@ -466,10 +469,10 @@ export const EventRegister = () => {
                 <li key={item.id} className={styles.listItem}>
                   <div className={styles.listItem}>
                     <Button
-                      sx={{ marginTop: "15px" }}
+                      sx={{ marginTop: '15px' }}
                       onClick={() => {
-                        setValue("storeName", item.store_name);
-                        setValue("category1", item.category);
+                        setValue('storeName', item.store_name);
+                        setValue('category1', item.category);
                         setModalFlag(false);
                       }}
                     >
@@ -486,9 +489,9 @@ export const EventRegister = () => {
               onClick={() => {
                 setModalFlag(false);
               }}
-              variant="contained"
-              color="inherit"
-              sx={{ position: "fixed", bottom: "35%", right: "37%" }}
+              variant='contained'
+              color='inherit'
+              sx={{ position: 'fixed', bottom: '35%', right: '37%' }}
             >
               キャンセル
             </Button>

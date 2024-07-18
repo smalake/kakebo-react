@@ -89,22 +89,20 @@ export const Login = () => {
       const uid = resFirebase.user.uid;
       // TODO: エラーの種類に応じてメッセージを変える
       if (uid === '') {
-        alert('ログインできませんでした');
         throw new Error('firebase login failed');
       }
+      const token = await resFirebase.user.getIdToken();
+      localStorage.setItem('token', token);
       if (await eventSet(uid)) {
-        const token = await resFirebase.user.getIdToken();
-        localStorage.setItem('token', token);
         setTimeout(() => {
           navigate('/event-register');
         }, 1000);
       } else {
-        alert('エラーが発生しました');
         throw new Error('event init failed');
       }
     } catch (err) {
       console.log(err);
-      alert('エラーが発生しました');
+      alert(err);
     } finally {
       setButtonLoading(false);
       setGoogleLoading(false);
@@ -119,7 +117,7 @@ export const Login = () => {
     const res = await authApi.login(param);
     // ユーザ登録されていたらログイン
     if (res.status !== 200) {
-      alert('エラーが発生しました');
+      alert('[eventSet]エラーが発生しました');
       console.log(res.data.error); // TODO: エラーメッセージが取得できるか確認
       return false;
     }
@@ -129,18 +127,18 @@ export const Login = () => {
     db.open()
       .then(() => {
         db.transaction('rw', db.event, db.private, () => {
-          db.event.bulkAdd(eventData.data.events);
-          db.private.bulkAdd(privateData.data.events);
+          db.event.bulkAdd(eventData.data);
+          db.private.bulkAdd(privateData.data);
         }).then(() => {
           // リビジョンを保存
-          localStorage.setItem('revision', revision.data.revision);
+          localStorage.setItem('revision', revision.data);
           setIsLogin(1);
           return true;
         });
       })
       .catch((error) => {
         console.log(error);
-        alert('エラーが発生しました');
+        alert('[db catch]エラーが発生しました');
         return false;
       });
   };
