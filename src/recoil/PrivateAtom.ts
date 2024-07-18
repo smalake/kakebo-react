@@ -1,15 +1,15 @@
-import { atom, selector } from "recoil";
-import { Event, OneEvent, Graph, Total, FormatAmount } from "../types";
-import { db } from "../db/db";
+import { atom, selector } from 'recoil';
+import { Event, OneEvent, Graph, Total, FormatAmount } from '../types';
+import { db } from '../db/db';
 
 export const privateFlagAtom = atom({
-  key: "PrivateFlag",
+  key: 'PrivateFlag',
   default: 0,
 });
 
 // indexedDBの値を変換
 export const privateSelector = selector({
-  key: "PrivateSelector",
+  key: 'PrivateSelector',
   get: async ({ get }) => {
     const flag = get(privateFlagAtom);
     // Linter対応
@@ -28,7 +28,7 @@ export const privateSelector = selector({
         id: data.id,
         amount: data.amount,
         category: data.category,
-        store_name: data.store,
+        store_name: data.store_name,
       };
       const date = data.date;
 

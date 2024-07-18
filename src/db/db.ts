@@ -1,11 +1,11 @@
-import Dexie, { Table } from "dexie";
+import Dexie, { Table } from 'dexie';
 
 export interface EventTable {
   id: number;
   date: string;
   amount: number;
   category: number;
-  store: string;
+  store_name: string;
 }
 
 export class EventDB extends Dexie {
@@ -13,8 +13,8 @@ export class EventDB extends Dexie {
   private!: Table<EventTable>;
 
   constructor() {
-    super("eventDB");
-    this.version(1).stores({ event: "id, amount, category, store, date", private: "id, amount, category, store, date" });
+    super('eventDB');
+    this.version(1).stores({ event: 'id, amount, category, store_name, date', private: 'id, amount, category, store_name, date' });
   }
 }
 
