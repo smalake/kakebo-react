@@ -23,6 +23,9 @@ export const eventSelector = selector({
     const graphs: Graph = {};
     const totals: Total = {};
 
+    console.log('EventAtom');
+    console.log(dbData);
+
     dbData.forEach((data) => {
       const event: OneEvent = {
         id: data.id,
