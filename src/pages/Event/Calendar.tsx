@@ -42,13 +42,13 @@ export const Calendar = memo(() => {
           const revision = await eventApi.revision();
           db.transaction('rw', db.event, () => {
             db.event.clear();
-            db.event.bulkAdd(eventData.data);
+            db.event.bulkAdd(eventData.data.events);
           })
             .then(() => {
               const flag = eventFlag + 1;
               setEventFlag(flag);
               // リビジョンを保存
-              localStorage.setItem('revision', revision.data);
+              localStorage.setItem('revision', revision.data.revision);
             })
             .catch((error) => {
               console.log(error);

@@ -38,16 +38,16 @@ export const EventEdit = () => {
       try {
         if (id !== undefined) {
           const event = await eventApi.getOne(parseInt(id));
-          const formatedDate = event.data['date'].split('T');
-          setValue('amount', event.data['amount']);
-          setValue('category', event.data['category']);
-          setValue('storeName', event.data['store_name']);
-          setValue('memo', event.data['memo']);
+          const formatedDate = event.data.event['date'].split('T');
+          setValue('amount', event.data.event['amount']);
+          setValue('category', event.data.event['category']);
+          setValue('storeName', event.data.event['store_name']);
+          setValue('memo', event.data.event['memo']);
           setValue('date', formatedDate[0]);
-          setCreateUser(event.data['create_user']);
-          setCreatedAt(event.data['created_at']);
-          setUpdateUser(event.data['update_user']);
-          setUpdatedAt(event.data['updated_at']);
+          setCreateUser(event.data.event['create_user']);
+          setCreatedAt(event.data.event['created_at']);
+          setUpdateUser(event.data.event['update_user']);
+          setUpdatedAt(event.data.event['updated_at']);
         } else {
           alert('読み込みに失敗しました');
         }
@@ -92,7 +92,7 @@ export const EventEdit = () => {
         // Recoil Selectorの再計算用
         var flag = eventFlag + 1;
         setEventFlag(flag);
-        const revision = Number(localStorage.getItem('revision')) + 1;
+        const revision = res.data.revision;
         localStorage.setItem('revision', String(revision));
         navigate('/calendar');
         alert('更新しました');

@@ -152,17 +152,17 @@ export const EventRegister = () => {
       const res = await eventApi.create(send);
       if (res.status === 200) {
         // DBに登録した内容をIndexedDBに保存
-        if (res.data.length === 2) {
+        if (res.data.ids.length === 2) {
           const toDB = [
             {
-              id: res.data[0],
+              id: res.data.ids[0],
               amount: data.amount1 - amnt2,
               category: data.category1,
               store_name: data.storeName,
               date: String(data.date),
             },
             {
-              id: res.data[1],
+              id: res.data.ids[1],
               amount: Number(amnt2),
               category: data.category2,
               store_name: data.storeName,
@@ -180,7 +180,7 @@ export const EventRegister = () => {
           }
         } else {
           const toDB = {
-            id: res.data[0],
+            id: res.data.ids[0],
             amount: Number(data.amount1),
             category: data.category1,
             store_name: data.storeName,

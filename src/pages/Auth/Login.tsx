@@ -132,7 +132,7 @@ export const Login = () => {
         await db.transaction('rw', db.event, db.private, async () => {
           // すでにDBが作られている場合エラーになってしまうため、そのエラーを無視させる
           try {
-            await db.event.bulkAdd(eventData.data);
+            await db.event.bulkAdd(eventData.data.events);
           } catch (error) {
             if ((error as Error).name === 'BulkError') {
               console.warn('ConstraintError: Key already exists in the object store.');
@@ -153,7 +153,7 @@ export const Login = () => {
           }
         });
         // リビジョンを保存
-        localStorage.setItem('revision', revision.data);
+        localStorage.setItem('revision', revision.data.revision);
         setIsLogin(1);
         return true;
       } else {
