@@ -126,7 +126,7 @@ export const EventEdit = () => {
         const res = await eventApi.delete(parseInt(id!));
         if (res.status === 200) {
           await db.event.delete(Number(id));
-          const revision = Number(localStorage.getItem('revision')) + 1;
+          const revision = res.data.revision;
           localStorage.setItem('revision', String(revision));
           navigate('/calendar');
           alert('削除しました');
