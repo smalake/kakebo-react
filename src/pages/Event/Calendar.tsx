@@ -37,9 +37,9 @@ export const Calendar = memo(() => {
     const checkRevision = async () => {
       try {
         const res = await eventApi.revision();
-        if (res.data !== Number(revision)) {
+        const getRevision = res.data.revision;
+        if (getRevision !== Number(revision)) {
           const eventData = await eventApi.getAll();
-          const revision = await eventApi.revision();
           db.transaction('rw', db.event, () => {
             db.event.clear();
             db.event.bulkAdd(eventData.data.events);
@@ -48,7 +48,7 @@ export const Calendar = memo(() => {
               const flag = eventFlag + 1;
               setEventFlag(flag);
               // リビジョンを保存
-              localStorage.setItem('revision', revision.data.revision);
+              localStorage.setItem('revision', getRevision);
             })
             .catch((error) => {
               console.log(error);
