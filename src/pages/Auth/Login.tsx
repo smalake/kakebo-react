@@ -41,19 +41,14 @@ export const Login = () => {
       try {
         if (localStorage.getItem('token')) {
           const res = await authApi.isLogin();
-          console.log(res);
           if (res.status === 200) {
             setIsLogin(1);
-            if (res.data.parent) {
-              setIsParent(1);
-            } else {
-              setIsParent(0);
-            }
+            setIsParent(res.data.admin);
             navigate('/event-register');
           } else if (res.status === 401) {
             // トークンの期限切れだった場合、リフレッシュトークンを使って再取得
             // 2回目の場合（countが1）は再ログイン
-            if (res.data.error.includes('ID token has expired') && count === 0) {
+            if (res.data.error.includes('retrieve a valid ID token') && count === 0) {
               const token = await auth.currentUser?.getIdToken(true);
               localStorage.setItem('token', token!);
               loginCheck(1);
