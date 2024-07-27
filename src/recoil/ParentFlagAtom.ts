@@ -1,21 +1,21 @@
-import { DefaultValue, atom, selector } from "recoil";
-import { settingApi } from "../api/settingApi";
+import { DefaultValue, atom, selector } from 'recoil';
+import { settingApi } from '../api/settingApi';
 
 export const parentFlagAtom = atom({
-  key: "ParentFlagAtom",
+  key: 'ParentFlagAtom',
   default: -1,
 });
 
 // indexedDBの値を変換
 export const parentFlagSelector = selector({
-  key: "ParentFlagSelector",
+  key: 'ParentFlagSelector',
   get: async ({ get }) => {
     const flag = get(parentFlagAtom);
     if (flag === -1) {
       try {
         const res = await settingApi.isParent();
         if (res.status === 200) {
-          if (res.data.parent) {
+          if (res.data.admin) {
             return 1;
           } else {
             return 0;
