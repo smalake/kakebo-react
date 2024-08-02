@@ -6,4 +6,5 @@ export const privateApi = {
   create: (params: any) => axiosAuthedClient.post('/private', params),
   update: (id: number, params: any) => axiosAuthedClient.put(`/private/${id}`, params),
   delete: (id: number) => axiosAuthedClient.delete(`/private/${id}`),
+  revision: () => axiosAuthedClient.get('/revision-private'),
 };

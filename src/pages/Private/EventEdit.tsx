@@ -36,14 +36,14 @@ export const EventPrivateEdit = () => {
       try {
         if (id !== undefined) {
           const event = await privateApi.getOne(parseInt(id));
-          const formatedDate = event.data['date'].split('T');
-          setValue('amount', event.data['amount']);
-          setValue('category', event.data['category']);
-          setValue('storeName', event.data['store_name']);
-          setValue('memo', event.data['memo']);
+          const formatedDate = event.data.private['date'].split('T');
+          setValue('amount', event.data.private['amount']);
+          setValue('category', event.data.private['category']);
+          setValue('storeName', event.data.private['store_name']);
+          setValue('memo', event.data.private['memo']);
           setValue('date', formatedDate[0]);
-          setCreatedAt(event.data['created_at']);
-          setUpdatedAt(event.data['updated_at']);
+          setCreatedAt(event.data.private['created_at']);
+          setUpdatedAt(event.data.private['updated_at']);
         } else {
           alert('読み込みに失敗しました');
         }
@@ -85,6 +85,8 @@ export const EventPrivateEdit = () => {
           store_name: data.storeName,
           date: String(data.date),
         });
+        const revision = res.data.revision;
+        localStorage.setItem('revision-private', String(revision));
         navigate('/calendar');
         alert('更新しました');
       } else {
@@ -120,6 +122,8 @@ export const EventPrivateEdit = () => {
         const res = await privateApi.delete(parseInt(id!));
         if (res.status === 200) {
           await db.private.delete(Number(id));
+          const revision = res.data.revision;
+          localStorage.setItem('revision-private', String(revision));
           navigate('/calendar');
           alert('削除しました');
         } else {

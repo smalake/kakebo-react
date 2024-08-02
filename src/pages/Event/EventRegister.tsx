@@ -16,6 +16,8 @@ import { PatternSelector, patternAtom } from '../../recoil/PatternAtom';
 import { CategoryIcon } from '../../components/Category';
 import { createTheme } from '@mui/material';
 import { categoryAtom } from '../../recoil/CategoryAtom';
+import { AxiosResponse } from 'axios';
+import { privateApi } from '../../api/privateApi';
 
 export const EventRegister = () => {
   const navigate = useNavigate();
@@ -147,10 +149,15 @@ export const EventRegister = () => {
         memo2: data.memo2,
         store_name: data.storeName,
         date: d.toISOString(),
-        isPrivate: data.isPrivate,
       };
-      const res = await eventApi.create(send);
+      let res: AxiosResponse;
+      if (data.isPrivate) {
+        res = await privateApi.create(send);
+      } else {
+        res = await eventApi.create(send);
+      }
       if (res.status === 200) {
+        const revision = res.data.revision;
         // DBに登録した内容をIndexedDBに保存
         if (res.data.ids.length === 2) {
           const toDB = [
@@ -171,11 +178,11 @@ export const EventRegister = () => {
           ];
           if (data.isPrivate === 0) {
             await db.event.bulkAdd(toDB);
-            const revision = Number(localStorage.getItem('revision')) + 1;
             localStorage.setItem('revision', String(revision));
             setEventFlag(flag);
           } else {
             await db.private.bulkAdd(toDB);
+            localStorage.setItem('revision-private', String(revision));
             setPrivateFlag(pflag);
           }
         } else {
@@ -187,11 +194,11 @@ export const EventRegister = () => {
             date: String(data.date),
           };
           if (data.isPrivate === 0) {
-            const revision = Number(localStorage.getItem('revision')) + 1;
             localStorage.setItem('revision', String(revision));
             await db.event.add(toDB);
             setEventFlag(flag);
           } else {
+            localStorage.setItem('revision-private', String(revision));
             await db.private.add(toDB);
             setPrivateFlag(pflag);
           }

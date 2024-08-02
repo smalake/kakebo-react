@@ -48,7 +48,7 @@ export const Login = () => {
           } else if (res.status === 401) {
             // トークンの期限切れだった場合、リフレッシュトークンを使って再取得
             // 2回目の場合（countが1）は再ログイン
-            if (res.data.error.includes('retrieve a valid ID token') && count === 0) {
+            if ((res.data.error.includes('retrieve a valid ID token') || res.data.error.includes('ID token has expired')) && count === 0) {
               const token = await auth.currentUser?.getIdToken(true);
               localStorage.setItem('token', token!);
               loginCheck(1);
@@ -121,6 +121,7 @@ export const Login = () => {
       const eventData = await eventApi.getAll();
       const privateData = await privateApi.getAll();
       const revision = await eventApi.revision();
+      const pRevision = await privateApi.revision();
 
       if (eventData.status === 200 && privateData.status === 200 && revision.status === 200) {
         await db.open();
@@ -138,7 +139,7 @@ export const Login = () => {
 
           // eventと同様
           try {
-            await db.private.bulkAdd(privateData.data);
+            await db.private.bulkAdd(privateData.data.privates);
           } catch (error) {
             if ((error as Error).name === 'BulkError') {
               console.warn('ConstraintError: Key already exists in the object store.');
@@ -149,6 +150,7 @@ export const Login = () => {
         });
         // リビジョンを保存
         localStorage.setItem('revision', revision.data.revision);
+        localStorage.setItem('revision-private', pRevision.data.revision);
         setIsLogin(1);
         return true;
       } else {
