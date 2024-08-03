@@ -2,10 +2,10 @@ import React, { useEffect } from 'react';
 import styles from './Setting.module.css';
 import { Box, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { authApi } from '../../api/authApi';
 import { db } from '../../db/db';
 import { useRecoilValue } from 'recoil';
 import { parentFlagSelector } from '../../recoil/ParentFlagAtom';
+import { auth } from '../../components/util/firebase';
 
 export const Setting = () => {
   const navigate = useNavigate();
@@ -27,17 +27,14 @@ export const Setting = () => {
     const res = window.confirm('ログアウトしてもよろしいですか？');
     if (res) {
       try {
-        const res = await authApi.logout();
-        if (res.status === 200) {
-          localStorage.removeItem('token');
-          // localStorage.removeItem("refresh");
-          await db.delete();
-          alert('ログアウトしました');
-          navigate('/login');
-        } else {
-          console.log(res);
-          alert('ログアウトに失敗しました');
-        }
+        localStorage.removeItem('token');
+        localStorage.removeItem('revision');
+        localStorage.removeItem('revision-private');
+        // localStorage.removeItem("refresh");
+        auth.signOut();
+        await db.delete();
+        alert('ログアウトしました');
+        navigate('/login');
       } catch (err) {
         console.log(err);
         alert('ログアウトに失敗しました');

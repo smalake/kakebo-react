@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import styles from "./Setting.module.css";
-import { Button, TextField, Box } from "@mui/material";
-import LoadingButton from "@mui/lab/LoadingButton";
-import CircularProgress from "@mui/material/CircularProgress";
-import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import { settingApi } from "../../api/settingApi";
-import { NameChangeForm } from "../../types";
+import React, { useEffect, useState } from 'react';
+import styles from './Setting.module.css';
+import { Button, TextField, Box } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
+import CircularProgress from '@mui/material/CircularProgress';
+import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { settingApi } from '../../api/settingApi';
+import { NameChangeForm } from '../../types';
 
 export const ChangeName = () => {
   const navigate = useNavigate();
@@ -25,13 +25,13 @@ export const ChangeName = () => {
     const getName = async () => {
       try {
         const res = await settingApi.getName();
-        setValue("name", res.data["name"]);
+        setValue('name', res.data.name);
       } catch (err: any) {
         if (err.status === 401) {
-          alert("認証エラー\n再ログインしてください");
-          navigate("/login");
+          alert('認証エラー\n再ログインしてください');
+          navigate('/login');
         } else {
-          alert("読み込みに失敗しました");
+          alert('読み込みに失敗しました');
           console.log(err);
         }
       } finally {
@@ -39,7 +39,8 @@ export const ChangeName = () => {
       }
     };
     getName();
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onSubmit = async (data: NameChangeForm) => {
     setButtonLoading(true);
@@ -49,18 +50,18 @@ export const ChangeName = () => {
       };
       const res = await settingApi.updateName(send);
       if (res.status === 200) {
-        navigate("/setting");
-        alert("更新しました");
+        alert('更新しました');
+        navigate('/setting');
       } else {
-        alert("更新に失敗しました");
+        alert('更新に失敗しました');
         console.log(res);
       }
     } catch (err: any) {
       if (err.status === 401) {
-        alert("認証エラー\n再ログインしてください");
-        navigate("/login");
+        alert('認証エラー\n再ログインしてください');
+        navigate('/login');
       } else {
-        alert("更新に失敗しました");
+        alert('更新に失敗しました');
         console.log(err);
       }
     } finally {
@@ -73,11 +74,11 @@ export const ChangeName = () => {
       {loading ? (
         <Box
           sx={{
-            display: "flex",
-            justifyContent: "center",
+            display: 'flex',
+            justifyContent: 'center',
             // marginTop: "330px",
-            alignItems: "center",
-            height: "100%",
+            alignItems: 'center',
+            height: '100%',
           }}
         >
           <CircularProgress />
@@ -88,27 +89,27 @@ export const ChangeName = () => {
           <div className={styles.contents}>
             <form onSubmit={handleSubmit(onSubmit)}>
               <TextField
-                id="name"
-                label="表示名"
-                defaultValue=" "
-                {...register("name", { required: "表示名を入力してください", maxLength: { value: 20, message: "20文字以内で入力してください" } })}
+                id='name'
+                label='表示名'
+                defaultValue=' '
+                {...register('name', { required: '表示名を入力してください', maxLength: { value: 20, message: '20文字以内で入力してください' } })}
                 error={Boolean(errors.name)}
-                sx={{ width: "90%", margin: "20px auto" }}
+                sx={{ width: '90%', margin: '20px auto' }}
               />
               <LoadingButton
-                type="submit"
-                variant="contained"
+                type='submit'
+                variant='contained'
                 loading={buttonLoading}
-                sx={{ width: "60%", margin: "20px auto", fontSize: "90%", height: "45px", fontWeight: "bold" }}
+                sx={{ width: '60%', margin: '20px auto', fontSize: '90%', height: '45px', fontWeight: 'bold' }}
               >
                 変更
               </LoadingButton>
               <Button
-                variant="contained"
-                color="inherit"
-                sx={{ width: "60%", margin: "5px auto", fontSize: "90%", height: "45px", fontWeight: "bold" }}
+                variant='contained'
+                color='inherit'
+                sx={{ width: '60%', margin: '5px auto', fontSize: '90%', height: '45px', fontWeight: 'bold' }}
                 onClick={() => {
-                  navigate("/setting");
+                  navigate('/setting');
                 }}
               >
                 キャンセル
