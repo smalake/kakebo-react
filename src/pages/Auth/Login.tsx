@@ -43,7 +43,7 @@ export const Login = () => {
           const res = await authApi.isLogin();
           if (res.status === 200) {
             setIsLogin(1);
-            setIsParent(res.data.admin);
+            setIsParent(Number(res.data.admin));
             navigate('/event-register');
           } else if (res.status === 401) {
             // トークンの期限切れだった場合、リフレッシュトークンを使って再取得
@@ -96,6 +96,9 @@ export const Login = () => {
         throw new Error('event init failed');
       }
     } catch (err) {
+      localStorage.removeItem('token');
+      auth.signOut();
+      await db.delete();
       console.log(err);
       alert(err);
     } finally {
@@ -116,6 +119,7 @@ export const Login = () => {
       console.log(res.data.error); // TODO: エラーメッセージが取得できるか確認
       return false;
     }
+    setIsParent(Number(res.data.admin));
 
     try {
       const eventData = await eventApi.getAll();
@@ -123,7 +127,7 @@ export const Login = () => {
       const revision = await eventApi.revision();
       const pRevision = await privateApi.revision();
 
-      if (eventData.status === 200 && privateData.status === 200 && revision.status === 200) {
+      if (eventData.status === 200 && privateData.status === 200 && revision.status === 200 && pRevision.status === 200) {
         await db.open();
         await db.transaction('rw', db.event, db.private, async () => {
           // すでにDBが作られている場合エラーになってしまうため、そのエラーを無視させる
@@ -137,9 +141,9 @@ export const Login = () => {
             }
           }
 
-          // eventと同様
+          // eventと同様にエラーを無視させる
           try {
-            await db.private.bulkAdd(privateData.data.privates);
+            await db.private.bulkAdd(privateData.data.events);
           } catch (error) {
             if ((error as Error).name === 'BulkError') {
               console.warn('ConstraintError: Key already exists in the object store.');

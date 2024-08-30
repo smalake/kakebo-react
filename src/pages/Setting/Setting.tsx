@@ -4,12 +4,12 @@ import { Box, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../../db/db';
 import { useRecoilValue } from 'recoil';
-import { parentFlagSelector } from '../../recoil/ParentFlagAtom';
+import { parentFlagAtom } from '../../recoil/ParentFlagAtom';
 import { auth } from '../../components/util/firebase';
 
 export const Setting = () => {
   const navigate = useNavigate();
-  const isParent = useRecoilValue(parentFlagSelector);
+  const isParent = useRecoilValue(parentFlagAtom);
 
   useEffect(() => {
     // グループの親かどうかチェック
