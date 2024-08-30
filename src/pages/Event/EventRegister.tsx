@@ -111,7 +111,7 @@ export const EventRegister = () => {
   useEffect(() => {
     const patternCheck = async () => {
       const pat = await patternList;
-      if (pat[0].id) {
+      if (pat) {
         // パターン更新用
         const flag = patternFlag + 1;
         setPatternFlag(flag);
@@ -127,7 +127,6 @@ export const EventRegister = () => {
   // 登録ボタンをクリックしたときの処理
   const onSubmit = async (data: EventRegisterForm) => {
     setLoading(true);
-    const d = new Date(data.date);
     // Recoil Selectorの再計算用
     const flag = eventFlag + 1;
     const pflag = privateFlag + 1;
@@ -147,8 +146,8 @@ export const EventRegister = () => {
         category2: data.category2,
         memo1: data.memo1,
         memo2: data.memo2,
-        store_name: data.storeName,
-        date: d.toISOString(),
+        storeName: data.storeName,
+        date: data.date,
       };
       let res: AxiosResponse;
       if (data.isPrivate) {
@@ -478,7 +477,7 @@ export const EventRegister = () => {
                     <Button
                       sx={{ marginTop: '15px' }}
                       onClick={() => {
-                        setValue('storeName', item.store_name);
+                        setValue('storeName', item.storeName);
                         setValue('category1', item.category);
                         setModalFlag(false);
                       }}
@@ -486,7 +485,7 @@ export const EventRegister = () => {
                       <span className={styles.icon}>
                         <CategoryIcon catNum={item.category} />
                       </span>
-                      {categories[item.category].name} ({item.store_name})
+                      {categories[item.category].name} ({item.storeName})
                     </Button>
                   </div>
                 </li>

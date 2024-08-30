@@ -6,7 +6,7 @@ export interface EventRegisterForm {
   memo1: string;
   memo2: string;
   storeName: string;
-  date: Date;
+  date: string;
   isPrivate: number;
 }
 
@@ -15,7 +15,7 @@ export interface EventEditForm {
   category: number;
   storeName: string;
   memo: string;
-  date: Date;
+  date: string;
 }
 
 // Atom用
@@ -23,7 +23,7 @@ export interface OneEvent {
   id: number;
   amount: number;
   category: number;
-  store_name: string;
+  storeName: string;
 }
 
 export interface Event {

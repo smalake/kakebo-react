@@ -1,5 +1,5 @@
 export interface Pattern {
   id: number;
-  store_name: string;
+  storeName: string;
   category: number;
 }

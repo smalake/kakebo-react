@@ -165,7 +165,7 @@ export const EventList = ({ events, selectedDate }: { events: Event; selectedDat
                 <span className={styles.icon}>
                   <CategoryIcon catNum={item.category} />
                 </span>
-                {categories[item.category].name} {item.store_name ? `(${item.store_name})` : ''}
+                {categories[item.category].name} {item.storeName ? `(${item.storeName})` : ''}
               </span>
               <span className={styles.eventAmount}>{item.amount}円</span>
             </Link>

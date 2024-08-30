@@ -36,14 +36,13 @@ export const EventPrivateEdit = () => {
       try {
         if (id !== undefined) {
           const event = await privateApi.getOne(parseInt(id));
-          const formatedDate = event.data.private['date'].split('T');
-          setValue('amount', event.data.private['amount']);
-          setValue('category', event.data.private['category']);
-          setValue('storeName', event.data.private['store_name']);
-          setValue('memo', event.data.private['memo']);
-          setValue('date', formatedDate[0]);
-          setCreatedAt(event.data.private['created_at']);
-          setUpdatedAt(event.data.private['updated_at']);
+          setValue('amount', event.data.event['amount']);
+          setValue('category', event.data.event['category']);
+          setValue('storeName', event.data.event['store_name']);
+          setValue('memo', event.data.event['memo']);
+          setValue('date', event.data.event['date']);
+          setCreatedAt(event.data.event['created_at']);
+          setUpdatedAt(event.data.event['updated_at']);
         } else {
           alert('読み込みに失敗しました');
         }
@@ -65,15 +64,14 @@ export const EventPrivateEdit = () => {
   // 更新ボタンをクリックしたときの処理
   const onSubmit = async (data: EventEditForm) => {
     setButtonLoading(true);
-    const d = new Date(data.date);
     try {
       // 送信用のフォーマットへと変換
       const send = {
         amount: Number(data.amount),
         category: data.category,
-        store_name: data.storeName,
+        storeName: data.storeName,
         memo: data.memo,
-        date: d.toISOString(),
+        date: data.date,
       };
 
       const res = await privateApi.update(parseInt(id!), send);

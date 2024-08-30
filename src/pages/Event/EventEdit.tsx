@@ -38,12 +38,11 @@ export const EventEdit = () => {
       try {
         if (id !== undefined) {
           const event = await eventApi.getOne(parseInt(id));
-          const formatedDate = event.data.event['date'].split('T');
           setValue('amount', event.data.event['amount']);
           setValue('category', event.data.event['category']);
           setValue('storeName', event.data.event['store_name']);
           setValue('memo', event.data.event['memo']);
-          setValue('date', formatedDate[0]);
+          setValue('date', event.data.event['date']);
           setCreateUser(event.data.event['create_user']);
           setCreatedAt(event.data.event['created_at']);
           setUpdateUser(event.data.event['update_user']);
@@ -69,15 +68,14 @@ export const EventEdit = () => {
   // 更新ボタンをクリックしたときの処理
   const onSubmit = async (data: EventEditForm) => {
     setButtonLoading(true);
-    const d = new Date(data.date);
     try {
       // 送信用のフォーマットへと変換
       const send = {
         amount: Number(data.amount),
         category: data.category,
-        store_name: data.storeName,
+        storeName: data.storeName,
         memo: data.memo,
-        date: d.toISOString(),
+        date: data.date,
       };
 
       const res = await eventApi.update(parseInt(id!), send);
