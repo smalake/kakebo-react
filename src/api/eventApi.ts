@@ -6,5 +6,5 @@ export const eventApi = {
   create: (params: any) => axiosAuthedClient.post('/event', params),
   update: (id: number, params: any) => axiosAuthedClient.put(`/event/${id}`, params),
   delete: (id: number) => axiosAuthedClient.delete(`/event/${id}`),
-  revision: () => axiosAuthedClient.get('/revision'),
+  revision: () => axiosAuthedClient.get('/event/revision'),
 };
