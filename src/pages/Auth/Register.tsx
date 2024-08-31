@@ -45,6 +45,8 @@ export const Register = () => {
           localStorage.setItem('token', token);
           navigate('/');
         } else {
+          // DB登録が失敗した場合、Firebaseユーザを削除
+          await res.user.delete();
           throw new Error('db register failed');
         }
       } else {
@@ -97,6 +99,8 @@ export const Register = () => {
           localStorage.setItem('token', token);
           navigate('/');
         } else {
+          // DB登録が失敗した場合、Firebaseユーザを削除
+          await res.user.delete();
           throw new Error('db register failed');
         }
       } else {
