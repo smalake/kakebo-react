@@ -4,20 +4,25 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { registerValidation } from '../../components/util/validation';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './Auth.module.css';
-import { authApi } from '../../api/authApi';
 import { TextField } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { RegisterData, RegisterForm } from '../../../src/types';
-import { createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { RegisterForm } from '../../../src/types';
+import { createUserWithEmailAndPassword, signInWithPopup, sendEmailVerification } from 'firebase/auth';
 import { auth, provider } from '../../components/util/firebase';
 import { FirebaseError } from 'firebase/app';
 import { FcGoogle } from 'react-icons/fc';
 import { IoMdMail } from 'react-icons/io';
+import { dbRegister, eventSet } from './AuthEvent';
+import { useSetRecoilState } from 'recoil';
+import { loginAtom } from '../../recoil/LoginAtom';
+import { parentFlagAtom } from '../../recoil/ParentFlagAtom';
 
 export const Register = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const setIsLogin = useSetRecoilState(loginAtom);
+  const setIsParent = useSetRecoilState(parentFlagAtom);
 
   // react-hook-formの設定
   const {
@@ -41,8 +46,9 @@ export const Register = () => {
         // DBに登録
         const result = await dbRegister(registerData);
         if (result) {
-          const token = await res.user.getIdToken();
-          localStorage.setItem('token', token);
+          // 認証メール送信
+          await sendEmailVerification(res.user);
+          alert('認証メールを送信しました。\nメールアドレスの認証を完了させてください。');
           navigate('/');
         } else {
           // DB登録が失敗した場合、Firebaseユーザを削除
@@ -97,6 +103,9 @@ export const Register = () => {
         if (result) {
           const token = await res.user.getIdToken();
           localStorage.setItem('token', token);
+          await eventSet();
+          setIsLogin(1);
+          setIsParent(1);
           navigate('/');
         } else {
           // DB登録が失敗した場合、Firebaseユーザを削除
@@ -111,24 +120,6 @@ export const Register = () => {
       console.log(err);
     } finally {
       setGoogleLoading(false);
-    }
-  };
-
-  // DBに新規登録するためのAPIを叩く
-  const dbRegister = async (data: RegisterData) => {
-    try {
-      const res = await authApi.register(data);
-      if (res.status === 200) {
-        return true;
-      } else if (res.status === 409) {
-        alert('すでに登録されているためログインします');
-        return true;
-      } else {
-        return false;
-      }
-    } catch (err) {
-      alert('登録に失敗しました。\nサポートへお問い合わせください。');
-      console.log(err);
     }
   };
 

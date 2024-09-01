@@ -84,8 +84,14 @@ export const Login = () => {
       const uid = resFirebase.user.uid;
       // TODO: エラーの種類に応じてメッセージを変える
       if (uid === '') {
-        throw new Error('firebase login failed');
+        throw new Error('ログインに失敗しました。');
       }
+      // メール認証のチェック
+      if (!resFirebase.user.emailVerified) {
+        auth.signOut();
+        throw new Error('メールアドレスの確認ができていません。\n登録したメールアドレスを確認し、認証を完了してください。');
+      }
+
       const token = await resFirebase.user.getIdToken();
       localStorage.setItem('token', token);
       if (await eventSet(uid)) {
@@ -93,14 +99,14 @@ export const Login = () => {
           navigate('/event-register');
         }, 1000);
       } else {
-        throw new Error('event init failed');
+        auth.signOut();
+        throw new Error('ログイン時にエラーが発生しました。');
       }
     } catch (err) {
       localStorage.removeItem('token');
       auth.signOut();
       await db.delete();
-      console.log(err);
-      alert(err);
+      alert('err');
     } finally {
       setButtonLoading(false);
       setGoogleLoading(false);
