@@ -1,15 +1,15 @@
-import { atom, selector } from "recoil";
-import { Event, OneEvent, Graph, Total, FormatAmount } from "../types";
-import { db } from "../db/db";
+import { atom, selector } from 'recoil';
+import { Event, OneEvent, Graph, Total, FormatAmount } from '../types';
+import { db } from '../db/db';
 
 export const eventFlagAtom = atom({
-  key: "EventFlag",
+  key: 'EventFlag',
   default: 0,
 });
 
 // indexedDBの値を変換
 export const eventSelector = selector({
-  key: "EventSelector",
+  key: 'EventSelector',
   get: async ({ get }) => {
     const flag = get(eventFlagAtom);
     // Linter対応
@@ -28,7 +28,7 @@ export const eventSelector = selector({
         id: data.id,
         amount: data.amount,
         category: data.category,
-        store_name: data.store,
+        storeName: data.store_name,
       };
       const date = data.date;
 

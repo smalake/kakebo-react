@@ -1,13 +1,13 @@
-import { atom, selector } from "recoil";
-import { patternApi } from "../api/patternApi";
+import { atom, selector } from 'recoil';
+import { patternApi } from '../api/patternApi';
 
 export const patternAtom = atom({
-  key: "PatternAtom",
+  key: 'PatternAtom',
   default: 0,
 });
 
 export const PatternSelector = selector({
-  key: "PatternSelector",
+  key: 'PatternSelector',
   get: async ({ get }) => {
     const flag = get(patternAtom);
     // Linter対応
@@ -15,6 +15,7 @@ export const PatternSelector = selector({
       console.log(flag);
     }
     const res = await patternApi.get();
-    return res.data;
+    const humps = require('humps'); // スネークケースからキャメルケースへの変換用
+    return humps.camelizeKeys(res.data.patterns);
   },
 });

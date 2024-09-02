@@ -1,9 +1,8 @@
-import { axiosClient } from "./axiosClient";
+import { axiosAuthedClient } from './axiosAuthedClient';
 
 export const settingApi = {
-  getName: () => axiosClient.get("/display-name"),
-  updateName: (params: any) => axiosClient.put("display-name", params),
-  invite: () => axiosClient.get("/invite"),
-  isParent: () => axiosClient.get("/is-parent"),
-  sendMail: (params: Object) => axiosClient.post("/send-mail", params),
+  getName: () => axiosAuthedClient.get('/setting/name'),
+  updateName: (params: any) => axiosAuthedClient.put('setting/name', params),
+  invite: () => axiosAuthedClient.get('/setting//invite'),
+  sendMail: (params: Object) => axiosAuthedClient.post('/setting/send-mail', params),
 };

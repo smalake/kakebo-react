@@ -1,10 +1,10 @@
-import { axiosClient } from "./axiosClient";
+import { axiosAuthedClient } from './axiosAuthedClient';
 
 export const eventApi = {
-  getAll: () => axiosClient.get("/event"),
-  getOne: (id: number) => axiosClient.get(`/event/${id}`),
-  create: (params: any) => axiosClient.post("/event", params),
-  update: (id: number, params: any) => axiosClient.put(`/event/${id}`, params),
-  delete: (id: number) => axiosClient.delete(`/event/${id}`),
-  revision: () => axiosClient.get("/revision"),
+  getAll: () => axiosAuthedClient.get('/event'),
+  getOne: (id: number) => axiosAuthedClient.get(`/event/${id}`),
+  create: (params: any) => axiosAuthedClient.post('/event', params),
+  update: (id: number, params: any) => axiosAuthedClient.put(`/event/${id}`, params),
+  delete: (id: number) => axiosAuthedClient.delete(`/event/${id}`),
+  revision: () => axiosAuthedClient.get('/event/revision'),
 };

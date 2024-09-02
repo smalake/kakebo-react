@@ -1,22 +1,22 @@
-import React, { useEffect } from "react";
-import styles from "./Setting.module.css";
-import { Box, Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { authApi } from "../../api/authApi";
-import { db } from "../../db/db";
-import { useRecoilValue } from "recoil";
-import { parentFlagSelector } from "../../recoil/ParentFlagAtom";
+import React, { useEffect } from 'react';
+import styles from './Setting.module.css';
+import { Box, Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { db } from '../../db/db';
+import { useRecoilValue } from 'recoil';
+import { parentFlagAtom } from '../../recoil/ParentFlagAtom';
+import { auth } from '../../components/util/firebase';
 
 export const Setting = () => {
   const navigate = useNavigate();
-  const isParent = useRecoilValue(parentFlagSelector);
+  const isParent = useRecoilValue(parentFlagAtom);
 
   useEffect(() => {
     // グループの親かどうかチェック
     const checkParent = async () => {
       if (isParent === 401) {
-        alert("ログインしてください");
-        navigate("/login");
+        alert('ログインしてください');
+        navigate('/login');
       }
     };
     checkParent();
@@ -24,23 +24,20 @@ export const Setting = () => {
   }, []);
 
   const clickLogout = async () => {
-    const res = window.confirm("ログアウトしてもよろしいですか？");
+    const res = window.confirm('ログアウトしてもよろしいですか？');
     if (res) {
       try {
-        const res = await authApi.logout();
-        if (res.status === 200) {
-          localStorage.removeItem("token");
-          // localStorage.removeItem("refresh");
-          await db.delete();
-          alert("ログアウトしました");
-          navigate("/login");
-        } else {
-          console.log(res);
-          alert("ログアウトに失敗しました");
-        }
+        localStorage.removeItem('token');
+        localStorage.removeItem('revision');
+        localStorage.removeItem('revision-private');
+        // localStorage.removeItem("refresh");
+        auth.signOut();
+        await db.delete();
+        alert('ログアウトしました');
+        navigate('/login');
       } catch (err) {
         console.log(err);
-        alert("ログアウトに失敗しました");
+        alert('ログアウトに失敗しました');
       }
     }
   };
@@ -51,50 +48,52 @@ export const Setting = () => {
       ) : (
         <div>
           <h2>設定</h2>
-          <Box sx={{ textAlign: "center" }}>
+          <Box sx={{ textAlign: 'center' }}>
             <Button
-              variant="contained"
-              sx={{ fontSize: "18px", width: "80%", marginBottom: "30px" }}
+              variant='contained'
+              sx={{ fontSize: '18px', width: '80%', marginBottom: '30px' }}
               onClick={() => {
-                navigate("/change-name");
+                navigate('/change-name');
               }}
             >
               表示名の変更
             </Button>
             <Button
-              variant="contained"
-              sx={{ fontSize: "18px", width: "80%", marginBottom: "30px" }}
+              variant='contained'
+              sx={{ fontSize: '18px', width: '80%', marginBottom: '30px' }}
               onClick={() => {
-                navigate("/pattern-setting");
+                navigate('/pattern-setting');
               }}
             >
               お気に入りの登録・編集
             </Button>
-            {isParent && (
+            {isParent === 1 ? (
               <Button
-                variant="contained"
+                variant='contained'
                 sx={{
-                  fontSize: "18px",
-                  width: "80%",
-                  marginBottom: "30px",
+                  fontSize: '18px',
+                  width: '80%',
+                  marginBottom: '30px',
                 }}
                 onClick={() => {
-                  navigate("/invite-group");
+                  navigate('/invite-group');
                 }}
               >
                 共有家計簿への招待
               </Button>
+            ) : (
+              <></>
             )}
             <Button
-              variant="contained"
-              sx={{ fontSize: "18px", width: "80%", marginBottom: "30px" }}
+              variant='contained'
+              sx={{ fontSize: '18px', width: '80%', marginBottom: '30px' }}
               onClick={() => {
-                navigate("/contact");
+                navigate('/contact');
               }}
             >
               お問い合わせ
             </Button>
-            <Button variant="contained" sx={{ fontSize: "18px", width: "80%" }} onClick={clickLogout}>
+            <Button variant='contained' sx={{ fontSize: '18px', width: '80%' }} onClick={clickLogout}>
               ログアウト
             </Button>
           </Box>

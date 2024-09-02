@@ -1,29 +1,29 @@
-import React, { memo, useCallback, useEffect, useState } from "react";
-import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import jaLocale from "@fullcalendar/core/locales/ja";
-import styles from "./Calendar.module.css";
-import "./calendar.css";
-import { Box, CircularProgress, FormControl, IconButton, MenuItem, Select } from "@mui/material";
-import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
-import { EventClickArg } from "@fullcalendar/core";
-import { format } from "date-fns";
-import { Link, useNavigate } from "react-router-dom";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { eventFlagAtom, eventSelector } from "../../recoil/EventAtom";
-import { CategoryIcon } from "../../components/Category";
-import { Event } from "../../types";
-import { eventApi } from "../../api/eventApi";
-import { db } from "../../db/db";
-import { categoryAtom } from "../../recoil/CategoryAtom";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import React, { memo, useCallback, useEffect, useState } from 'react';
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import jaLocale from '@fullcalendar/core/locales/ja';
+import styles from './Calendar.module.css';
+import './calendar.css';
+import { Box, CircularProgress, FormControl, IconButton, MenuItem, Select } from '@mui/material';
+import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
+import { EventClickArg } from '@fullcalendar/core';
+import { format } from 'date-fns';
+import { Link, useNavigate } from 'react-router-dom';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { eventFlagAtom, eventSelector } from '../../recoil/EventAtom';
+import { CategoryIcon } from '../../components/Category';
+import { Event } from '../../types';
+import { eventApi } from '../../api/eventApi';
+import { db } from '../../db/db';
+import { categoryAtom } from '../../recoil/CategoryAtom';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 export const Calendar = memo(() => {
   const navigate = useNavigate();
   const events = useRecoilValue(eventSelector).event;
   const eventAmount = useRecoilValue(eventSelector).calendar;
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().substr(0, 10));
-  const revision = localStorage.getItem("revision");
+  const revision = localStorage.getItem('revision');
   const [eventFlag, setEventFlag] = useRecoilState(eventFlagAtom);
   const [loading, setLoading] = useState(true);
   const [amount, setAmount] = useState<
@@ -37,10 +37,10 @@ export const Calendar = memo(() => {
     const checkRevision = async () => {
       try {
         const res = await eventApi.revision();
-        if (res.data.revision !== Number(revision)) {
+        const getRevision = res.data.revision;
+        if (getRevision !== Number(revision)) {
           const eventData = await eventApi.getAll();
-          const revision = await eventApi.revision();
-          db.transaction("rw", db.event, () => {
+          db.transaction('rw', db.event, () => {
             db.event.clear();
             db.event.bulkAdd(eventData.data.events);
           })
@@ -48,11 +48,11 @@ export const Calendar = memo(() => {
               const flag = eventFlag + 1;
               setEventFlag(flag);
               // リビジョンを保存
-              localStorage.setItem("revision", revision.data.revision);
+              localStorage.setItem('revision', getRevision);
             })
             .catch((error) => {
               console.log(error);
-              alert("エラーが発生しました");
+              alert('エラーが発生しました');
             });
         }
       } catch (err) {
@@ -70,9 +70,9 @@ export const Calendar = memo(() => {
   }, [eventAmount]);
 
   const headerToolbar = {
-    start: "prev",
-    center: "title",
-    end: "next",
+    start: 'prev',
+    center: 'title',
+    end: 'next',
   };
 
   const handleClick = useCallback((arg: DateClickArg) => {
@@ -81,14 +81,14 @@ export const Calendar = memo(() => {
   const handleEventClick = useCallback((arg: EventClickArg) => {
     const date = arg.event.start;
     if (date != null) {
-      const res = format(date, "yyyy-MM-dd");
+      const res = format(date, 'yyyy-MM-dd');
       setSelectedDate(res);
     }
   }, []);
 
   const handleChange = (event: any) => {
     if (event.target.value === 1) {
-      navigate("/calendar-private");
+      navigate('/calendar-private');
     }
   };
 
@@ -97,21 +97,21 @@ export const Calendar = memo(() => {
       {loading ? (
         <Box
           sx={{
-            display: "flex",
-            justifyContent: "center",
-            marginTop: "330px",
-            alignItems: "center",
-            height: "100%",
+            display: 'flex',
+            justifyContent: 'center',
+            marginTop: '330px',
+            alignItems: 'center',
+            height: '100%',
           }}
         >
           <CircularProgress />
         </Box>
       ) : (
-        <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
           <div className={styles.calendar}>
-            <Box sx={{ textAlign: "right", marginBottom: "10px" }}>
-              <FormControl variant="standard" sx={{ width: "50%", textAlign: "center" }}>
-                <Select labelId="select-label" id="select-kakebo" value={0} label="家計簿選択" onChange={handleChange}>
+            <Box sx={{ textAlign: 'right', marginBottom: '10px' }}>
+              <FormControl variant='standard' sx={{ width: '50%', textAlign: 'center' }}>
+                <Select labelId='select-label' id='select-kakebo' value={0} label='家計簿選択' onChange={handleChange}>
                   <MenuItem value={0}>共有家計簿</MenuItem>
                   <MenuItem value={1}>プライベート家計簿</MenuItem>
                 </Select>
@@ -121,11 +121,11 @@ export const Calendar = memo(() => {
             <div>
               <FullCalendar
                 plugins={[dayGridPlugin, interactionPlugin]}
-                initialView="dayGridMonth"
+                initialView='dayGridMonth'
                 locales={[jaLocale]}
-                locale="ja"
+                locale='ja'
                 headerToolbar={headerToolbar}
-                contentHeight="auto"
+                contentHeight='auto'
                 events={amount}
                 dateClick={handleClick}
                 eventClick={handleEventClick}
@@ -165,7 +165,7 @@ export const EventList = ({ events, selectedDate }: { events: Event; selectedDat
                 <span className={styles.icon}>
                   <CategoryIcon catNum={item.category} />
                 </span>
-                {categories[item.category].name} {item.store_name ? `(${item.store_name})` : ""}
+                {categories[item.category].name} {item.storeName ? `(${item.storeName})` : ''}
               </span>
               <span className={styles.eventAmount}>{item.amount}円</span>
             </Link>
