@@ -51,3 +51,19 @@ export const dbRegister = async (data: RegisterData) => {
     console.log(err);
   }
 };
+export const dbRegisterJoin = async (data: RegisterData) => {
+  try {
+    const res = await authApi.join(data);
+    if (res.status === 200) {
+      return true;
+    } else if (res.status === 409) {
+      alert('すでに登録されているためログインします');
+      return true;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    alert('登録に失敗しました。\nサポートへお問い合わせください。');
+    console.log(err);
+  }
+};

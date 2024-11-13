@@ -15,7 +15,7 @@ import { IoMdMail } from 'react-icons/io';
 import { useSetRecoilState } from 'recoil';
 import { parentFlagAtom } from '../../recoil/ParentFlagAtom';
 import { loginAtom } from '../../recoil/LoginAtom';
-import { dbRegister, eventSet } from './AuthEvent';
+import { dbRegisterJoin, eventSet } from './AuthEvent';
 
 export const Join = () => {
   const navigate = useNavigate();
@@ -47,7 +47,7 @@ export const Join = () => {
         };
 
         // DBに登録
-        const result = await dbRegister(registerData);
+        const result = await dbRegisterJoin(registerData);
         if (result) {
           // 認証メール送信
           await sendEmailVerification(res.user);
@@ -103,7 +103,7 @@ export const Join = () => {
           key: key,
         };
         // DBに登録
-        const result = await dbRegister(registerData);
+        const result = await dbRegisterJoin(registerData);
         if (result) {
           const token = await res.user.getIdToken();
           localStorage.setItem('token', token);
