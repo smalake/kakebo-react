@@ -15,8 +15,8 @@ import { privateFlagAtom } from '../../recoil/PrivateAtom';
 export const EventPrivateEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [createdAt, setCreatedAt] = useState('');
-  const [updatedAt, setUpdatedAt] = useState('');
+  // const [createdAt, setCreatedAt] = useState('');
+  // const [updatedAt, setUpdatedAt] = useState('');
   const [loading, setLoading] = useState(true);
   const [buttonLoading, setButtonLoading] = useState(false);
   const [eventFlag, setEventFlag] = useRecoilState(privateFlagAtom);
@@ -38,11 +38,11 @@ export const EventPrivateEdit = () => {
           const event = await privateApi.getOne(parseInt(id));
           setValue('amount', event.data.event['amount']);
           setValue('category', event.data.event['category']);
-          setValue('storeName', event.data.event['store_name']);
+          setValue('storeName', event.data.event['storeName']);
           setValue('memo', event.data.event['memo']);
           setValue('date', event.data.event['date']);
-          setCreatedAt(event.data.event['created_at']);
-          setUpdatedAt(event.data.event['updated_at']);
+          // setCreatedAt(event.data.event['createdAt']);
+          // setUpdatedAt(event.data.event['updatedAt']);
         } else {
           alert('読み込みに失敗しました');
         }
@@ -80,7 +80,7 @@ export const EventPrivateEdit = () => {
           id: Number(id),
           amount: Number(data.amount),
           category: data.category,
-          store_name: data.storeName,
+          storeName: data.storeName,
           date: String(data.date),
         });
         const revision = res.data.revision;
@@ -284,10 +284,10 @@ export const EventPrivateEdit = () => {
               </div>
             </form>
           </div>
-          <div className={styles.desc}>
+          {/* <div className={styles.desc}>
             <div>作成: {createdAt}</div>
             <div>更新: {updatedAt}</div>
-          </div>
+          </div> */}
         </>
       )}
     </>
