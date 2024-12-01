@@ -164,14 +164,14 @@ export const EventRegister = () => {
               id: res.data.ids[0],
               amount: data.amount1 - amnt2,
               category: data.category1,
-              store_name: data.storeName,
+              storeName: data.storeName,
               date: String(data.date),
             },
             {
               id: res.data.ids[1],
               amount: Number(amnt2),
               category: data.category2,
-              store_name: data.storeName,
+              storeName: data.storeName,
               date: String(data.date),
             },
           ];
@@ -189,7 +189,7 @@ export const EventRegister = () => {
             id: res.data.ids[0],
             amount: Number(data.amount1),
             category: data.category1,
-            store_name: data.storeName,
+            storeName: data.storeName,
             date: String(data.date),
           };
           if (data.isPrivate === 0) {

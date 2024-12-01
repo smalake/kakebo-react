@@ -28,7 +28,7 @@ export const privateSelector = selector({
         id: data.id,
         amount: data.amount,
         category: data.category,
-        storeName: data.store_name,
+        storeName: data.storeName,
       };
       const date = data.date;
 

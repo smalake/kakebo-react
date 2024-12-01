@@ -15,10 +15,10 @@ import { db } from '../../db/db';
 export const EventEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [createUser, setCreateUser] = useState('');
-  const [updateUser, setUpdateUser] = useState('');
-  const [createdAt, setCreatedAt] = useState('');
-  const [updatedAt, setUpdatedAt] = useState('');
+  // const [createUser, setCreateUser] = useState('');
+  // const [updateUser, setUpdateUser] = useState('');
+  // const [createdAt, setCreatedAt] = useState('');
+  // const [updatedAt, setUpdatedAt] = useState('');
   const [loading, setLoading] = useState(true);
   const [buttonLoading, setButtonLoading] = useState(false);
   const [eventFlag, setEventFlag] = useRecoilState(eventFlagAtom);
@@ -40,13 +40,13 @@ export const EventEdit = () => {
           const event = await eventApi.getOne(parseInt(id));
           setValue('amount', event.data.event['amount']);
           setValue('category', event.data.event['category']);
-          setValue('storeName', event.data.event['store_name']);
+          setValue('storeName', event.data.event['storeName']);
           setValue('memo', event.data.event['memo']);
           setValue('date', event.data.event['date']);
-          setCreateUser(event.data.event['create_user']);
-          setCreatedAt(event.data.event['created_at']);
-          setUpdateUser(event.data.event['update_user']);
-          setUpdatedAt(event.data.event['updated_at']);
+          // setCreateUser(event.data.event['createUser']);
+          // setCreatedAt(event.data.event['createdAt']);
+          // setUpdateUser(event.data.event['updateUser']);
+          // setUpdatedAt(event.data.event['updatedAt']);
         } else {
           alert('読み込みに失敗しました');
         }
@@ -84,7 +84,7 @@ export const EventEdit = () => {
           id: Number(id),
           amount: Number(data.amount),
           category: data.category,
-          store_name: data.storeName,
+          storeName: data.storeName,
           date: String(data.date),
         });
         // Recoil Selectorの再計算用
@@ -288,14 +288,14 @@ export const EventEdit = () => {
               </div>
             </form>
           </div>
-          <div className={styles.desc}>
+          {/* <div className={styles.desc}>
             <div>
               作成: {createUser}さん ({createdAt})
             </div>
             <div>
               更新: {updateUser}さん ({updatedAt})
             </div>
-          </div>
+          </div> */}
         </>
       )}
     </>

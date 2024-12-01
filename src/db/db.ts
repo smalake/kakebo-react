@@ -5,7 +5,7 @@ export interface EventTable {
   date: string;
   amount: number;
   category: number;
-  store_name: string;
+  storeName: string;
 }
 
 export class EventDB extends Dexie {
@@ -14,7 +14,7 @@ export class EventDB extends Dexie {
 
   constructor() {
     super('eventDB');
-    this.version(1).stores({ event: 'id, amount, category, store_name, date', private: 'id, amount, category, store_name, date' });
+    this.version(1).stores({ event: 'id, amount, category, storeName, date', private: 'id, amount, category, storeName, date' });
   }
 }
 
