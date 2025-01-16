@@ -48,9 +48,14 @@ export const Login = () => {
           } else if (res.status === 401) {
             // トークンの期限切れだった場合、リフレッシュトークンを使って再取得
             // 2回目の場合（countが1）は再ログイン
-            if ((res.data.error.includes('retrieve a valid ID token') || res.data.error.includes('ID token has expired')) && count === 0) {
-              const token = await auth.currentUser?.getIdToken(true);
-              localStorage.setItem('token', token!);
+            // if ((res.data.error.includes('retrieve a valid ID token') || res.data.error.includes('ID token has expired')) && count === 0) {
+            //   const token = await auth.currentUser?.getIdToken(true);
+            //   localStorage.setItem('token', token!);
+            //   loginCheck(1);
+            // }
+            if (auth.currentUser && count === 0) {
+              const token = await auth.currentUser.getIdToken(true);
+              localStorage.setItem('token', token);
               loginCheck(1);
             }
           }
@@ -92,7 +97,7 @@ export const Login = () => {
         throw new Error('メールアドレスの確認ができていません。\n登録したメールアドレスを確認し、認証を完了してください。');
       }
 
-      const token = await resFirebase.user.getIdToken();
+      const token = await resFirebase.user.getIdToken(true);
       localStorage.setItem('token', token);
       if (await eventSet(uid)) {
         setTimeout(() => {
