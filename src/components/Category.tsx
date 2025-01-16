@@ -1,16 +1,17 @@
-import React from "react";
-import { ReactComponent as Unselected } from "../assets/unselected.svg";
-import { ReactComponent as Food } from "../assets/food.svg";
-import { ReactComponent as EatingOut } from "../assets/eating_out.svg";
-import { ReactComponent as Lifework } from "../assets/lifework.svg";
-import { ReactComponent as Traffic } from "../assets/traffic.svg";
-import { ReactComponent as Medical } from "../assets/medical.svg";
-import { ReactComponent as Clothing } from "../assets/clothing.svg";
-import { ReactComponent as Hobby } from "../assets/hobby.svg";
-import { ReactComponent as Utility } from "../assets/utility.svg";
-import { ReactComponent as Connection } from "../assets/connection.svg";
-import { useRecoilValue } from "recoil";
-import { categoryAtom } from "../recoil/CategoryAtom";
+import React from 'react';
+import { ReactComponent as Unselected } from '../assets/unselected.svg';
+import { ReactComponent as Food } from '../assets/food.svg';
+import { ReactComponent as EatingOut } from '../assets/eating_out.svg';
+import { ReactComponent as Lifework } from '../assets/lifework.svg';
+import { ReactComponent as Traffic } from '../assets/traffic.svg';
+import { ReactComponent as Medical } from '../assets/medical.svg';
+import { ReactComponent as Clothing } from '../assets/clothing.svg';
+import { ReactComponent as Hobby } from '../assets/hobby.svg';
+import { ReactComponent as Utility } from '../assets/utility.svg';
+import { ReactComponent as Connection } from '../assets/connection.svg';
+import { AiFillMoneyCollect } from 'react-icons/ai';
+import { useRecoilValue } from 'recoil';
+import { categoryAtom } from '../recoil/CategoryAtom';
 
 type CategoryProps = {
   catNum: number;
@@ -40,6 +41,8 @@ export const CategoryIcon = ({ catNum }: CategoryProps): JSX.Element => {
       return <Utility style={style} />;
     case 8:
       return <Connection style={style} />;
+    case 9:
+      return <AiFillMoneyCollect style={{ color: category[catNum].color, width: '24px', height: '24px' }} />;
     default:
       return <Unselected style={style} />;
   }

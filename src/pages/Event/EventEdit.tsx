@@ -217,7 +217,8 @@ export const EventEdit = () => {
                         <MenuItem value={6}>趣味</MenuItem>
                         <MenuItem value={7}>光熱費</MenuItem>
                         <MenuItem value={8}>通信費</MenuItem>
-                        <MenuItem value={9}>その他</MenuItem>
+                        <MenuItem value={9}>精算</MenuItem>
+                        <MenuItem value={10}>その他</MenuItem>
                       </Select>
                     </FormControl>
                   )}
