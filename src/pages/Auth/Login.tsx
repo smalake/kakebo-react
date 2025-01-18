@@ -37,27 +37,16 @@ export const Login = () => {
 
   // ログインチェック
   useEffect(() => {
-    const loginCheck = async (count: number) => {
+    const loginCheck = async () => {
       try {
-        if (localStorage.getItem('token')) {
+        if (auth.currentUser) {
           const res = await authApi.isLogin();
           if (res.status === 200) {
             setIsLogin(1);
             setIsParent(Number(res.data.admin));
             navigate('/event-register');
-          } else if (res.status === 401) {
-            // トークンの期限切れだった場合、リフレッシュトークンを使って再取得
-            // 2回目の場合（countが1）は再ログイン
-            // if ((res.data.error.includes('retrieve a valid ID token') || res.data.error.includes('ID token has expired')) && count === 0) {
-            //   const token = await auth.currentUser?.getIdToken(true);
-            //   localStorage.setItem('token', token!);
-            //   loginCheck(1);
-            // }
-            if (auth.currentUser && count === 0) {
-              const token = await auth.currentUser.getIdToken(true);
-              localStorage.setItem('token', token);
-              loginCheck(1);
-            }
+            const token = await auth.currentUser.getIdToken(true);
+            localStorage.setItem('token', token);
           }
         }
       } catch (err) {
@@ -66,7 +55,7 @@ export const Login = () => {
         setLoading(false);
       }
     };
-    loginCheck(0);
+    loginCheck();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
